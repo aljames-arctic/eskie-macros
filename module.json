@@ -1,0 +1,56 @@
+{
+  "id": "eskie-macros",
+  "title": "Eskie's Macros",
+  "description": "<p>A collection of macros from Eskiemoh.</p>",
+  "version": "#{VERSION}#",
+  "authors": [
+    {
+      "name": "Alexander James",
+      "url": "https://github.com/aljames-arctic",
+      "flags": {}
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "esmodules": [
+    "src/module.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json",
+      "flags": {}
+    }
+  ],
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "changelog": "https://github.com/aljames-arctic/eskie-macros/releases",
+  "bugs": "https://github.com/aljames-arctic/eskie-macros/issues",
+  "license": "LICENSE",
+  "relationships": {
+    "requires": [
+      {
+        "id": "sequencer",
+        "type": "module",
+        "compatibility": {}
+      }
+    ],
+    "recommends": [
+      {
+        "id": "eskie-effects",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "eskie-effects-free",
+        "type": "module",
+        "compatibility": {}
+      }
+    ]
+  },
+  "flags": {}
+}
