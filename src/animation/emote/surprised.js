@@ -25,19 +25,18 @@ async function create(token, config = {}) {
         id: 'surprised',
         duration: 0,
         effect: [
-            {
-                img: "https://i.imgur.com/8Yr9fMC.png",
-                scale: 0.6,
-                anchor: { x: 0.5, y: 1.55 }
-            },
-            {
-                img: "https://i.imgur.com/myWyksT.png",
-                scale: 0.45,
-                anchor: { x: -0.3, y: 1.25 }
+            {   // !! } surprised icon
+                img: eskieMacros.img('emote', 'surprised', "01"),
+                scale: 1.2,
+                anchor: { x: -0.3, y: 1.25 },
+                x: -0.8,
+                y: 0.5
             }
         ]
     };
     let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+
+    const tokenWidth = token.document.width;
 
     let surprisedEffect = new Sequence()
         .effect()
@@ -45,30 +44,16 @@ async function create(token, config = {}) {
         .file(effect[0].img)
         .atLocation(token)
         .anchor(effect[0].anchor)
+        .spriteOffset({ x: effect[0].x * tokenWidth, y: effect[0].y * tokenWidth }, { gridUnits: true, local: true })
         .scaleIn(0, 500, { ease: "easeOutElastic" })
         .scaleOut(0, 500, { ease: "easeOutExpo" })
         .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
         .scaleToObject(effect[0].scale)
-        .private()
-
-        .effect()
-        .name(id)
-        .file(effect[1].img)
-        .atLocation(token)
-        .anchor(effect[1].anchor)
-        .scaleIn(0, 500, { ease: "easeOutElastic" })
-        .scaleOut(0, 500, { ease: "easeOutExpo" })
-        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
-        .scaleToObject(effect[1].scale)
+        .attachTo(token, { bindAlpha: false })
         .waitUntilFinished();
 
-    if (duration > 0) {
-        surprisedEffect = surprisedEffect.duration(duration);
-    } else {
-        surprisedEffect = surprisedEffect.persist();
-    }
-
-    return surprisedEffect.attachTo(token, { bindAlpha: false });
+    surprisedEffect = (duration > 0) ? surprisedEffect.duration(duration) : surprisedEffect.persist();
+    return surprisedEffect;
 }
 
 async function play(token, config = {}) {
