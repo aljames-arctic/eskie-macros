@@ -30,12 +30,12 @@ async function create(token, config = {}) {
                 img: eskieMacros.img('emote', 'drunk_bubbles', '01'),
                 x: -0.2,
                 y: -0.3,
-                scale: 0.5
+                scale: 0.7
             },
             { // blush
                 img: eskieMacros.img('emote', 'blush', '01'),
-                x: 0.15,
-                y: -0.15,
+                x: -0.15,
+                y: 0.15,
                 scale: 0.5
             },
             {} // sway
