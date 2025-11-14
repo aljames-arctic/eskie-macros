@@ -21,6 +21,7 @@ async function create(token, {id = 'laugh', duration = 0, facing = 'left'} = {})
     const tokenWidth = token.document.width;
     const mirrorFace = facing === 'right';
     const facingFactor = mirrorFace ? -1 : 1;
+    const file = eskieMacros.file('emote', 'laugh', '01', 'yellow');
 
     let laughEffect = new Sequence()
         .animation()
@@ -29,23 +30,10 @@ async function create(token, {id = 'laugh', duration = 0, facing = 'left'} = {})
 
         .effect()
         .name(id)
-        .file("https://i.imgur.com/SQWSf10.png")
+        .file(file)
         .atLocation(token, {offset:{x:(-0.4*tokenWidth*facingFactor), y:-0.45*tokenWidth}, gridUnits: true, local: true})
         .attachTo(token, {bindAlpha: false})
         .loopProperty("sprite", "rotation", { from: 0, to: -15*facingFactor, duration: 250, ease: "easeOutCubic" })
-        .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-        .scaleToObject(0.34)
-        .mirrorX(mirrorFace)
-        .private();
-    laughEffect = (duration > 0) ? laughEffect.duration(duration) : laughEffect.persist();
-
-    laughEffect = laughEffect
-        .effect()
-        .name(id)
-        .file("https://i.imgur.com/iWuBQ10.png")
-        .atLocation(token, {offset:{x:(-0.55*tokenWidth*facingFactor), y:0*tokenWidth}, gridUnits: true, local: true})
-        .attachTo(token, {bindAlpha: false})
-        .loopProperty("sprite", "rotation", { from: 0, to: 20*facingFactor, duration: 250,ease: "easeOutCubic" })
         .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
         .scaleToObject(0.34)
         .mirrorX(mirrorFace)

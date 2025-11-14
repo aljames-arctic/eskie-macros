@@ -23,12 +23,8 @@
  */
 async function create(token, {id = 'drunk', duration = 0} = {}, {offsetx = -0.2, offsety = -0.3, scale = 0.5} = {}) {
     const tokenWidth = token.document.width;
-    eskieMacros.dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]);
-    const isPatreonUser = eskieMacros.dependency.isActivated({ id: 'eskie-effects' });
-
-    const pathPrefix = (isPatreonUser) ? `eskie` : `eskie-free.`;
-    const blush = `${pathPrefix}.emote.blush.01`;
-    const drunkBubbles = `${pathPrefix}.emote.drunk_bubbles.01`;
+    const blush = eskieMacros.file('emote', 'blush', '01');
+    const drunkBubbles = eskieMacros.file('emote', 'drunk_bubbles', '01');
 
     let drunkEffect = new Sequence()
     // Drunk bubbles effect

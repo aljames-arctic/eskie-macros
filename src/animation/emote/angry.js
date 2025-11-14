@@ -23,13 +23,7 @@
  */
 async function create(token, {id = 'angry', duration = 5000, file = undefined} = {}, {offsetx = 0.3, offsety = -0.3, scale = 0.65} = {}) {
     const tokenWidth = token.document.width;
-
-    // You can provide a custom file, otherwise it will select based on eskie-effects presence
-    if (!file) {
-        eskieMacros.dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]);
-        const isPatreonUser = eskieMacros.dependency.isActivated({ id: 'eskie-effects' });
-        file = (isPatreonUser) ? `eskie.emote.angry.02` : `eskie-free.emote.angry.01`;
-    }
+    if (!file) file = eskieMacros.file('emote', 'angry', '02');
 
     let angryEffect = new Sequence()
         .effect()

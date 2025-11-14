@@ -1,5 +1,6 @@
 import { dependency } from './lib/dependency.js';
 import { animation } from './animation/animation.js';
+import { filemanager } from './lib/filemanager.js';
 // Import module settings to also run its initialization code
 import './settings.js';
 
@@ -21,6 +22,7 @@ function setupApiCalls(exportedFunctions) {
 function setupModule() {
     // Setup dependency API
     setupApiCalls( animation );
+    setupApiCalls( filemanager );
     setupApiCalls({ dependency });
 }
 
