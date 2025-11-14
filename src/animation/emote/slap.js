@@ -1,3 +1,4 @@
+// Work In Progress
 
 /* **
    Originally Published: 5/1/2023
@@ -24,22 +25,22 @@
 async function create(location, config = {}) {
     const defaultConfig = {
         id: 'slap',
-        duration: 0,
+        duration: 5000,
         effect: [
             { // impact
-                img: "animated-spell-effects-cartoon.magic.impact.02",
+                img: eskieMacros.img('sound', 'roar'),
                 x: 0.1,
                 y: -0.1,
-                size: 1.4
+                scale: 1.7
             },
             { // slap image
                 img: "https://i.imgur.com/9tLjNHH.png",
-                size: 0.55,
+                scale: 0.55,
                 rotation: -45
             },
             { // slap image shadow
                 img: "https://i.imgur.com/9tLjNHH.png",
-                size: 0.55,
+                scale: 0.55,
                 rotation: -45
             }
         ]
@@ -48,14 +49,16 @@ async function create(location, config = {}) {
 
     let slapEffect = new Sequence()
         .effect()
+        .name(id)
         .atLocation(location, { offset: { x: effect[0].x, y: effect[0].y }, gridUnits: true })
         .file(effect[0].img)
-        .size(effect[0].size, { gridUnits: true })
+        .size(effect[0].scale, { gridUnits: true })
 
         .effect()
+        .name(id)
         .atLocation(location)
         .file(effect[1].img)
-        .size(effect[1].size, { gridUnits: true })
+        .size(effect[1].scale, { gridUnits: true })
         .rotate(effect[1].rotation)
         .fadeOut(250)
         .duration(1000)
@@ -63,6 +66,7 @@ async function create(location, config = {}) {
         .zIndex(1)
 
         .effect()
+        .name(id)
         .atLocation(location)
         .file(effect[2].img)
         .filter("ColorMatrix", { brightness: -1 })
@@ -70,26 +74,20 @@ async function create(location, config = {}) {
         .duration(6000)
         .fadeOut(1000)
         .rotate(effect[2].rotation)
-        .size(effect[2].size, { gridUnits: true })
+        .size(effect[2].scale, { gridUnits: true })
         .delay(50)
         .zIndex(0);
 
-    if (duration > 0) {
-        slapEffect = slapEffect.duration(duration);
-    } else {
-        slapEffect = slapEffect.persist();
-    }
-
+    slapEffect = (duration > 0) ? slapEffect.duration(duration) : slapEffect.persist();
     return slapEffect;
 }
 
-async function play(token, config = {}) {
+async function play(config = {}, crosshairOptions = undefined) {
     let crosshairConfig = {
         size:0.5,
-        icon: 'icons/magic/symbols/star-rising-purple.webp',
+        icon: eskieMacros.img('crosshair', 'circle', 'fantasy_01') ?? 'icons/svg/circle.svg',
         label: 'slap',
         tag: 'Spray',
-        t: 'cone',
         drawIcon: false,
         drawOutline: true,
         interval:0,
@@ -98,14 +96,15 @@ async function play(token, config = {}) {
         rememberControlled: true,
         cancelled: false
     };
-    let location = await warpgate.crosshairs.show(crosshairConfig);
+
+    let location = await Sequencer.Crosshair.show(crosshairOptions ?? crosshairConfig);
     if (location.cancelled) return;
 
     let seq = await create(location, config);
     await seq.play();
 }
 
-async function stop(token, {id = 'slap'} = {}) {
+async function stop({id = 'slap'} = {}) {
     return Sequencer.EffectManager.endEffects({ name: id });
 }
 
