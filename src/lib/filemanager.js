@@ -9,20 +9,14 @@ function file(...categories) {
     // Traverse the categories that the user has provided
     while (remainingOptions && remainingOptions.length > 0) {
         if (!remainingOptions.includes(categories[0])) {
-            remainingOptions = null;
-            break;
+            currentPath += `.${remainingOptions[0]}`;
+            remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
+            categories.shift(); // Remove the used category and continue (try to match as best we can)
+            continue;
         }
+
         currentPath += `.${categories.shift()}`;
         remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
-    }
-
-    // If you do not have the full path, complete it with the first available options until you get to an animation
-    if (!remainingOptions) {
-        let options = Sequencer.Database.getPathsUnder(currentPath);
-        while (options.length > 0) {
-            currentPath += `.${options[0]}`;
-            options = Sequencer.Database.getPathsUnder(currentPath);
-        }
     }
 
     return currentPath;
