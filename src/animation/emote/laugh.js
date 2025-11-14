@@ -30,9 +30,9 @@ async function create(token, config = {}) {
         effect: [
             { // laughing face
                 img: eskieMacros.img('emote', 'laugh', '01', 'yellow'),
-                x: -0.4,
-                y: -0.45,
-                scale: 0.34
+                x: 0.3,
+                y: -0.3,
+                scale: 0.9
             },
             {} // token shake
         ]
