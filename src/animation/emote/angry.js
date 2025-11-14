@@ -26,8 +26,8 @@ async function create(token, config) {
         id: 'angry',
         duration: 5000,
         effect: [
-            { x: 0.3, y: -0.3, scale: 0.65, img: eskieMacros.img('emote', 'angry', '02') },
-            { x: 0.3, y: -0.3, scale: 0.85, img: eskieMacros.img('emote', 'angry', '02') }
+            { x: 0.3, y: -0.4, scale: 0.65, img: eskieMacros.img('emote', 'angry', '02') },
+            { x: 0.3, y: -0.4, scale: 0.85, img: eskieMacros.img('emote', 'angry', '02') }
         ],
     };
     let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
