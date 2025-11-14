@@ -30,25 +30,11 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             {
-                img: "https://i.imgur.com/kMbIhW3.png",
-                x: -0.45,
-                y: -0.4,
-                scale: 0.3,
-                rotation: 35
-            },
-            {
-                img: "https://i.imgur.com/v2dx2oE.png",
-                x: -0.6,
-                y: -0.25,
-                scale: 0.37,
+                img: eskieMacros.img('emote', 'shout', '01'),
+                x: 0.4,
+                y: -0.6,
+                scale: 0.9,
                 rotation: -15
-            },
-            {
-                img: "https://i.imgur.com/kMbIhW3.png",
-                x: -0.6,
-                y: -0.05,
-                scale: 0.3,
-                rotation: 0
             }
         ]
     };
@@ -65,45 +51,17 @@ async function create(token, config = {}) {
         .file(effect[0].img)
         .atLocation(token, { offset: { x: (effect[0].x * tokenWidth) * facingFactor, y: (effect[0].y * tokenWidth) }, gridUnits: true, local: true })
         .spriteRotation(effect[0].rotation * facingFactor)
-        .loopProperty("sprite", "rotation", { from: 0, to: 15 * facingFactor, duration: 250, ease: "easeOutCubic" })
-        .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-        .loopProperty("sprite", "position.x", { from: 0, to: -0.025 * facingFactor, duration: 250, gridUnits: true, pingPong: false })
-        .scaleToObject(effect[0].scale)
-        .private()
-        .mirrorX(mirrorFace)
-        .mirrorY()
-
-        .effect()
-        .name(id)
-        .file(effect[1].img)
-        .atLocation(token, { offset: { x: (effect[1].x * tokenWidth) * facingFactor, y: (effect[1].y * tokenWidth) }, gridUnits: true, local: true })
-        .spriteRotation(effect[1].rotation * facingFactor)
         .loopProperty("sprite", "rotation", { from: 0, to: -10 * facingFactor, duration: 250, ease: "easeOutCubic" })
         .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
         .loopProperty("sprite", "position.x", { from: 0, to: -0.025 * facingFactor, duration: 250, gridUnits: true, pingPong: false })
-        .scaleToObject(effect[1].scale)
-        .private()
+        .scaleToObject(effect[0].scale)
         .mirrorX(mirrorFace)
+        .attachTo(token, { bindAlpha: false } )
 
-        .effect()
-        .name(id)
-        .file(effect[2].img)
-        .atLocation(token, { offset: { x: (effect[2].x * tokenWidth) * facingFactor, y: (effect[2].y * tokenWidth) }, gridUnits: true, local: true })
-        .spriteRotation(effect[2].rotation * facingFactor)
-        .loopProperty("sprite", "rotation", { from: 0, to: 15 * facingFactor, duration: 250, ease: "easeOutCubic" })
-        .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-        .loopProperty("sprite", "position.x", { from: 0, to: -0.025 * facingFactor, duration: 250, gridUnits: true, pingPong: false })
-        .scaleToObject(effect[2].scale)
-        .mirrorX(mirrorFace)
         .waitUntilFinished(-200);
 
-    if (duration > 0) {
-        shoutEffect = shoutEffect.duration(duration);
-    } else {
-        shoutEffect = shoutEffect.persist();
-    }
-
-    return shoutEffect.attachTo(token, { bindAlpha: false });
+    shoutEffect = (duration > 0) ? shoutEffect.duration(duration) : shoutEffect.persist();
+    return shoutEffect
 }
 
 async function play(token, config = {}) {
