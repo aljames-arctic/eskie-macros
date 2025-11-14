@@ -54,15 +54,11 @@ async function create(token, config = {}) {
         .scaleToObject(effect[0].scale)
         .mirrorX(mirrorFace)
         .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits: true, pingPong: true })
+        .attachTo(token, { bindAlpha: false })
         .waitUntilFinished();
 
-    if (duration > 0) {
-        soulSuckedEffect = soulSuckedEffect.duration(duration);
-    } else {
-        soulSuckedEffect = soulSuckedEffect.persist();
-    }
-
-    return soulSuckedEffect.attachTo(token, { bindAlpha: false });
+    soulSuckedEffect = (duration > 0) ? soulSuckedEffect.duration(duration) : soulSuckedEffect.persist();
+    return soulSuckedEffect;
 }
 
 async function play(token, config = {}) {

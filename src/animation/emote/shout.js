@@ -61,7 +61,7 @@ async function create(token, config = {}) {
         .waitUntilFinished(-200);
 
     shoutEffect = (duration > 0) ? shoutEffect.duration(duration) : shoutEffect.persist();
-    return shoutEffect
+    return shoutEffect;
 }
 
 async function play(token, config = {}) {
