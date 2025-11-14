@@ -10,34 +10,56 @@
  *
  * @param {Token} token The token to play the effect on.
  * 
- * @param {object} [options={}] Options for the effect.
- * @param {string} [options.id='surprised'] The id of the effect.
- * @param {number} [options.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
+ * @param {object} [config={}] Options for the effect.
+ * @param {string} [config.id='surprised'] The id of the effect.
+ * @param {number} [config.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
+ * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
+ * @param {string} [config.effect.img] The image file to use for the effect.
+ * @param {number} [config.effect.scale] The scale of the effect.
+ * @param {object} [config.effect.anchor] The anchor point of the effect.
  * 
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
-async function create(token, {id = 'surprised', duration = 0} = {}) {
+async function create(token, config = {}) {
+    const defaultConfig = {
+        id: 'surprised',
+        duration: 0,
+        effect: [
+            {
+                img: "https://i.imgur.com/8Yr9fMC.png",
+                scale: 0.6,
+                anchor: { x: 0.5, y: 1.55 }
+            },
+            {
+                img: "https://i.imgur.com/myWyksT.png",
+                scale: 0.45,
+                anchor: { x: -0.3, y: 1.25 }
+            }
+        ]
+    };
+    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+
     let surprisedEffect = new Sequence()
         .effect()
         .name(id)
-        .file("https://i.imgur.com/8Yr9fMC.png")
+        .file(effect[0].img)
         .atLocation(token)
-        .anchor({x: 0.5, y: 1.55})
-        .scaleIn(0, 500, {ease: "easeOutElastic"})
-        .scaleOut(0, 500, {ease: "easeOutExpo"})
-        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true})
-        .scaleToObject(0.6)
+        .anchor(effect[0].anchor)
+        .scaleIn(0, 500, { ease: "easeOutElastic" })
+        .scaleOut(0, 500, { ease: "easeOutExpo" })
+        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
+        .scaleToObject(effect[0].scale)
         .private()
 
         .effect()
         .name(id)
-        .file("https://i.imgur.com/myWyksT.png")
+        .file(effect[1].img)
         .atLocation(token)
-        .anchor({x: -0.3, y: 1.25})
-        .scaleIn(0, 500, {ease: "easeOutElastic"})
-        .scaleOut(0, 500, {ease: "easeOutExpo"})
-        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true})
-        .scaleToObject(0.45)
+        .anchor(effect[1].anchor)
+        .scaleIn(0, 500, { ease: "easeOutElastic" })
+        .scaleOut(0, 500, { ease: "easeOutExpo" })
+        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
+        .scaleToObject(effect[1].scale)
         .waitUntilFinished();
 
     if (duration > 0) {
@@ -45,8 +67,8 @@ async function create(token, {id = 'surprised', duration = 0} = {}) {
     } else {
         surprisedEffect = surprisedEffect.persist();
     }
-    
-    return surprisedEffect.attachTo(token, {bindAlpha: false});
+
+    return surprisedEffect.attachTo(token, { bindAlpha: false });
 }
 
 async function play(token, config = {}) {

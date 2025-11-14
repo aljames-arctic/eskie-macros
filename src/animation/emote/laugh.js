@@ -10,18 +10,44 @@
  *
  * @param {Token} token The token to play the effect on.
  * 
- * @param {object} [options={}] Options for the effect.
- * @param {string} [options.id='laugh'] The id of the effect.
- * @param {number} [options.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
- * @param {string} [options.facing='left'] The direction the token is facing. Can be 'left' or 'right'.
+ * @param {object} [config={}] Configuration for the effect.
+ * @param {string} [config.id='laugh'] The id of the effect.
+ * @param {number} [config.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
+ * @param {string} [config.facing='left'] The direction the token is facing. Can be 'left' or 'right'.
+ * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
+ * @param {string} [config.effect.img] The image file to use for the effect.
+ * @param {number} [config.effect.x] The x offset of the effect in grid units.
+ * @param {number} [config.effect.y] The y offset of the effect in grid units.
+ * @param {number} [config.effect.scale] The scale of the effect.
  * 
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
-async function create(token, {id = 'laugh', duration = 0, facing = 'left'} = {}) {
+async function create(token, config = {}) {
+    const defaultConfig = {
+        id: 'laugh',
+        duration: 0,
+        facing: 'left',
+        effect: [
+            { // laughing face
+                img: eskieMacros.img('emote', 'laugh', '01', 'yellow'),
+                x: -0.4,
+                y: -0.45,
+                scale: 0.34
+            },
+            {} // token shake
+        ]
+    };
+    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    const facing = config.facing ?? defaultConfig.facing;
+
+    if (!effect[0].img) {
+        ui.notifications.error("Eskie Macros: Required module 'Eskie Effects' or 'Eskie Effects Free' is not installed or activated. Please install/activate the module to use the default images for this effect.");
+        return;
+    }
+
     const tokenWidth = token.document.width;
     const mirrorFace = facing === 'right';
     const facingFactor = mirrorFace ? -1 : 1;
-    const file = eskieMacros.file('emote', 'laugh', '01', 'yellow');
 
     let laughEffect = new Sequence()
         .animation()
@@ -30,12 +56,12 @@ async function create(token, {id = 'laugh', duration = 0, facing = 'left'} = {})
 
         .effect()
         .name(id)
-        .file(file)
-        .atLocation(token, {offset:{x:(-0.4*tokenWidth*facingFactor), y:-0.45*tokenWidth}, gridUnits: true, local: true})
-        .attachTo(token, {bindAlpha: false})
-        .loopProperty("sprite", "rotation", { from: 0, to: -15*facingFactor, duration: 250, ease: "easeOutCubic" })
+        .file(effect[0].img)
+        .atLocation(token, { offset: { x: (effect[0].x * tokenWidth * facingFactor), y: effect[0].y * tokenWidth }, gridUnits: true, local: true })
+        .attachTo(token, { bindAlpha: false })
+        .loopProperty("sprite", "rotation", { from: 0, to: -15 * facingFactor, duration: 250, ease: "easeOutCubic" })
         .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-        .scaleToObject(0.34)
+        .scaleToObject(effect[0].scale)
         .mirrorX(mirrorFace)
         .private();
     laughEffect = (duration > 0) ? laughEffect.duration(duration) : laughEffect.persist();
@@ -46,19 +72,19 @@ async function create(token, {id = 'laugh', duration = 0, facing = 'left'} = {})
         .copySprite(token)
         .scaleToObject(token.document.texture.scaleX)
         .atLocation(token)
-        .attachTo(token, {bindAlpha: false})
-        .loopProperty("sprite", "position.y", { from: 0, to: -0.01, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
-        .loopProperty("sprite", "width", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
-        .loopProperty("sprite", "height", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad"  })
+        .attachTo(token, { bindAlpha: false })
+        .loopProperty("sprite", "position.y", { from: 0, to: -0.01, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+        .loopProperty("sprite", "width", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+        .loopProperty("sprite", "height", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
         .mirrorY(token.document.mirrorX)
         .waitUntilFinished(-200)
     laughEffect = (duration > 0) ? laughEffect.duration(duration) : laughEffect.persist();
-    
+
     laughEffect = laughEffect
         .animation()
         .on(token)
         .opacity(1);
-    
+
     return laughEffect;
 }
 

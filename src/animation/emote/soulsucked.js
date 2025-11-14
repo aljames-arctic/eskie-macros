@@ -10,14 +10,35 @@
  *
  * @param {Token} token The token to play the effect on.
  * 
- * @param {object} [options={}] Options for the effect.
- * @param {string} [options.id='soulsucked'] The id of the effect.
- * @param {number} [options.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
- * @param {string} [options.facing='left'] The direction the token is facing. Can be 'left' or 'right'.
+ * @param {object} [config={}] Options for the effect.
+ * @param {string} [config.id='soulsucked'] The id of the effect.
+ * @param {number} [config.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
+ * @param {string} [config.facing='left'] The direction the token is facing. Can be 'left' or 'right'.
+ * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
+ * @param {string} [config.effect.img] The image file to use for the effect.
+ * @param {number} [config.effect.x] The x offset of the effect in grid units.
+ * @param {number} [config.effect.y] The y offset of the effect in grid units.
+ * @param {number} [config.effect.scale] The scale of the effect.
  * 
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
-async function create(token, {id = 'soulsucked', duration = 0, facing = 'left'} = {}) {
+async function create(token, config = {}) {
+    const defaultConfig = {
+        id: 'soulsucked',
+        duration: 0,
+        facing: 'left',
+        effect: [
+            {
+                img: "https://i.imgur.com/dBaFOB8.png",
+                x: -0.45,
+                y: -0.25,
+                scale: 0.45
+            }
+        ]
+    };
+    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    const facing = config.facing ?? defaultConfig.facing;
+
     const tokenWidth = token.document.width;
     const mirrorFace = facing === 'right';
     const facingFactor = mirrorFace ? -1 : 1;
@@ -25,14 +46,14 @@ async function create(token, {id = 'soulsucked', duration = 0, facing = 'left'} 
     let soulSuckedEffect = new Sequence()
         .effect()
         .name(id)
-        .file("https://i.imgur.com/dBaFOB8.png")
+        .file(effect[0].img)
         .atLocation(token)
-        .scaleIn(0, 1000, {ease: "easeOutElastic"})
-        .scaleOut(0, 1000, {ease: "easeOutExpo"})
-        .spriteOffset({x:(-0.45*tokenWidth)*facingFactor, y:-0.25}, { gridUnits: true, local: true})
-        .scaleToObject(0.45)
+        .scaleIn(0, 1000, { ease: "easeOutElastic" })
+        .scaleOut(0, 1000, { ease: "easeOutExpo" })
+        .spriteOffset({ x: (effect[0].x * tokenWidth) * facingFactor, y: (effect[0].y * tokenWidth) }, { gridUnits: true, local: true })
+        .scaleToObject(effect[0].scale)
         .mirrorX(mirrorFace)
-        .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits:true, pingPong: true})
+        .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits: true, pingPong: true })
         .waitUntilFinished();
 
     if (duration > 0) {
@@ -40,8 +61,8 @@ async function create(token, {id = 'soulsucked', duration = 0, facing = 'left'} 
     } else {
         soulSuckedEffect = soulSuckedEffect.persist();
     }
-    
-    return soulSuckedEffect.attachTo(token, {bindAlpha: false});
+
+    return soulSuckedEffect.attachTo(token, { bindAlpha: false });
 }
 
 async function play(token, config = {}) {
