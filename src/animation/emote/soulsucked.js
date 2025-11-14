@@ -29,10 +29,10 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             {
-                img: "https://i.imgur.com/dBaFOB8.png",
+                img: eskieMacros.img('emote', 'soul_sucked', "01"),
                 x: -0.45,
                 y: -0.25,
-                scale: 0.45
+                scale: 0.7
             }
         ]
     };
