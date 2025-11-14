@@ -9,31 +9,47 @@
  *
  * @param {Token} token The token to play the effect on.
  * 
- * @param {object} [options={}] Options for the effect.
- * @param {string} [options.id='angry'] The id of the effect.
- * @param {number} [options.duration=5000] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
- * @param {string} [options.file] The file to use for the effect. If not provided, it will be determined based on installed modules.
- * 
- * @param {object} [offsets={}] Options for the effect offsets.
- * @param {number} [offsets.offsetx=0.3] The x offset of the effect in grid units.
- * @param {number} [offsets.offsety=-0.3] The y offset of the effect in grid units.
- * @param {number} [offsets.scale=0.65] The scale of the effect.
+ * @param {object} [config={}] Configuration for the effect.
+ * @param {string} [config.id='angry'] The id of the effect.
+ * @param {number} [config.duration=5000] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
+ * @param {string} [config.file] The file to use for the effect. If not provided, it will be determined based on installed modules.
+ * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
+ * @param {number} [config.effect.x] The x offset of the effect in grid units.
+ * @param {number} [config.effect.y] The y offset of the effect in grid units.
+ * @param {number} [config.effect.scale] The scale of the effect.
  * 
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
-async function create(token, {id = 'angry', duration = 5000, file = undefined} = {}, {offsetx = 0.3, offsety = -0.3, scale = 0.65} = {}) {
+async function create(token, config) {
+    // Merge user config with default config
+    const defaultConfig = {
+        id: 'angry',
+        duration: 5000,
+        effect: [
+            { x: 0.3, y: -0.3, scale: 0.65, img: eskieMacros.img('emote', 'angry', '02') },
+            { x: 0.3, y: -0.3, scale: 0.85, img: eskieMacros.img('emote', 'angry', '02') }
+        ],
+    };
+    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+
+    // Validate that we have the required configurations
+    if (effect[0].img === undefined || effect[1].img === undefined) {
+        ui.notifications.error("Eskie Macros: Required module 'Eskie Effects' or 'Eskie Effects Free' is not installed or activated. Please install/activate the module to use the default images for this effect.");
+        return;
+    }
+    
+    // Extract out necessary config values
     const tokenWidth = token.document.width;
-    if (!file) file = eskieMacros.file('emote', 'angry', '02');
 
     let angryEffect = new Sequence()
         .effect()
         .name(id)
-        .file(file)
+        .file(effect[0].img)
         .atLocation(token)
         .scaleIn(0, 1000, {ease: "easeOutElastic"})
         .scaleOut(0, 1000, {ease: "easeOutExpo"})
-        .spriteOffset({ x: offsetx*tokenWidth, y: offsety*tokenWidth }, { gridUnits: true, local: true })
-        .scaleToObject(scale)
+        .spriteOffset({ x: effect[0].x * tokenWidth, y: effect[0].y * tokenWidth }, { gridUnits: true, local: true })
+        .scaleToObject(effect[0].scale)
     angryEffect = (duration > 0) ? angryEffect.duration(duration) : angryEffect.persist();    
     angryEffect = angryEffect.duration(duration)
         .attachTo(token, { bindAlpha: false })
@@ -42,12 +58,12 @@ async function create(token, {id = 'angry', duration = 5000, file = undefined} =
 
         .effect()
         .name(id)
-        .file(file)
+        .file(effect[1].img)
         .atLocation(token)
         .scaleIn(0, 1000, {ease: "easeOutElastic"})
         .scaleOut(0, 1000, {ease: "easeOutExpo"})
-        .spriteOffset({ x: offsetx*tokenWidth, y: offsety*tokenWidth }, { gridUnits: true, local: true })
-        .scaleToObject(scale);
+        .spriteOffset({ x: effect[1].x * tokenWidth, y: effect[1].y * tokenWidth }, { gridUnits: true, local: true })
+        .scaleToObject(effect[1].scale);
     angryEffect = (duration > 0) ? angryEffect.duration(duration) : angryEffect.persist();
     angryEffect = angryEffect
         .attachTo(token, {bindAlpha: false})
@@ -57,8 +73,8 @@ async function create(token, {id = 'angry', duration = 5000, file = undefined} =
     return angryEffect;
 }
 
-async function play(token, config = {}, options = {}) {
-    let seq = await create(token, config, options);
+async function play(token, config = {}) {
+    let seq = await create(token, config);
     await seq.play();
 }
 

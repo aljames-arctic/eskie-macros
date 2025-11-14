@@ -1,5 +1,8 @@
-function file(...categories) {
-    eskieMacros.dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]);
+function img(...categories) {
+    // If we don't have the required module, return undefined
+    try{ eskieMacros.dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]); } 
+    catch (e) {  return undefined; }
+
     const isPatreonUser = eskieMacros.dependency.isActivated({ id: 'eskie-effects' });
     const modulePrefix = (isPatreonUser) ? `eskie` : `eskie-free`;
     
@@ -23,5 +26,5 @@ function file(...categories) {
 }
 
 export const filemanager = {
-    file,
+    img,
 }
