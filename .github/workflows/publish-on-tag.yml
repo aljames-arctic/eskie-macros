@@ -89,26 +89,27 @@ jobs:
         with:
           files: 'module.json'
         env:
-          VERSION: ${{github.event.release.tag_name}}
+          VERSION: ${{steps.get_version.outputs.version-without-v}}
           URL: ${{ env.project_url }}
           MANIFEST: ${{ env.release_manifest_url }}
           DOWNLOAD: ${{ env.release_module_url }}
 
       # Install npm dependencies. and build the dist folder
-      - name: Install npm dependencies
-        run: npm ci --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Build
-        run: npm run build; cp module.json dist/module.json
 
       # Create a "module.zip" archive containing all the module's required files.
       # If you have other directories or files that will need to be added to
       # your packaged module, add them here.
       - name: Create Module Archive
-        working-directory: ./dist
-        run: zip -r module.zip *
+        run: |
+          zip                                    \
+            --recurse-paths                      \
+             ./module.zip                        \
+            module.json                          \
+            README.md                            \
+            LICENSE                              \
+            src/                                 \
+            lang/                                \
 
       # Update the GitHub release with the manifest and module archive files.
       - name: Update Release With Files
@@ -120,6 +121,6 @@ jobs:
           draft: ${{ github.event.release.unpublished }}
           prerelease: ${{ github.event.release.prerelease }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: './dist/module.json, ./dist/module.zip'
+          artifacts: './module.json, ./module.zip'
           tag: ${{ github.event.release.tag_name }}
           body: ${{ github.event.release.body }}
