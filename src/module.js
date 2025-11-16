@@ -1,5 +1,5 @@
 import { dependency } from './lib/dependency.js';
-import { animation } from './animation/animation.js';
+import { animation } from './animation/_animation.js';
 import { filemanager } from './lib/filemanager.js';
 import { util } from './lib/util.js';
 import { templates } from './templates/templates.js';
