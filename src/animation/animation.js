@@ -5,6 +5,7 @@ import { shout } from './emote/shout.js';
 import { slap } from './emote/slap.js';
 import { soulsucked } from './emote/soulsucked.js';
 import { surprised } from './emote/surprised.js';
+import { effect } from './effects/_effects.js';
 
 export const animation = {
     emote: {
@@ -16,4 +17,5 @@ export const animation = {
         soulsucked,
         surprised,
     },
+    effect,
 };
