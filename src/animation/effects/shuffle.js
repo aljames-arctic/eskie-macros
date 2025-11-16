@@ -3,7 +3,14 @@
    Update Author: bakanabaka
 ** */
 
-function create(targets, {sendToCenter = false, destinationPoints = targets.map(t => ({ x: t.x, y: t.y }))} = {}) {
+function create(targets, config = {}) {
+    // Merge user config with default config
+    const defaultConfig = {
+        sendToCenter: false,
+        destinationPoints: targets.map(t => ({ x: t.x, y: t.y })),
+    };
+    let { sendToCenter, destinationPoints } = foundry.utils.mergeObject(defaultConfig, config, {inplace:false});
+
     if (targets.length !== destinationPoints.length)
         throw `User provided ${targets.length} targets but ${destinationPoints.length} destination points. Can not shuffle.`;
 
@@ -32,7 +39,7 @@ function create(targets, {sendToCenter = false, destinationPoints = targets.map(
     return shuffleSeq;
 }
 
-async function play(targets, {repeat = targets.length, delay = 1000, sendToCenter = false} = {}) {
+async function play(targets, {repeat = 0, delay = 1000, sendToCenter = false} = {}) {
     const destinationPoints = targets.map(target => ({ x: target.x, y: target.y }));
     for (let i = 0; i <= repeat; i++) {
         let shuffleSeq = create(targets, {sendToCenter, destinationPoints});
