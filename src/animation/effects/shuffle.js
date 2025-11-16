@@ -3,8 +3,10 @@
    Update Author: bakanabaka
 ** */
 
-function create(targets, {sendToCenter = false} = {}) {
-    const destinationPoints = targets.map(target => ({ x: target.x, y: target.y }));
+function create(targets, {sendToCenter = false, destinationPoints = targets.map(t => ({ x: t.x, y: t.y }))} = {}) {
+    if (targets.length !== destinationPoints.length)
+        throw `User provided ${targets.length} targets but ${destinationPoints.length} destination points. Can not shuffle.`;
+
     const shuffle = destinationPoints.sort(() => Math.random() - 0.5);
     const shuffleSeq = new Sequence();
 
@@ -31,8 +33,9 @@ function create(targets, {sendToCenter = false} = {}) {
 }
 
 async function play(targets, {repeat = targets.length, delay = 1000, sendToCenter = false} = {}) {
+    const destinationPoints = targets.map(target => ({ x: target.x, y: target.y }));
     for (let i = 0; i <= repeat; i++) {
-        let shuffleSeq = create(targets, {sendToCenter});
+        let shuffleSeq = create(targets, {sendToCenter, destinationPoints});
         if (delay > 0) shuffleSeq = shuffleSeq.wait(delay);
         await shuffleSeq.play();
     }
