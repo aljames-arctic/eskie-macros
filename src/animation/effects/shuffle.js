@@ -17,6 +17,8 @@ function create(targets, config = {}) {
     const shuffle = destinationPoints.sort(() => Math.random() - 0.5);
     const shuffleSeq = new Sequence();
 
+    if (targets.length === 0) return shuffleSeq;
+
     if (sendToCenter) {
         let centerPoint = destinationPoints.reduce((acc, { x, y }) => ({ x: acc.x + x, y: acc.y + y }), { x: 0, y: 0 });
         centerPoint.x /= destinationPoints.length;
