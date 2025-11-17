@@ -19,3 +19,7 @@ The following API updates were made to align the script with the latest Foundry 
 *   The deprecated `.from()` method was replaced with `.copySprite()`.
 
 These changes ensure that the script is compatible with the latest version of Foundry VTT and follows the recommended API practices.
+
+## Bug Fixes
+
+*   Added a check to ensure that `canvas.scene.background.src` has a value before creating an effect that uses it. This prevents an error when the scene has no background image.

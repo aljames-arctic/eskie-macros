@@ -1,10 +1,11 @@
 async function create(source, target, config = {}) {
     const defaultConfig = {
         targetDeath: true,
+        deleteTarget: false,
         teleport: true,
         cameraFocus: true,
     };
-    let { targetDeath, teleport, cameraFocus } = foundry.utils.mergeObject(defaultConfig, config, {inplace:false});
+    let { targetDeath, teleport, cameraFocus, deleteTarget } = foundry.utils.mergeObject(defaultConfig, config, {inplace:false});
 
     const style = {
         "fill": "#ffffff",
@@ -99,15 +100,17 @@ async function create(source, target, config = {}) {
 
     sequence.wait(500)
 
-    sequence.effect()
-        .file(canvas.scene.background.src)
-        .filter("ColorMatrix", { brightness: 0.3})
-        .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
-        .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
-        .duration(3000)
-        .fadeIn(500)
-        .fadeOut(500)
-        .belowTokens()
+    if (canvas.scene.background.src) {
+        sequence.effect()
+            .file(canvas.scene.background.src)
+            .filter("ColorMatrix", { brightness: 0.3})
+            .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
+            .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
+            .duration(3000)
+            .fadeIn(500)
+            .fadeOut(500)
+            .belowTokens()
+    }
 
     sequence.effect()
         .file("animated-spell-effects-cartoon.magic.mind sliver")
