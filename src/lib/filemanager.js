@@ -1,4 +1,6 @@
-function img(modulePrefix, ...categories) {
+import { dependency } from './dependency.js'
+
+function closestImage(modulePrefix, ...categories) {
     let currentPath = modulePrefix;
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
 
@@ -18,38 +20,39 @@ function img(modulePrefix, ...categories) {
     return currentPath;
 }
 
-function closestImg(path) {
+function img(path) {
     let categories = path.split('.');
+    if (categories.length === 0) return;
     let isPatreonUser = false;
-    let modulePrefix = '';
+    let modulePrefix = categories.shift();
 
-    switch (categories[0]) {
+    switch (modulePrefix) {
         case 'eskie':
         case 'eskie-free':
-            try{ eskieMacros.dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]); } 
+            try{ dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]); } 
             catch (e) {  return undefined; }
-            isPatreonUser = eskieMacros.dependency.isActivated({ id: 'eskie-effects' });
+            isPatreonUser = dependency.isActivated({ id: 'eskie-effects' });
             modulePrefix = (isPatreonUser) ? `eskie` : `eskie-free`;
             break;
-        case 'JB2A_DnD5e':
-        case 'jb2a_patreon':
-            try{ eskieMacros.dependency.required({ id: 'eskie-effects' }, { id: 'eskie-effects-free' }); } 
+        case 'jb2a':
+            try{ dependency.someRequired([{ id: 'jb2a_patreon' }, { id: 'JB2A_DnD5e' }]); } 
             catch (e) {  return undefined; }
-            isPatreonUser = eskieMacros.dependency.isActivated({ id: 'eskie-effects' });
-            modulePrefix = (isPatreonUser) ? `eskie` : `eskie-free`;
+            isFreeUser = dependency.isActivated({ id: 'JB2A_DnD5e' });
+            isPatreonUser = dependency.isActivated({ id: 'jb2a_patreon' });
+            if (isPatreonUser && isFreeUser) 
+                ui.notifications.warn('Both JB2A Patreon and Free are installed!! Both modules use the path `jb2a.` to prefix files. This can cause conflicts! Recommend disabling the free version.');
+            modulePrefix = `jb2a`;
             break;
         case 'animated-spell-effects':
         case 'animated-spell-effects-cartoon':
-            try{ eskieMacros.dependency.required({ id: `${categories[0]}` }); } 
+            try{ dependency.required({ id: modulePrefix }); } 
             catch (e) {  return undefined; }
-            modulePrefix = categories[0];
             break;
     }
 
-    return img(modulePrefix, ...categories);
+    return closestImage(modulePrefix, ...categories);
 }
 
 export const filemanager = {
     img,
-    closestImg,
 }
