@@ -49,6 +49,26 @@
         "id": "eskie-effects-free",
         "type": "module",
         "compatibility": {}
+      },
+      {
+        "id": "animated-spell-effects",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "animated-spell-effects-cartoon",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "jb2a_patreon",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "JB2A_DnD5e",
+        "type": "module",
+        "compatibility": {}
       }
     ]
   },
