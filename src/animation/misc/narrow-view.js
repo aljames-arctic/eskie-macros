@@ -10,7 +10,7 @@ async function create(config = {}) {
     const height = cHeight / 4;
     
     let sequence = new Sequence();
-    sequence.effect()
+    sequence = sequence.effect()
         .name(`${id}-top`)
         .screenSpace()
         .screenSpaceAnchor({ x: 0, y: 0 })
@@ -27,7 +27,28 @@ async function create(config = {}) {
         })
         .delay(2000)
         .animateProperty("topbar", "position.y", { from: -height, to: 0, duration: duration, ease: "linear"})
-        .persist()
+        .persist();
+
+    sequence = sequence.effect()
+        .name(`${id}-bottom`)
+        .screenSpace()
+        .screenSpaceAnchor({ x: 0, y: 0 })
+        .atLocation({ x: 0, y: cHeight - height })
+        .shape("rectangle", {
+            lineSize: 1,
+            lineColor: "#000000",
+            fillColor: "#000000",
+            width: canvas.screenDimensions[0],
+            height: height,
+            offset: {x:0, y:0},
+            fillAlpha: 1,
+            gridUnits: false,
+            name: "bottombar"
+        })
+        .delay(2000)
+        .animateProperty("bottombar", "position.y", { from: height, to: 0, duration: duration, ease: "linear"})
+        .persist();
+
     return sequence;
 }
 
@@ -37,8 +58,10 @@ async function play(config = {}) {
 }
 
 async function stop({id = 'narrow-view'} = {}) {
-    Sequencer.EffectManager.endEffects({ name: `${id}-top` });
-    Sequencer.EffectManager.endEffects({ name: `${id}-bottom` });
+    return Promise.all([
+        Sequencer.EffectManager.endEffects({ name: `${id}-top` }),
+        Sequencer.EffectManager.endEffects({ name: `${id}-bottom` })
+    ]);
 }
 
 export const narrowView = {

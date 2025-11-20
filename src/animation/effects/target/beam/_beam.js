@@ -1,5 +1,5 @@
 import { beam } from "./beam";
 
-export const beam = {
+export const beams = {
     beam,
 }

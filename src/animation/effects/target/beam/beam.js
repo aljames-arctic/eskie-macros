@@ -98,10 +98,15 @@ async function play(token, target, config = {}) {
 }
 
 async function stop(token, target, {id = 'beam'} = {}) {
-    return Sequencer.EffectManager.endEffects({ name: id, object: token });
+    return Promise.all([
+        Sequencer.EffectManager.endEffects({ name: id, object: token }),
+        Sequencer.EffectManager.endEffects({ name: id, object: target })
+    ]);
+    
 }
 
 export const beam = {
     create,
     play,
+    stop,
 };

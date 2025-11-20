@@ -1,5 +1,6 @@
 import { img } from '../../../lib/filemanager.js';
-import { beam } from './beam/beam.js';
+import { utils } from '../../../lib/utils.js';
+import { beam as beamEffect } from './beam/beam.js';
 
 /**
  * Helper function to apply a series of dissolving mask effects to a sequence.
@@ -145,6 +146,21 @@ function death(target, config) {
     return seq;
 }
 
+function beam(token, target, config) { 
+    const defaultConfig = {
+        id: 'disintegrate',
+        duration: 5000,
+        effect: [
+            { img: img(`jb2a.magic_signs.circle.02.transmutation.loop.dark_green`) },
+            { img: img(`jb2a.particles.outward.white.01.02`) },
+            { img: img(`jb2a.extras.tmfx.border.circle.inpulse.01.fast`) },
+            { img: img(`jb2a.disintegrate.green`) },
+        ],
+    };
+    let mergeConfig = utils.mergeObject(defaultConfig, config);
+    return beamEffect.create(token, target, mergeConfig);
+}
+
 /**
  * Creates a disintegrate effect sequence, combining a beam and a death animation.
  *
@@ -164,7 +180,7 @@ async function create(token, target, config) {
     };
     const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
 
-    let disintegrateEffect = beam.create(token, target, mergedConfig);
+    let disintegrateEffect = beam(token, target, mergedConfig);
     if (mergedConfig.targetDeath) // Chain the death animation if the target is dead
         disintegrateEffect = disintegrateEffect.addSequence(death(target, mergedConfig));
 
@@ -301,7 +317,9 @@ export const disintegrate = {
     create,
     play,
     stop,
+    // Subfunctions
+    beam,
     death,
     dissolve,
-    reform
+    reform,
 };
