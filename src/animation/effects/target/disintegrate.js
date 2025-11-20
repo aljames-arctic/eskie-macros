@@ -13,7 +13,7 @@ import { beam as beamEffect } from './beam/beam.js';
  * @param {object} options.offset The offset for the mask.
  * @param {Array<object>} options.steps The steps of the animation, containing radius, duration, and fill.
  */
-function _dissolve({ id, target, centerX, centerY, offset, steps }) {
+function _dissolve({ id, target, offset, steps, shape }) {
     let seq = new Sequence()
         // Make the original target token invisible
         .animation()
@@ -21,25 +21,19 @@ function _dissolve({ id, target, centerX, centerY, offset, steps }) {
         .opacity(0);
 
     for (const step of steps) {
-        const shape = {
-            lineSize: 25,
-            lineColor: "#FF0000",
-            radius: step.radius,
-            gridUnits: true,
-            name: "test",
-            isMask: true,
-            offset: offset,
-        };
+        const stepShape = { ...shape };
+        stepShape.radius = step.radius;
+        stepShape.offset = offset;
         if (step.fill) {
-            shape.fillColor = "#FF0000";
+            stepShape.fillColor = shape.fillColor;
         }
 
         seq = seq.effect()
             .name(id)
-            .atLocation({ x: centerX, y: centerY })
+            .atLocation({ x: target.center.x, y: target.center.y })
             .copySprite(target)
             .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", shape)
+            .shape("circle", stepShape)
             .duration(step.duration)
             .fadeOut(1000);
     }
@@ -47,17 +41,43 @@ function _dissolve({ id, target, centerX, centerY, offset, steps }) {
     return seq;
 }
 
-function dissolve(target, config) {
-    const defaultConfig = {
-        id: 'disintegrate'
+function _reform({ id, target, allSteps, shape }) {
+    const formingSequence = new Sequence();
+
+    for (const step of allSteps) {
+        const stepShape = { ...shape };
+        stepShape.radius = step.radius;
+        stepShape.offset = step.offset;
+        if (step.fill) {
+            stepShape.fillColor = shape.fillColor;
+        }
+
+        formingSequence.effect()
+            .name(id)
+            .atLocation({ x: target.center.x, y: target.center.y })
+            .copySprite(target)
+            .scaleToObject(target.document.texture.scaleX)
+            .shape("circle", stepShape)
+            .fadeIn(300)
+            .delay(step.duration - 200 > 0 ? step.duration - 200 : step.duration)
+            .persist();
+    }
+    return formingSequence;
+}
+
+function getDissolveShape() {
+    return {
+        lineSize: 25,
+        lineColor: "#FF0000",
+        gridUnits: true,
+        name: "test",
+        isMask: true,
+        fillColor: "#FF0000",
     };
-    const { id } = foundry.utils.mergeObject(defaultConfig, config);
+}
 
-    let centerX = target.x + canvas.grid.size / 2;
-    let centerY = target.y + canvas.grid.size / 2;
-
-    // Configuration for the different angles of the dissolve effect
-    const dissolveSections = [
+function getDissolveConfig() {
+    return [
         {
             offset: { x: canvas.grid.size * 0.1, y: -canvas.grid.size * 0.4 },
             steps: [
@@ -86,10 +106,19 @@ function dissolve(target, config) {
             ]
         }
     ];
+}
+
+function dissolve(target, config) {
+    const defaultConfig = {
+        id: 'disintegrate',
+    };
+    const { id } = foundry.utils.mergeObject(defaultConfig, config);
 
     let seq = new Sequence();
+    const dissolveSections = getDissolveConfig();
+    const shape = getDissolveShape();
     for (const section of dissolveSections) {
-        seq = seq.addSequence(_dissolve({ id, target, centerX, centerY, offset: section.offset, steps: section.steps }));
+        seq = seq.addSequence(_dissolve({ id, target, offset: section.offset, steps: section.steps, shape }));
     }
     return seq;
 }
@@ -108,22 +137,36 @@ function dissolve(target, config) {
  */
 function death(target, config) {
     const defaultConfig = {
-        id: 'disintegrate'
+        id: 'disintegrate',
+        effect: [
+            { // Smoke Effect
+                img: img("animated-spell-effects-cartoon.smoke.97"),
+                delay: 1000,
+                duration: 10000,
+                scale: 0.5,
+            },
+            { // Spirit Effect
+                img: img("jb2a.spirit_guardians.green.particles"),
+                duration: 7500,
+                scale: 0.35,
+            }
+        ]
     };
-    const { id } = foundry.utils.mergeObject(defaultConfig, config);
+    const { id, effect } = utils.mergeObject(defaultConfig, config);
+    const [smokeEffect, spiritEffect] = effect;
 
     let seq = new Sequence()
         // Add a smoke puff effect
         .effect()
         .name(id)
-        .file(img("animated-spell-effects-cartoon.smoke.97"))
+        .file(smokeEffect.img)
         .atLocation(target, { offset: { y: -0.25 }, gridUnits: true })
         .fadeIn(1000)
         .scaleIn(0, 1000, { ease: "easeOutCubic" })
-        .delay(1000)
-        .duration(10000)
+        .delay(smokeEffect.delay)
+        .duration(smokeEffect.duration)
         .fadeOut(500)
-        .scaleToObject(0.5)
+        .scaleToObject(smokeEffect.scale)
         .filter("ColorMatrix", { brightness: 0 })
         .zIndex(0.1)
         .belowTokens()
@@ -131,11 +174,11 @@ function death(target, config) {
         // Add swirling spirit particle effects
         .effect()
         .name(id)
-        .file(img("jb2a.spirit_guardians.green.particles"))
+        .file(spiritEffect.img)
         .atLocation(target)
-        .duration(7500)
+        .duration(spiritEffect.duration)
         .fadeOut(3000)
-        .scaleToObject(0.35)
+        .scaleToObject(spiritEffect.scale)
         .filter("ColorMatrix", { hue: -25 })
         .belowTokens()
 
@@ -222,45 +265,12 @@ function reform(target, config) {
         duration: 500,
     };
     const { id, duration } = foundry.utils.mergeObject(defaultConfig, config);
-
-    const centerX = target.x + canvas.grid.size / 2;
-    const centerY = target.y + canvas.grid.size / 2;
-
     const reformSequence = new Sequence();
+    const dissolveSections = getDissolveConfig();
+    const shape = getDissolveShape();
 
     // Set target to be invisible at the start
     reformSequence.animation().on(target).opacity(0);
-
-    // Configuration for the different angles of the dissolve effect
-    const dissolveSections = [
-        {
-            offset: { x: canvas.grid.size * 0.1, y: -canvas.grid.size * 0.4 },
-            steps: [
-                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.2, duration: 1800 },
-                { radius: 0.25, duration: 2000 }, { radius: 0.3, duration: 2200 },
-                { radius: 0.35, duration: 2400 }, { radius: 0.4, duration: 2600 },
-                { radius: 0.45, duration: 2800 },
-            ]
-        },
-        {
-            offset: { x: -canvas.grid.size * 0.4, y: canvas.grid.size * 0.3 },
-            steps: [
-                { radius: 0.15, duration: 500, fill: true }, { radius: 0.2, duration: 700 },
-                { radius: 0.25, duration: 900 }, { radius: 0.3, duration: 1100 },
-                { radius: 0.35, duration: 1300 }, { radius: 0.4, duration: 1500 },
-                { radius: 0.45, duration: 1700 }, { radius: 0.5, duration: 1900 },
-                { radius: 0.55, duration: 2100 },
-            ]
-        },
-        {
-            offset: { x: canvas.grid.size * 0.5, y: canvas.grid.size * 0.4 },
-            steps: [
-                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.25, duration: 1900 },
-                { radius: 0.3, duration: 2100 }, { radius: 0.35, duration: 2300 },
-                { radius: 0.4, duration: 2500 }, { radius: 0.45, duration: 2700 },
-            ]
-        }
-    ];
 
     const allSteps = [];
     dissolveSections.forEach(section => {
@@ -272,32 +282,7 @@ function reform(target, config) {
     allSteps.sort((a, b) => a.duration - b.duration);
     const maxDuration = allSteps.length > 0 ? Math.max(...allSteps.map(s => s.duration)) : 0;
 
-    const formingSequence = new Sequence();
-
-    for (const step of allSteps) {
-        const shape = {
-            lineSize: 25,
-            lineColor: "#FF0000",
-            radius: step.radius,
-            gridUnits: true,
-            name: "test",
-            isMask: true,
-            offset: step.offset,
-        };
-        if (step.fill) {
-            shape.fillColor = "#FF0000";
-        }
-
-        formingSequence.effect()
-            .name(`${id}_part`)
-            .atLocation({ x: centerX, y: centerY })
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", shape)
-            .fadeIn(300)
-            .delay(step.duration - 200 > 0 ? step.duration - 200 : step.duration)
-            .persist();
-    }
+    const formingSequence = _reform({ id: id, target, allSteps, shape: shape });
 
     reformSequence
         .addSequence(formingSequence)
@@ -307,7 +292,7 @@ function reform(target, config) {
         .opacity(1.0)
         .wait(100)
         .thenDo(() => {
-            Sequencer.EffectManager.endEffects({ name: `${id}_part`, fadeOut: duration });
+            Sequencer.EffectManager.endEffects({ name: id, fadeOut: duration });
         });
 
     return reformSequence;
