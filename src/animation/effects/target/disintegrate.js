@@ -192,7 +192,6 @@ function death(target, config) {
 function beam(token, target, config) { 
     const defaultConfig = {
         id: 'disintegrate',
-        duration: 5000,
         effect: [
             { img: img(`jb2a.magic_signs.circle.02.transmutation.loop.dark_green`) },
             { img: img(`jb2a.particles.outward.white.01.02`) },

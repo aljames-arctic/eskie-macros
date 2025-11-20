@@ -4,7 +4,6 @@ import { utils } from "../../../../lib/utils.js";
 function create(token, target, config) {
     const defaultConfig = {
         id: 'beam',
-        duration: 5000,
         effect: [
             { img: img(`jb2a.magic_signs.circle.02.transmutation.loop.dark_green`) },
             { img: img(`jb2a.particles.outward.white.01.02`) },
@@ -12,7 +11,7 @@ function create(token, target, config) {
             { img: img(`jb2a.disintegrate.green`) },
         ],
     };
-    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
+    let { id, effect } = utils.mergeObject(defaultConfig, config);
 
     let seq = new Sequence()
         .effect()
