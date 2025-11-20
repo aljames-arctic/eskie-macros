@@ -14,6 +14,11 @@ import { beam } from './beam/beam.js';
  */
 function _dissolve({ id, target, centerX, centerY, offset, steps }) {
     let seq = new Sequence()
+        // Make the original target token invisible
+        .animation()
+        .on(target)
+        .opacity(0);
+
     for (const step of steps) {
         const shape = {
             lineSize: 25,
@@ -100,11 +105,6 @@ function death(target, config) {
     let { id } = config;
 
     let seq = new Sequence()
-        // Make the original target token invisible
-        .animation()
-        .on(target)
-        .opacity(0)
-
         // Add a smoke puff effect
         .effect()
         .name(id)
@@ -154,17 +154,14 @@ async function create(token, target, config) {
     const defaultConfig = {
         id: 'disintegrate',
         targetDeath: true,
-        targetDelete: false,
     };
     const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
 
-    const beamEffect = beam.create(token, target, mergedConfig);
-    const deathEffect = death(target, mergedConfig);
+    let disintegrateEffect = beam.create(token, target, mergedConfig);
+    if (mergedConfig.targetDeath) // Chain the death animation if the target is dead
+        disintegrateEffect = disintegrateEffect.addSequence(death(target, mergedConfig));
 
-    // Chain the beam and death effects together into one sequence
-    return new Sequence()
-        .addSequence(beamEffect)
-        .addSequence(deathEffect);
+    return disintegrateEffect;
 }
 
 /**
@@ -190,10 +187,109 @@ async function stop(token, {id = 'disintegrate'} = {}) {
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
+/**
+ * Creates a "reform" effect, which is the reverse of the disintegrate effect.
+ * @param {Token} target The token to apply the effect to.
+ * @param {object} config Configuration for the effect.
+ * @returns {Sequence} A Sequencer sequence object.
+ */
+function reform(target, config) {
+    const { id = 'disintegrate-reform', duration = 500 } = config;
+    const centerX = target.x + canvas.grid.size / 2;
+    const centerY = target.y + canvas.grid.size / 2;
+
+    const reformSequence = new Sequence();
+
+    // Set target to be invisible at the start
+    reformSequence.animation().on(target).opacity(0);
+
+    // Configuration for the different angles of the dissolve effect
+    const dissolveSections = [
+        {
+            offset: { x: canvas.grid.size * 0.1, y: -canvas.grid.size * 0.4 },
+            steps: [
+                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.2, duration: 1800 },
+                { radius: 0.25, duration: 2000 }, { radius: 0.3, duration: 2200 },
+                { radius: 0.35, duration: 2400 }, { radius: 0.4, duration: 2600 },
+                { radius: 0.45, duration: 2800 },
+            ]
+        },
+        {
+            offset: { x: -canvas.grid.size * 0.4, y: canvas.grid.size * 0.3 },
+            steps: [
+                { radius: 0.15, duration: 500, fill: true }, { radius: 0.2, duration: 700 },
+                { radius: 0.25, duration: 900 }, { radius: 0.3, duration: 1100 },
+                { radius: 0.35, duration: 1300 }, { radius: 0.4, duration: 1500 },
+                { radius: 0.45, duration: 1700 }, { radius: 0.5, duration: 1900 },
+                { radius: 0.55, duration: 2100 },
+            ]
+        },
+        {
+            offset: { x: canvas.grid.size * 0.5, y: canvas.grid.size * 0.4 },
+            steps: [
+                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.25, duration: 1900 },
+                { radius: 0.3, duration: 2100 }, { radius: 0.35, duration: 2300 },
+                { radius: 0.4, duration: 2500 }, { radius: 0.45, duration: 2700 },
+            ]
+        }
+    ];
+
+    const allSteps = [];
+    dissolveSections.forEach(section => {
+        section.steps.forEach(step => {
+            allSteps.push({ ...step, offset: section.offset });
+        });
+    });
+
+    allSteps.sort((a, b) => a.duration - b.duration);
+    const maxDuration = allSteps.length > 0 ? Math.max(...allSteps.map(s => s.duration)) : 0;
+
+    const formingSequence = new Sequence();
+
+    for (const step of allSteps) {
+        const shape = {
+            lineSize: 25,
+            lineColor: "#FF0000",
+            radius: step.radius,
+            gridUnits: true,
+            name: "test",
+            isMask: true,
+            offset: step.offset,
+        };
+        if (step.fill) {
+            shape.fillColor = "#FF0000";
+        }
+
+        formingSequence.effect()
+            .name(`${id}_part`)
+            .atLocation({ x: centerX, y: centerY })
+            .copySprite(target)
+            .scaleToObject(target.document.texture.scaleX)
+            .shape("circle", shape)
+            .fadeIn(300)
+            .delay(step.duration - 200 > 0 ? step.duration - 200 : step.duration)
+            .persist();
+    }
+
+    reformSequence
+        .addSequence(formingSequence)
+        .wait(maxDuration + duration)
+        .animation()
+        .on(target)
+        .opacity(1.0)
+        .wait(100)
+        .thenDo(() => {
+            Sequencer.EffectManager.endEffects({ name: `${id}_part`, fadeOut: duration });
+        });
+
+    return reformSequence;
+}
+
 export const disintegrate = {
     create,
     play,
     stop,
     death,
     dissolve,
+    reform
 };
