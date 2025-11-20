@@ -1,21 +1,117 @@
 import { img } from '../../../lib/filemanager.js';
 import { beam } from './beam/beam.js';
 
+/**
+ * Helper function to apply a series of dissolving mask effects to a sequence.
+ * @param {Sequence} sequence The sequence to add the effects to.
+ * @param {object} options The options for the dissolve effect.
+ * @param {string} options.id The unique ID for the effect.
+ * @param {Token} options.target The target token.
+ * @param {number} options.centerX The center X coordinate.
+ * @param {number} options.centerY The center Y coordinate.
+ * @param {object} options.offset The offset for the mask.
+ * @param {Array<object>} options.steps The steps of the animation, containing radius, duration, and fill.
+ */
+function _dissolve({ id, target, centerX, centerY, offset, steps }) {
+    let seq = new Sequence()
+    for (const step of steps) {
+        const shape = {
+            lineSize: 25,
+            lineColor: "#FF0000",
+            radius: step.radius,
+            gridUnits: true,
+            name: "test",
+            isMask: true,
+            offset: offset,
+        };
+        if (step.fill) {
+            shape.fillColor = "#FF0000";
+        }
+
+        seq = seq.effect()
+            .name(id)
+            .atLocation({ x: centerX, y: centerY })
+            .copySprite(target)
+            .scaleToObject(target.document.texture.scaleX)
+            .shape("circle", shape)
+            .duration(step.duration)
+            .fadeOut(1000);
+    }
+
+    return seq;
+}
+
+function dissolve(target, config) {
+    let { id } = config;
+    let centerX = target.x + canvas.grid.size / 2;
+    let centerY = target.y + canvas.grid.size / 2;
+
+    // Configuration for the different angles of the dissolve effect
+    const dissolveSections = [
+        {
+            offset: { x: canvas.grid.size * 0.1, y: -canvas.grid.size * 0.4 },
+            steps: [
+                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.2, duration: 1800 },
+                { radius: 0.25, duration: 2000 }, { radius: 0.3, duration: 2200 },
+                { radius: 0.35, duration: 2400 }, { radius: 0.4, duration: 2600 },
+                { radius: 0.45, duration: 2800 },
+            ]
+        },
+        {
+            offset: { x: -canvas.grid.size * 0.4, y: canvas.grid.size * 0.3 },
+            steps: [
+                { radius: 0.15, duration: 500, fill: true }, { radius: 0.2, duration: 700 },
+                { radius: 0.25, duration: 900 }, { radius: 0.3, duration: 1100 },
+                { radius: 0.35, duration: 1300 }, { radius: 0.4, duration: 1500 },
+                { radius: 0.45, duration: 1700 }, { radius: 0.5, duration: 1900 },
+                { radius: 0.55, duration: 2100 },
+            ]
+        },
+        {
+            offset: { x: canvas.grid.size * 0.5, y: canvas.grid.size * 0.4 },
+            steps: [
+                { radius: 0.15, duration: 1500, fill: true }, { radius: 0.25, duration: 1900 },
+                { radius: 0.3, duration: 2100 }, { radius: 0.35, duration: 2300 },
+                { radius: 0.4, duration: 2500 }, { radius: 0.45, duration: 2700 },
+            ]
+        }
+    ];
+
+    let seq = new Sequence();
+    for (const section of dissolveSections) {
+        seq = seq.addSequence(_dissolve({ id, target, centerX, centerY, offset: section.offset, steps: section.steps }));
+    }
+    return seq;
+}
+
+/**
+ * This function creates the core disintegration animation for a target token.
+ * It works by first making the token invisible, then layering several visual effects.
+ * The "dissolving" effect is achieved by creating multiple copies of the token's image
+ * and applying a series of expanding circular masks to them, which makes it look like
+ * the token is being eaten away from different angles.
+ *
+ * @param {Token} target The token to apply the death effect to.
+ * @param {object} config Configuration object for the effect.
+ * @param {string} config.id The unique ID for the effects sequence.
+ * @returns {Sequence} A Sequencer sequence object representing the death animation.
+ */
 function death(target, config) {
-    let { id, targetDeath } = config;
-    let centerX =  target.x+canvas.grid.size/2
-    let centerY =  target.y+canvas.grid.size/2
-    let deathEffect = new Sequence()
+    let { id } = config;
+
+    let seq = new Sequence()
+        // Make the original target token invisible
         .animation()
         .on(target)
         .opacity(0)
 
+        // Add a smoke puff effect
         .effect()
         .name(id)
         .file(img("animated-spell-effects-cartoon.smoke.97"))
-        .atLocation(target, {offset:{y:-0.25}, gridUnits: true})
+        .atLocation(target, { offset: { y: -0.25 }, gridUnits: true })
         .fadeIn(1000)
-        .scaleIn(0, 1000, {ease: "easeOutCubic"})
+        .scaleIn(0, 1000, { ease: "easeOutCubic" })
         .delay(1000)
         .duration(10000)
         .fadeOut(500)
@@ -24,6 +120,7 @@ function death(target, config) {
         .zIndex(0.1)
         .belowTokens()
 
+        // Add swirling spirit particle effects
         .effect()
         .name(id)
         .file(img("jb2a.spirit_guardians.green.particles"))
@@ -34,404 +131,23 @@ function death(target, config) {
         .filter("ColorMatrix", { hue: -25 })
         .belowTokens()
 
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                fillColor: "#FF0000",
-                radius: 0.15,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-                
-            })
-        .duration(1500)
-        .fadeOut(1000)
+        // Dissolve and wait
+        .addSequence(dissolve(target, config))
+        .wait(1500);
 
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.2,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4},            
-            })
-        .duration(1800)
-        .fadeOut(1000)
-                    
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.25,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-            })
-        .duration(2000)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.3,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-            })
-        .duration(2200)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.35,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-            })   
-        .duration(2400)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.4,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-            })
-        .duration(2600)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.45,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.1, y:-canvas.grid.size*0.4}, 
-            })    
-        .duration(2800)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                fillColor: "#FF0000",
-                radius: 0.15,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-                
-            })
-        .duration(500)
-        .fadeOut(1000)    
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.2,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3},           
-            })
-        .duration(700)
-        .fadeOut(1000)              
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.25,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })
-        .duration(900)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.3,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })
-        .duration(1100)
-        .fadeOut(1000)  
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.35,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })   
-        .duration(1300)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.4,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })
-        .duration(1500)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.45,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })   
-        .duration(1700)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.5,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            }) 
-        .duration(1900)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.55,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:-canvas.grid.size*0.4, y:canvas.grid.size*0.3}, 
-            })
-        .duration(2100)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                fillColor: "#FF0000",
-                radius: 0.15,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4}, 
-                
-            })
-        .duration(1500)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX) 
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.25,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4},  
-            })
-        .duration(1900)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.3,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4}, 
-            })
-        .duration(2100)
-        .fadeOut(1000)
-
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.35,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4}, 
-            })   
-        .duration(2300)
-        .fadeOut(1000)
-            
-        // Always Play
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.4,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4}, 
-            })
-        .duration(2500)
-        .fadeOut(1000)    
-
-        // Only Death
-        .effect()
-            .name(id)
-            .atLocation({x:centerX, y:centerY})
-            .copySprite(target)
-            .scaleToObject(target.document.texture.scaleX)
-            .shape("circle", {
-                lineSize: 25,
-                lineColor: "#FF0000",
-                radius: 0.45,
-                gridUnits: true,
-                name: "test",
-                isMask: true,
-                offset: {x:canvas.grid.size*0.5, y:canvas.grid.size*0.4}, 
-            })    
-        .duration(2700)
-        .fadeOut(1000)
-
-        // Always
-        .wait(1500)
-    return deathEffect;
+    return seq;
 }
 
 /**
- * Creates a disintegrate effect.
+ * Creates a disintegrate effect sequence, combining a beam and a death animation.
  *
- * @param {Token} token The token to play the effect on.
+ * @param {Token} token The token initiating the effect.
  * @param {Token} target The token to be disintegrated.
- * 
  * @param {object} [config={}] Configuration for the effect.
  * @param {string} [config.id='disintegrate'] The id of the effect.
- * @param {boolean} [config.targetDeath=true] Whether the target should be deleted.
+ * @param {boolean} [config.targetDeath=true] Whether the target should be marked for deletion in the animation.
  * 
- * @returns {Promise<void>} A promise that resolves when the effect is finished.
+ * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
  */
 async function create(token, target, config) {
     // Merge user config with default config
@@ -445,16 +161,31 @@ async function create(token, target, config) {
     const beamEffect = beam.create(token, target, mergedConfig);
     const deathEffect = death(target, mergedConfig);
 
+    // Chain the beam and death effects together into one sequence
     return new Sequence()
         .addSequence(beamEffect)
         .addSequence(deathEffect);
 }
 
+/**
+ * Creates and plays the full disintegrate effect.
+ * @param {Token} token The token initiating the effect.
+ * @param {Token} target The token to be disintegrated.
+ * @param {object} [config={}] Configuration for the effect.
+ * @returns {Promise<void>} A promise that resolves when the effect is finished.
+ */
 async function play(token, target, config = {}) {
     let seq = await create(token, target, config);
     await seq.play();
 }
 
+/**
+ * Stops the disintegrate effect on a given token.
+ * @param {Token} token The token on which to stop the effect.
+ * @param {object} [config={}] Configuration for stopping the effect.
+ * @param {string} [config.id='disintegrate'] The id of the effect to stop.
+ * @returns {Promise<void>}
+ */
 async function stop(token, {id = 'disintegrate'} = {}) {
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
@@ -464,4 +195,5 @@ export const disintegrate = {
     play,
     stop,
     death,
+    dissolve,
 };
