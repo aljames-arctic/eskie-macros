@@ -47,7 +47,11 @@ function _dissolve({ id, target, centerX, centerY, offset, steps }) {
 }
 
 function dissolve(target, config) {
-    let { id } = config;
+    const defaultConfig = {
+        id: 'disintegrate'
+    };
+    const { id } = foundry.utils.mergeObject(defaultConfig, config);
+
     let centerX = target.x + canvas.grid.size / 2;
     let centerY = target.y + canvas.grid.size / 2;
 
@@ -102,7 +106,10 @@ function dissolve(target, config) {
  * @returns {Sequence} A Sequencer sequence object representing the death animation.
  */
 function death(target, config) {
-    let { id } = config;
+    const defaultConfig = {
+        id: 'disintegrate'
+    };
+    const { id } = foundry.utils.mergeObject(defaultConfig, config);
 
     let seq = new Sequence()
         // Add a smoke puff effect
@@ -194,7 +201,12 @@ async function stop(token, {id = 'disintegrate'} = {}) {
  * @returns {Sequence} A Sequencer sequence object.
  */
 function reform(target, config) {
-    const { id = 'disintegrate-reform', duration = 500 } = config;
+    const defaultConfig = {
+        id: 'disintegrate',
+        duration: 500,
+    };
+    const { id, duration } = foundry.utils.mergeObject(defaultConfig, config);
+
     const centerX = target.x + canvas.grid.size / 2;
     const centerY = target.y + canvas.grid.size / 2;
 
