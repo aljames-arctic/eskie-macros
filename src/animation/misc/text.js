@@ -1,4 +1,3 @@
-
 async function create(token, text, config = {}) {
     const defaultConfig = {
         id: 'text',

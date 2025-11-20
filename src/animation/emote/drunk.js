@@ -35,7 +35,7 @@ async function create(token, config = {}) {
                 scale: 0.7
             },
             { // blush
-                img: img('eskie.emote', 'blush', '01'),
+                img: img('eskie.emote.blush.01'),
                 x: -0.15,
                 y: 0.15,
                 scale: 0.5

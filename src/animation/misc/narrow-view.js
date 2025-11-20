@@ -1,4 +1,3 @@
-
 async function create(config = {}) {
     const defaultConfig = {
         id: 'narrow-view',

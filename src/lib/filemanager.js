@@ -24,6 +24,7 @@ export function img(path) {
     let categories = path.split('.');
     if (categories.length === 0) return;
     let isPatreonUser = false;
+    let isFreeUser = false;
     let modulePrefix = categories.shift();
 
     switch (modulePrefix) {
