@@ -1,5 +1,7 @@
+import { img } from "../lib/filemanager.js";
+
 async function create(token, {angle = 53.13, coneSize = "thin", distance = 15} = {}) {
-    let coneImage = eskieMacros.file('crosshair', 'cone', coneSize, 'fantasy_01', 'white', 'full');
+    let coneImage = img(`eskie.crosshair.cone.${coneSize}.fantasy_01.white.full`);
 
     let cone = new Sequence()
     .crosshair("position")

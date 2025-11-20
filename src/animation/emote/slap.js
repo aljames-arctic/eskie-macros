@@ -1,4 +1,5 @@
-// Work In Progress
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
 
 /* **
    Originally Published: 5/1/2023
@@ -28,7 +29,7 @@ async function create(location, config = {}) {
         duration: 5000,
         effect: [
             { // impact
-                img: eskieMacros.img('sound', 'roar'),
+                img: img('eskie.sound.roar'),
                 x: 0.1,
                 y: -0.1,
                 scale: 1.7
@@ -45,7 +46,7 @@ async function create(location, config = {}) {
             }
         ]
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
 
     let slapEffect = new Sequence()
         .effect()
@@ -85,7 +86,7 @@ async function create(location, config = {}) {
 async function play(config = {}, crosshairOptions = undefined) {
     let crosshairConfig = {
         size:0.5,
-        icon: eskieMacros.img('crosshair', 'circle', 'fantasy_01') ?? 'icons/svg/circle.svg',
+        icon: img('eskie.crosshair', 'circle', 'fantasy_01') ?? 'icons/svg/circle.svg',
         label: 'slap',
         tag: 'Spray',
         drawIcon: false,

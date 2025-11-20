@@ -1,3 +1,6 @@
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
+
 /* **
    Originally Published: 4/14/2023
    Author: EskieMoh#2969 
@@ -26,11 +29,11 @@ async function create(token, config) {
         id: 'angry',
         duration: 5000,
         effect: [
-            { x: 0.3, y: -0.4, scale: 0.65, img: eskieMacros.img('emote', 'angry', '02') },
-            { x: 0.3, y: -0.4, scale: 0.85, img: eskieMacros.img('emote', 'angry', '02') }
+            { x: 0.3, y: -0.4, scale: 0.65, img: img('eskie.emote.angry.02') },
+            { x: 0.3, y: -0.4, scale: 0.85, img: img('eskie.emote.angry.02') }
         ],
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
 
     // Validate that we have the required configurations
     if (effect[0].img === undefined || effect[1].img === undefined) {

@@ -6,6 +6,6 @@ function mergeObject(defaultConfig, config) {
     return { id: userConfig.id, duration: userConfig.duration, effect: effectData };
 }
 
-export const util = {
+export const utils = {
     mergeObject,
 }

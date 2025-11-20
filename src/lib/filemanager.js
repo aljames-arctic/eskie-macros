@@ -20,7 +20,7 @@ function closestImage(modulePrefix, ...categories) {
     return currentPath;
 }
 
-function img(path) {
+export function img(path) {
     let categories = path.split('.');
     if (categories.length === 0) return;
     let isPatreonUser = false;

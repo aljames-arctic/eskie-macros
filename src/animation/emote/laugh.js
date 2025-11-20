@@ -1,3 +1,5 @@
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
 
 /* **
    Originally Published: 6/5/2023
@@ -29,7 +31,7 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             { // laughing face
-                img: eskieMacros.img('emote', 'laugh', '01', 'yellow'),
+                img: img('eskie.emote.laugh.01.yellow'),
                 x: 0.3,
                 y: -0.3,
                 scale: 0.9
@@ -37,7 +39,7 @@ async function create(token, config = {}) {
             {} // token shake
         ]
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
     const facing = config.facing ?? defaultConfig.facing;
 
     if (!effect[0].img) {

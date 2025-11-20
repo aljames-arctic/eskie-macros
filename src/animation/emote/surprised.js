@@ -1,3 +1,5 @@
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
 
 /* **
    Originally Published: 4/14/2023
@@ -26,7 +28,7 @@ async function create(token, config = {}) {
         duration: 0,
         effect: [
             {   // !! } surprised icon
-                img: eskieMacros.img('emote', 'surprised', "01"),
+                img: img('eskie.emote.surprised.01'),
                 scale: 1.2,
                 anchor: { x: -0.3, y: 1.25 },
                 x: -0.8,
@@ -34,7 +36,7 @@ async function create(token, config = {}) {
             }
         ]
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
 
     const tokenWidth = token.document.width;
 

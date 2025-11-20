@@ -1,3 +1,5 @@
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
 
 /* **
    Originally Published: 4/14/2023
@@ -29,14 +31,14 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             {
-                img: eskieMacros.img('emote', 'soul_sucked', "01"),
+                img: img('eskie.emote.soul_sucked.01'),
                 x: -0.45,
                 y: -0.25,
                 scale: 0.7
             }
         ]
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
     const facing = config.facing ?? defaultConfig.facing;
 
     const tokenWidth = token.document.width;

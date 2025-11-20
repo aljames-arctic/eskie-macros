@@ -1,3 +1,5 @@
+import { img } from "../../lib/filemanager.js";
+import { utils } from "../../lib/utils.js"
 
 /* **
    Originally Published: 4/14/2023
@@ -27,13 +29,13 @@ async function create(token, config = {}) {
         duration: 7000,
         effect: [
             { // bubbles
-                img: eskieMacros.img('emote', 'drunk_bubbles', '01'),
+                img: img('eskie.emote.drunk_bubbles.01'),
                 x: -0.2,
                 y: -0.3,
                 scale: 0.7
             },
             { // blush
-                img: eskieMacros.img('emote', 'blush', '01'),
+                img: img('eskie.emote', 'blush', '01'),
                 x: -0.15,
                 y: 0.15,
                 scale: 0.5
@@ -41,7 +43,7 @@ async function create(token, config = {}) {
             {} // sway
         ]
     };
-    let { id, duration, effect } = eskieMacros.mergeObject(defaultConfig, config);
+    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
 
     if (!effect[0].img || !effect[1].img) {
         ui.notifications.error("Eskie Macros: Required module 'Eskie Effects' or 'Eskie Effects Free' is not installed or activated. Please install/activate the module to use the default images for this effect.");
