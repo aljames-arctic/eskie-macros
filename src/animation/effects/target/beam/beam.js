@@ -5,10 +5,10 @@ function create(token, target, config) {
     const defaultConfig = {
         id: 'beam',
         effect: [
-            { img: img(`jb2a.magic_signs.circle.02.transmutation.loop.dark_green`) },
-            { img: img(`jb2a.particles.outward.white.01.02`) },
-            { img: img(`jb2a.extras.tmfx.border.circle.inpulse.01.fast`) },
-            { img: img(`jb2a.disintegrate.green`) },
+            { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
+            { img: `jb2a.particles.outward.white.01.02` },
+            { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
+            { img: `jb2a.disintegrate.green` },
         ],
     };
     let { id, effect } = utils.mergeObject(defaultConfig, config);
@@ -17,7 +17,7 @@ function create(token, target, config) {
         .effect()
         .name(id)
         .atLocation(token)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .scaleToObject(1.25)
         .rotateIn(180, 600, {ease: "easeOutCubic"})
         .scaleIn(0, 600, {ease: "easeOutCubic"})
@@ -29,7 +29,7 @@ function create(token, target, config) {
         .effect()
         .name(id)
         .atLocation(token)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .scaleToObject(1.25)
         .rotateIn(180, 600, {ease: "easeOutCubic"})
         .scaleIn(0, 600, {ease: "easeOutCubic"})
@@ -45,7 +45,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(effect[1].img)
+        .file(img(effect[1].img))
         .scaleIn(0, 1000, {ease: "easeOutQuint"})
         .delay(500)
         .fadeOut(1000)
@@ -57,7 +57,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(effect[1].img)
+        .file(img(effect[1].img))
         .scaleIn(0, 1000, {ease: "easeOutQuint"})
         .delay(500)
         .fadeOut(1000)
@@ -72,7 +72,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(effect[2].img)
+        .file(img(effect[2].img))
         .atLocation(token)
         .tint("#d9df53")
         .scaleToObject(1.5)
@@ -81,7 +81,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(effect[3].img)
+        .file(img(effect[3].img))
         .atLocation(token)
         .stretchTo(target)
         .zIndex(1)

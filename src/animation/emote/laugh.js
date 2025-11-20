@@ -31,7 +31,7 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             { // laughing face
-                img: img('eskie.emote.laugh.01.yellow'),
+                img: 'eskie.emote.laugh.01.yellow',
                 x: 0.3,
                 y: -0.3,
                 scale: 0.9
@@ -58,7 +58,7 @@ async function create(token, config = {}) {
 
         .effect()
         .name(id)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .atLocation(token, { offset: { x: (effect[0].x * tokenWidth * facingFactor), y: effect[0].y * tokenWidth }, gridUnits: true, local: true })
         .attachTo(token, { bindAlpha: false })
         .loopProperty("sprite", "rotation", { from: 0, to: -15 * facingFactor, duration: 250, ease: "easeOutCubic" })

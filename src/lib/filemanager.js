@@ -21,6 +21,10 @@ function closestImage(modulePrefix, ...categories) {
 }
 
 export function img(path) {
+    // Support http:// and https:// addresses
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+    // Support Sequencer Database paths (. seperated)
     let categories = path.split('.');
     if (categories.length === 0) return;
     let isPatreonUser = false;

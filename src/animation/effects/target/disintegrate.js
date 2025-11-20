@@ -140,13 +140,13 @@ function death(target, config) {
         id: 'disintegrate',
         effect: [
             { // Smoke Effect
-                img: img("animated-spell-effects-cartoon.smoke.97"),
+                img: "animated-spell-effects-cartoon.smoke.97",
                 delay: 1000,
                 duration: 10000,
                 scale: 0.5,
             },
             { // Spirit Effect
-                img: img("jb2a.spirit_guardians.green.particles"),
+                img: "jb2a.spirit_guardians.green.particles",
                 duration: 7500,
                 scale: 0.35,
             }
@@ -159,7 +159,7 @@ function death(target, config) {
         // Add a smoke puff effect
         .effect()
         .name(id)
-        .file(smokeEffect.img)
+        .file(img(smokeEffect.img))
         .atLocation(target, { offset: { y: -0.25 }, gridUnits: true })
         .fadeIn(1000)
         .scaleIn(0, 1000, { ease: "easeOutCubic" })
@@ -174,7 +174,7 @@ function death(target, config) {
         // Add swirling spirit particle effects
         .effect()
         .name(id)
-        .file(spiritEffect.img)
+        .file(img(spiritEffect.img))
         .atLocation(target)
         .duration(spiritEffect.duration)
         .fadeOut(3000)
@@ -193,10 +193,10 @@ function beam(token, target, config) {
     const defaultConfig = {
         id: 'disintegrate',
         effect: [
-            { img: img(`jb2a.magic_signs.circle.02.transmutation.loop.dark_green`) },
-            { img: img(`jb2a.particles.outward.white.01.02`) },
-            { img: img(`jb2a.extras.tmfx.border.circle.inpulse.01.fast`) },
-            { img: img(`jb2a.disintegrate.green`) },
+            { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
+            { img: `jb2a.particles.outward.white.01.02` },
+            { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
+            { img: `jb2a.disintegrate.green` },
         ],
     };
     let mergeConfig = utils.mergeObject(defaultConfig, config);

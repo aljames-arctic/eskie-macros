@@ -29,7 +29,7 @@ async function create(location, config = {}) {
         duration: 5000,
         effect: [
             { // impact
-                img: img('eskie.sound.roar'),
+                img: 'eskie.sound.roar',
                 x: 0.1,
                 y: -0.1,
                 scale: 1.7
@@ -52,7 +52,7 @@ async function create(location, config = {}) {
         .effect()
         .name(id)
         .atLocation(location, { offset: { x: effect[0].x, y: effect[0].y }, gridUnits: true })
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .size(effect[0].scale, { gridUnits: true })
 
         .effect()

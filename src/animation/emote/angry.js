@@ -29,8 +29,8 @@ async function create(token, config) {
         id: 'angry',
         duration: 5000,
         effect: [
-            { x: 0.3, y: -0.4, scale: 0.65, img: img('eskie.emote.angry.02') },
-            { x: 0.3, y: -0.4, scale: 0.85, img: img('eskie.emote.angry.02') }
+            { x: 0.3, y: -0.4, scale: 0.65, img: 'eskie.emote.angry.02' },
+            { x: 0.3, y: -0.4, scale: 0.85, img: 'eskie.emote.angry.02' }
         ],
     };
     let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
@@ -47,7 +47,7 @@ async function create(token, config) {
     let angryEffect = new Sequence()
         .effect()
         .name(id)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .atLocation(token)
         .scaleIn(0, 1000, {ease: "easeOutElastic"})
         .scaleOut(0, 1000, {ease: "easeOutExpo"})
@@ -61,7 +61,7 @@ async function create(token, config) {
 
         .effect()
         .name(id)
-        .file(effect[1].img)
+        .file(img(effect[1].img))
         .atLocation(token)
         .scaleIn(0, 1000, {ease: "easeOutElastic"})
         .scaleOut(0, 1000, {ease: "easeOutExpo"})

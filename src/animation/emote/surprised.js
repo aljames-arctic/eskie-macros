@@ -28,7 +28,7 @@ async function create(token, config = {}) {
         duration: 0,
         effect: [
             {   // !! } surprised icon
-                img: img('eskie.emote.surprised.01'),
+                img: 'eskie.emote.surprised.01',
                 scale: 1.2,
                 anchor: { x: -0.3, y: 1.25 },
                 x: -0.8,
@@ -43,7 +43,7 @@ async function create(token, config = {}) {
     let surprisedEffect = new Sequence()
         .effect()
         .name(id)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .atLocation(token)
         .anchor(effect[0].anchor)
         .spriteOffset({ x: effect[0].x * tokenWidth, y: effect[0].y * tokenWidth }, { gridUnits: true, local: true })

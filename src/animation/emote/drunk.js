@@ -29,13 +29,13 @@ async function create(token, config = {}) {
         duration: 7000,
         effect: [
             { // bubbles
-                img: img('eskie.emote.drunk_bubbles.01'),
+                img: 'eskie.emote.drunk_bubbles.01',
                 x: -0.2,
                 y: -0.3,
                 scale: 0.7
             },
             { // blush
-                img: img('eskie.emote.blush.01'),
+                img: 'eskie.emote.blush.01',
                 x: -0.15,
                 y: 0.15,
                 scale: 0.5
@@ -55,7 +55,7 @@ async function create(token, config = {}) {
     let drunkEffect = new Sequence()
         // Drunk bubbles effect
         .effect()
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .name(id)
         .delay(0, 500)
         .atLocation(token, { offset: { x: effect[0].x * tokenWidth, y: effect[0].y * tokenWidth }, gridUnits: true });
@@ -77,7 +77,7 @@ async function create(token, config = {}) {
 
         // Blush effect attached to token with bobbing motion
         .effect()
-        .file(effect[1].img)
+        .file(img(effect[1].img))
         .zIndex(0)
         .name(id)
         .opacity(0.85)

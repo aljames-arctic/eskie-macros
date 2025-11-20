@@ -31,7 +31,7 @@ async function create(token, config = {}) {
         facing: 'left',
         effect: [
             {
-                img: img('eskie.emote.soul_sucked.01'),
+                img: 'eskie.emote.soul_sucked.01',
                 x: -0.45,
                 y: -0.25,
                 scale: 0.7
@@ -48,7 +48,7 @@ async function create(token, config = {}) {
     let soulSuckedEffect = new Sequence()
         .effect()
         .name(id)
-        .file(effect[0].img)
+        .file(img(effect[0].img))
         .atLocation(token)
         .scaleIn(0, 1000, { ease: "easeOutElastic" })
         .scaleOut(0, 1000, { ease: "easeOutExpo" })
