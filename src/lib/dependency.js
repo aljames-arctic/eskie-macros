@@ -22,8 +22,7 @@ function _activated(dependency) {
     if (dependency.id == 'foundry') entity = game;
 
     if (!entity) return [false, undefined];
-    if (!entity.active && isModule) return [false, undefined];
-    if (!entity.version) ui.notifications.warn(`${entity} does not have a version field`);
+    if (!entity.active && isModule) return [false, entity?.version];
 
     let [minimum, maximum] = [dependency.min, dependency.max];
     if (minimum == undefined) minimum = entity.version ?? '0.0.0';
@@ -42,7 +41,9 @@ function _versionMessageAppend(dependency, version) {
     let msg = '';
     if (dependency.min) msg += `\n\tMinimum version: ${dependency.min}`;
     if (dependency.max) msg += `\n\tMaximum version: ${dependency.max}`;
-    msg += `\n\tCurrent version: ${version ?? 'NOT INSTALLED'}`;
+    msg += (version) ? `\n\tCurrent version: ${version}` : ``;
+    msg += `\n\tCurrent state: `;
+    msg += (version) ? `NOT ACTIVATED` : `NOT INSTALLED`;
     return msg;
 }
 

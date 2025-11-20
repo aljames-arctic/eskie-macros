@@ -34,14 +34,12 @@ export function img(path) {
     switch (modulePrefix) {
         case 'eskie':
         case 'eskie-free':
-            try{ dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]); } 
-            catch (e) {  return undefined; }
+            dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]);
             isPatreonUser = dependency.isActivated({ id: 'eskie-effects' });
             modulePrefix = (isPatreonUser) ? `eskie` : `eskie-free`;
             break;
         case 'jb2a':
-            try{ dependency.someRequired([{ id: 'jb2a_patreon' }, { id: 'JB2A_DnD5e' }]); } 
-            catch (e) {  return undefined; }
+            dependency.someRequired([{ id: 'jb2a_patreon' }, { id: 'JB2A_DnD5e' }]);
             isFreeUser = dependency.isActivated({ id: 'JB2A_DnD5e' });
             isPatreonUser = dependency.isActivated({ id: 'jb2a_patreon' });
             if (isPatreonUser && isFreeUser) 
@@ -50,8 +48,7 @@ export function img(path) {
             break;
         case 'animated-spell-effects':
         case 'animated-spell-effects-cartoon':
-            try{ dependency.required({ id: modulePrefix }); } 
-            catch (e) {  return undefined; }
+            dependency.required({ id: modulePrefix });
             break;
     }
 
