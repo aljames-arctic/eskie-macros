@@ -1,5 +1,11 @@
 import { img } from "../../../lib/filemanager.js";
 
+/* **
+    Last Updated: 5/10/2023
+    Author: EskieMoh#2969
+    Updated: bakanabaka
+** */
+
 /**
  * Creates an Arms of Hadar effect.
  *

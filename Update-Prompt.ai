@@ -41,3 +41,8 @@ This section outlines the general process for converting Discord animation scrip
 *   **Image Path Conversion:** Instances of `.file("path/to/image.webp")` are converted to `.file(img("path/to/image.webp"))`. This requires importing `img` from `../../lib/filemanager.js`.
 *   **Effect Comments:** Add comments to describe what each effect or sequence of effects is visually representing or functionally doing.
 *   **Helper Functions:** Break down complex sequences of effects into smaller, logically grouped helper functions (e.g., `_castSpellEffects(sequence, token)` or `_explosionEffects(sequence, targetToken)`). This improves readability and maintainability.
+
+### Attribution
+
+*   **Credit the Original Author:** Include a comment at the top of the file crediting the original author of the animation.
+*   **Credit the Updater:** Add a comment at the top of the file crediting `bakanabaka` as the author of the modular conversion.

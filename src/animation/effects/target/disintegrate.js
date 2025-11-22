@@ -2,6 +2,13 @@ import { img } from '../../../lib/filemanager.js';
 import { utils } from '../../../lib/utils.js';
 import { beam as beamEffect } from './beam/beam.js';
 
+
+/* **
+    Last Updated: 4/20/2023
+    Author: EskieMoh#2969
+    Updated: bakanabaka
+** */
+
 /**
  * Helper function to apply a series of dissolving mask effects to a sequence.
  * @param {Sequence} sequence The sequence to add the effects to.
