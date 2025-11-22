@@ -6,6 +6,7 @@ import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
 import { hex } from "./target/hex.js";
 import { drainingKiss } from "./target/draining-kiss.js";
 import { charmPerson } from "./multi-token/charm-person.js";
+import { healingWord } from "./target/healing-word.js";
 
 export const effect = {
     shuffle,
@@ -16,4 +17,5 @@ export const effect = {
     hex,
     drainingKiss,
     charmPerson,
+    healingWord,
 };
