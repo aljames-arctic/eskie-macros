@@ -1,0 +1,43 @@
+# Update Log
+
+## General Transformations
+
+*   The script was converted from a standalone script to a module with `create` and `play` functions.
+*   The `token` and `target` variables, which were previously expected to be in the global scope, are now passed as `source` and `target` arguments to the `create` and `play` functions.
+*   The configuration options at the top of the script are now passed as a `config` object.
+
+## API Updates
+
+The following API updates were made to align the script with the latest Foundry VTT API:
+
+*   `target.data.name` was replaced with `target.name`.
+*   `target.document.data.width` was replaced with `target.document.width`.
+*   `warpgate.crosshairs.show` was replaced with `Sequencer.Crosshair.show`.
+*   The `t` property in the crosshairs configuration was changed from `'line'` to `'ray'` to comply with the valid measured template types.
+*   The deprecated `.from()` method was replaced with `.copySprite()`.
+
+These changes ensure that the script is compatible with the latest version of Foundry VTT and follows the recommended API practices.
+
+## Bug Fixes
+
+*   Added a check to ensure that `canvas.scene.background.src` has a value before creating an effect that uses it. This prevents an error when the scene has no background image.
+
+## Discord Animation to Modular Format Conversion
+
+This section outlines the general process for converting Discord animation scripts (typically found in `discord-animations/nextup`) to the modular format used in `src/animation/effects/`.
+
+### General Transformations
+
+*   **Modular Structure:** The animation logic is encapsulated within `async function create(token, target(s) (optional), config)` which returns a `Sequence` object.
+*   **Play Function:** A `play(token, target(s) (optional), config)` function is added to execute the sequence created by `create`.
+*   **Stop Function:** A `stop(token, { id = 'effectId' } = {})` function is included to allow for stopping persistent effects.
+*   **Parameter Handling:**
+    *   The casting token is passed as `token`.
+    *   Target tokens are passed as an array `targetTokens` or as a singular `target`.
+    *   Animation-specific configurations are managed via a `config` object, allowing for default values and user overrides.
+*   **File Relocation:** The converted file is moved from `discord-animations/nextup` to `src/animation/effects/`.
+*   **Module Integration:** The `src/animation/effects/_effects.js` file is updated to import and export the new modular animation, making it accessible within the system.
+*   **Variable Renaming:** Global variables like `targets` are replaced with `targetTokens` for clarity and to fit the modular function signature.
+*   **Image Path Conversion:** Instances of `.file("path/to/image.webp")` are converted to `.file(img("path/to/image.webp"))`. This requires importing `img` from `../../lib/filemanager.js`.
+*   **Effect Comments:** Add comments to describe what each effect or sequence of effects is visually representing or functionally doing.
+*   **Helper Functions:** Break down complex sequences of effects into smaller, logically grouped helper functions (e.g., `_castSpellEffects(sequence, token)` or `_explosionEffects(sequence, targetToken)`). This improves readability and maintainability.
