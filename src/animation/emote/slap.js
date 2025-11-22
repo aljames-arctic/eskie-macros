@@ -101,8 +101,8 @@ async function play(config = {}, crosshairOptions = undefined) {
     let location = await Sequencer.Crosshair.show(crosshairOptions ?? crosshairConfig);
     if (location.cancelled) return;
 
-    let seq = await create(location, config);
-    await seq.play();
+    const seq = await create(location, config);
+    if (seq) { await seq.play(); }
 }
 
 async function stop({id = 'slap'} = {}) {

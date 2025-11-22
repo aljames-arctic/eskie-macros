@@ -77,8 +77,8 @@ async function create(token, config) {
 }
 
 async function play(token, config = {}) {
-    let seq = await create(token, config);
-    await seq.play();
+    const seq = await create(token, config);
+    if (seq) { await seq.play(); }
 }
 
 async function stop(token, {id = 'angry'} = {}) {

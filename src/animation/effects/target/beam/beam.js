@@ -92,8 +92,8 @@ function create(token, target, config) {
 }
 
 async function play(token, target, config = {}) {
-    const sequence = await create(token, target, config);
-    await sequence.play();
+    const seq = await create(token, target, config);
+    if (seq) { await seq.play(); }
 }
 
 async function stop(token, target, {id = 'beam'} = {}) {

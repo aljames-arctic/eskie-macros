@@ -245,7 +245,7 @@ async function create(token, target, config) {
  */
 async function play(token, target, config = {}) {
     let seq = await create(token, target, config);
-    await seq.play();
+    if (seq) { await seq.play(); }
 }
 
 /**

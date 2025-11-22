@@ -44,9 +44,9 @@ function create(targets, config = {}) {
 async function play(targets, {repeat = 0, delay = 1000, sendToCenter = false} = {}) {
     const destinationPoints = targets.map(target => ({ x: target.x, y: target.y }));
     for (let i = 0; i <= repeat; i++) {
-        let shuffleSeq = create(targets, {sendToCenter, destinationPoints});
-        if (delay > 0) shuffleSeq = shuffleSeq.wait(delay);
-        await shuffleSeq.play();
+        let seq = create(targets, {sendToCenter, destinationPoints});
+        if (delay > 0) seq = seq.wait(delay);
+        if (seq) { await seq.play(); }
     }
 }
 

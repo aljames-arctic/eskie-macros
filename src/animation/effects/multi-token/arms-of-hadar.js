@@ -190,8 +190,8 @@ async function create(token, targetTokens, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
 async function play(token, targetTokens, config = {}) {
-    const sequence = await create(token, targetTokens, config);
-    await sequence.play();
+    const seq = await create(token, targetTokens, config);
+    if (seq) { await seq.play(); }
 }
 
 /**

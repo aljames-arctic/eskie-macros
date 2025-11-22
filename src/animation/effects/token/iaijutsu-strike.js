@@ -175,8 +175,8 @@ async function create(source, target, config = {}) {
 }
 
 async function play(source, target, config = {}) {
-    const sequence = await create(source, target, config);
-    await sequence.play();
+    const seq = await create(source, target, config);
+    if (seq) { await seq.play(); }
 }
 
 export const iaijutsuStrike = {
