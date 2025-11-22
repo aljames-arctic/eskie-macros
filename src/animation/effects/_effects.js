@@ -3,6 +3,7 @@ import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { beam } from "./target/beam/beam.js";
 import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
+import { gate } from "./location/gate.js";
 import { hex } from "./target/hex.js";
 import { drainingKiss } from "./target/draining-kiss.js";
 import { charmPerson } from "./multi-token/charm-person.js";
@@ -14,6 +15,7 @@ export const effect = {
     disintegrate,
     beam,
     armsOfHadar,
+    gate,
     hex,
     drainingKiss,
     charmPerson,
