@@ -1,23 +1,27 @@
-import { shuffle } from "./multi-token/shuffle.js";
-import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
-import { disintegrate } from "./target/disintegrate.js";
-import { beam } from "./target/beam/beam.js";
-import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
-import { gate } from "./location/gate.js";
-import { hex } from "./target/hex.js";
-import { drainingKiss } from "./target/draining-kiss.js";
 import { charmPerson } from "./multi-token/charm-person.js";
+import { dimensionDoor } from "./token/dimension-door.js";
+import { disintegrate } from "./target/disintegrate.js";
+import { drainingKiss } from "./target/draining-kiss.js";
+import { gate } from "./location/gate.js";
 import { healingWord } from "./target/healing-word.js";
+import { hex } from "./target/hex.js";
+import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
+import { mistyStep } from "./token/misty-step.js";
+import { revivify } from "./target/revivify.js";
+import { sanctuary } from "./target/sanctuary.js";
+import { shuffle } from "./multi-token/shuffle.js";
 
 export const effect = {
-    shuffle,
-    iaijutsuStrike,
-    disintegrate,
-    beam,
-    armsOfHadar,
-    gate,
-    hex,
-    drainingKiss,
     charmPerson,
+    dimensionDoor,
+    disintegrate,
+    drainingKiss,
+    gate,
     healingWord,
+    hex,
+    iaijutsuStrike,
+    mistyStep,
+    revivify,
+    sanctuary,
+    shuffle,
 };
