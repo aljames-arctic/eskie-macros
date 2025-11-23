@@ -10,6 +10,8 @@ import { mistyStep } from "./token/misty-step.js";
 import { revivify } from "./target/revivify.js";
 import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
+import { petrified } from "./target/petrified.js";
+import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 
 export const effect = {
     charmPerson,
@@ -21,6 +23,8 @@ export const effect = {
     hex,
     iaijutsuStrike,
     mistyStep,
+    petrified,
+    petrifyingGaze,
     revivify,
     sanctuary,
     shuffle,
