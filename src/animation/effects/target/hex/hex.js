@@ -3,7 +3,7 @@
  * Update Author: bakanabaka
  */
 
-import { img } from '../../../lib/filemanager.js';
+import { img } from '../../../../lib/filemanager.js';
 
 async function create(token, target, config) {
     const defaultConfig = {
@@ -81,7 +81,7 @@ async function stop(token, { id = 'hex' } = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const hex = {
+export const hexCast = {
     create,
     play,
     stop,

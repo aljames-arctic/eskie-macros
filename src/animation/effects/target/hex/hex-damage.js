@@ -1,0 +1,59 @@
+// Original Author: EskieMoh#2969
+// Modular Conversion: bakanabaka
+
+import { img } from "../../../../lib/filemanager.js";
+
+async function create(token, target, config) {
+    const sequence = new Sequence();
+
+    sequence.effect()
+        .file(img(`jb2a.particles.outward.purple.01.03`))
+        .attachTo(target)
+        .scale(0.15)
+        .playbackRate(1)
+        .duration(1000)
+        .fadeOut(500)
+        .scaleIn(0, 1000, { ease: "easeOutCubic" })
+        .filter("ColorMatrix", { hue: 0 })
+        .animateProperty("sprite", "width", { from: 0, to: 0.5, duration: 500, gridUnits: true, ease: "easeOutBack" })
+        .animateProperty("sprite", "height", { from: 0, to: 1.5, duration: 1000, gridUnits: true, ease: "easeOutBack" })
+        .animateProperty("sprite", "position.y", { from: 0, to: -1, duration: 1000, gridUnits: true })
+        .zIndex(0.2);
+
+    sequence.effect()
+        .file(img("animated-spell-effects-cartoon.misc.all seeing eye"))
+        .attachTo(target)
+        .filter("ColorMatrix", { hue: 182 })
+        .scaleToObject(0.75)
+        .scaleIn(0, 250, { ease: "easeOutCubic" })
+        .zIndex(0.1);
+
+    sequence.effect()
+        .file(img("animated-spell-effects-cartoon.simple.27"))
+        .attachTo(target)
+        .scaleToObject(4)
+        .spriteOffset({ x: 0.1, y: -0.45 }, { gridUnits: true })
+        .filter("ColorMatrix", { brightness: -1 });
+
+    sequence.effect()
+        .copySprite(target)
+        .attachTo(target)
+        .fadeOut(300)
+        .loopProperty("sprite", "position.x", { from: -0.05, to: 0.05, duration: 175, pingPong: true, gridUnits: true })
+        .scaleToObject(target.document.texture.scaleX)
+        .duration(500)
+        .tint("#dcace3")
+        .opacity(0.45);
+
+    return sequence;
+}
+
+async function play(token, target, config) {
+    const sequence = await create(token, target, config);
+    if (sequence) { sequence.play(); }
+}
+
+export const hexDamage = {
+    create,
+    play
+};
