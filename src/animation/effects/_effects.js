@@ -1,6 +1,6 @@
 import { bless } from "./target/bless.js";
 import { charmPerson } from "./multi-token/charm-person.js";
-import { detectMagic } from "./token/detectMagic.js";
+import { detect } from "./token/detect.js";
 import { dimensionDoor } from "./token/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { drainingKiss } from "./target/draining-kiss.js";
@@ -23,7 +23,7 @@ import { vortexWarp } from "./target/vortex-warp.js";
 export const effect = {
     bless,
     charmPerson,
-    detectMagic,
+    detect,
     dimensionDoor,
     disintegrate,
     drainingKiss,
