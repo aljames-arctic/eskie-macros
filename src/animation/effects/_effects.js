@@ -17,6 +17,7 @@ import { rage } from "./token/rage.js";
 import { revivify } from "./target/revivify.js";
 import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
+import { sleep } from "./target/sleep.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 
@@ -40,6 +41,7 @@ export const effect = {
     revivify,
     sanctuary,
     shuffle,
+    sleep,
     teleport,
     vortexWarp,
 };
