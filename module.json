@@ -1,7 +1,7 @@
 {
   "id": "eskie-macros",
-  "title": "Eskie Discord Macros",
-  "description": "<p>A collection of macros from Eskiemoh.</p>",
+  "title": "Eskie Macro Pack",
+  "description": "<p>A collection of macros from the Eskiemoh Discord Server.</p>",
   "version": "#{VERSION}#",
   "authors": [
     {
@@ -46,7 +46,7 @@
         "compatibility": {}
       },
       {
-        "id": "eskie-effects-free",
+        "id": "jb2a_patreon",
         "type": "module",
         "compatibility": {}
       },
@@ -61,12 +61,7 @@
         "compatibility": {}
       },
       {
-        "id": "jb2a_patreon",
-        "type": "module",
-        "compatibility": {}
-      },
-      {
-        "id": "JB2A_DnD5e",
+        "id": "tagger",
         "type": "module",
         "compatibility": {}
       }

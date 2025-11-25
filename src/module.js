@@ -12,8 +12,8 @@ import './settings.js';
  * @param {array} exportedIdentifierName the array of exported functions to be merged
  */
 function setupApiCalls(exportedFunctions) {
-    globalThis.eskieMacros = foundry.utils.mergeObject(
-        globalThis.eskieMacros ?? {},
+    globalThis.eskie = foundry.utils.mergeObject(
+        globalThis.eskie ?? {},
         exportedFunctions
     );
 }
