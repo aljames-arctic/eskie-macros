@@ -57,8 +57,8 @@ async function _createDetectionEffects(target, config) {
                 .scaleToObject(1, { considerTokenScale: true })
                 .delay(delay)
                 .duration(animationDuration)
-                .fadeIn(2000)
-                .fadeOut(2000, { ease: 'easeInSine' })
+                .fadeIn(500)
+                .fadeOut(500, { ease: 'easeInSine' })
                 .opacity(0.8)
                 .zIndex(0.1);
         }

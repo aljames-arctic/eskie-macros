@@ -2,12 +2,12 @@ import { detectUtil } from './detectUtil.js'
 import { dependency } from '../../../../lib/dependency.js';
 
 const defaultDetectionConfig = {
-    aberration: 'jb2a.magic_signs.rune.02.complete.02.blue',
-    celestial: 'jb2a.magic_signs.rune.02.complete.06.orange',
-    elemental: 'jb2a.magic_signs.rune.02.complete.01.green',
-    fey: 'jb2a.magic_signs.rune.02.complete.08.purple',
-    fiend: 'jb2a.magic_signs.rune.02.complete.07.orange',
-    undead : 'jb2a.magic_signs.rune.necromancy.complete.pink',
+    aberration: 'jb2a.condition.curse.01.006.blue',
+    celestial: 'jb2a.condition.curse.01.002.blue',
+    elemental: 'jb2a.condition.curse.01.001.red',
+    fey: 'jb2a.condition.curse.01.020.purple',
+    fiend: 'jb2a.condition.curse.01.024.red',
+    undead : 'jb2a.condition.curse.01.021.purple',
     consecrated : 'jb2a.magic_signs.rune.02.complete.04.yellow',
     descecrated : 'jb2a.magic_signs.rune.02.complete.04.grey',
 };
