@@ -1,16 +1,54 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
 import { img } from "../../../lib/filemanager.js";
+
 /**
- *
- * @param {object} token
- * @param {object[]} targets
- * @param {object} config
- * @returns {Sequence}
+ * Helper function to create a single cloud effect.
+ * @param {object} position - The position to attach the effect to.
+ * @param {string} file - The image file path for the cloud effect.
+ * @param {object} config - Configuration for the cloud effect.
+ * @param {number} config.size - Size of the effect.
+ * @param {number} config.opacity - Opacity of the effect.
+ * @param {number} config.rotate - Initial rotation of the effect.
+ * @param {number} config.zIndex - Z-index of the effect.
+ * @param {number} config.rotationDuration - Duration for the loop property rotation.
+ * @param {boolean} persist - Whether the effect should persist.
+ * @returns {Effect} A configured Sequencer Effect.
+ */
+function _createCloudEffect(position, file, { size, opacity, rotate, zIndex, rotationDuration }, persist) {
+    return new Sequence()
+        .effect()
+        .name("Cloud of Sand")
+        .file(img(file))
+        .atLocation(position)
+        .size(size, {gridUnits:true})
+        .scaleIn(0, 1000, {ease: "easeInCubic"})
+        .rotateIn(-900, 1000, {ease: "easeOutCubic"})
+        .fadeIn(500)
+        .filter("ColorMatrix", { hue: -25 })
+        .belowTokens()
+        .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: rotationDuration})
+        .persist(persist)
+        .opacity(opacity)
+        .rotate(rotate)
+        .zIndex(zIndex)
+        .rotateOut(360, 500, {ease: "easeOutCubic", delay: 250})
+        .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
+        .fadeOut(750)
+}
+
+/**
+ * Creates the animation sequence for Cloud of Sand.
+ * @param {object} token - The casting token.
+ * @param {object[]} targets - The array of target tokens.
+ * @param {object} config - Configuration options.
+ * @param {boolean} config.persist - Whether the effect should persist.
+ * @returns {Sequence} The animation sequence.
  */
 async function create(token, targets, config = { persist: false }) {
+    const color = config.color ?? "yellow";
     let configWarpgate = {
-        size: 9,
+        size:9,
         icon: 'icons/magic/air/air-wave-gust-smoke-yellow.webp',
         label: 'Cloud of Sand',
         tag: 'entangle',
@@ -40,7 +78,7 @@ async function create(token, targets, config = { persist: false }) {
 
     .effect()
     .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.01.yellow"))
+    .file(img(`jb2a.sleep.cloud.01.${color}`))
     .attachTo(token)
     .scaleToObject(1.75)
     .fadeIn(1000, {ease: "easeInCubic"})
@@ -80,102 +118,12 @@ async function create(token, targets, config = { persist: false }) {
     .opacity(0.45)
     .persist(config.persist)
 
-    .effect()
-    .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.01.yellow"))
-    .atLocation(position)
-    .size(12, {gridUnits:true})
-    .scaleIn(0, 1000, {ease: "easeInCubic"})
-    .rotateIn(-900, 1000, {ease: "easeOutCubic"})
-    .fadeIn(500)
-    .filter("ColorMatrix", { hue: -25 })
-    .belowTokens()
-    .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 1500})
-    .persist(config.persist)
-    .rotateOut(360, 500, {ease: "easeOutCubic", delay: 250})
-    .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
-    .fadeOut(750)
-
-    .effect()
-    .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.01.yellow"))
-    .atLocation(position)
-    .size(10, {gridUnits:true})
-    .scaleIn(0, 1000, {ease: "easeInCubic"})
-    .rotateIn(-900, 1000, {ease: "easeOutCubic"})
-    .fadeIn(500)
-    .filter("ColorMatrix", { hue: -25 })
-    .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 1400})
-    .persist(config.persist)
-    .opacity(0.65)
-    .rotate(90)
-    .duration(7000)
-    .zIndex(2)
-    .rotateOut(-360, 500, {ease: "easeOutCubic", delay: 250})
-    .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
-    .fadeOut(750)
-
-    .effect()
-    .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.01.yellow"))
-    .atLocation(position)
-    .size(6, {gridUnits:true})
-    .scaleIn(0, 1000, {ease: "easeInCubic"})
-    .rotateIn(-900, 1000, {ease: "easeOutCubic"})
-    .fadeIn(500)
-    .filter("ColorMatrix", { hue: -25 })
-    .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 1300})
-    .persist(config.persist)
-    .opacity(0.4)
-    .rotate(180)
-    .zIndex(3)
-    .rotateOut(360, 500, {ease: "easeOutCubic", delay: 250})
-    .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
-    .fadeOut(750)
-
-    .effect()
-    .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.02.yellow"))
-    .atLocation(position)
-    .size(2, {gridUnits:true})
-    .scaleIn(0, 1000, {ease: "easeInCubic"})
-    .rotateIn(-900, 1000, {ease: "easeOutCubic"})
-    .fadeIn(500)
-    .filter("ColorMatrix", { hue: -25 })
-    .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 1200})
-    .persist(config.persist)
-    .opacity(0.25)
-    .rotate(180)
-    .zIndex(4)
-    .rotateOut(-360, 500, {ease: "easeOutCubic", delay: 250})
-    .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
-    .fadeOut(750)
-
-    .effect()
-    .name("Cloud of Sand")
-    .file(img("jb2a.sleep.cloud.02.yellow"))
-    .atLocation(position)
-    .size(1, {gridUnits:true})
-    .scaleIn(0, 1000, {ease: "easeInCubic"})
-    .rotateIn(-900, 1000, {ease: "easeOutCubic"})
-    .fadeIn(500)
-    .filter("ColorMatrix", { hue: -25 })
-    .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 1100})
-    .persist(config.persist)
-    .opacity(0.15)
-    .rotate(180)
-    .zIndex(5)
-    .rotateOut(360, 500, {ease: "easeOutCubic", delay: 250})
-    .scaleOut(1, 500, {ease: "easeOutCubic", delay: 250})
-    .fadeOut(750)
-
-    .wait(7500)
-
-    .thenDo(function(){
-        if (config.persist == false){
-            Sequencer.EffectManager.endEffects({ name: `Cloud of Sand` });
-        }
-    })
+    // Simplified cloud effects
+    sequence.addSequence(_createCloudEffect(position, `jb2a.sleep.cloud.01.${color}`, { size: 12, opacity: 1, rotate: 0, zIndex: 1, rotationDuration: 1500 }, config.persist));
+    sequence.addSequence(_createCloudEffect(position, `jb2a.sleep.cloud.01.${color}`, { size: 10, opacity: 0.65, rotate: 90, zIndex: 2, rotationDuration: 1400 }, config.persist));
+    sequence.addSequence(_createCloudEffect(position, `jb2a.sleep.cloud.01.${color}`, { size: 6, opacity: 0.4, rotate: 180, zIndex: 3, rotationDuration: 1300 }, config.persist));
+    sequence.addSequence(_createCloudEffect(position, `jb2a.sleep.cloud.02.${color}`, { size: 2, opacity: 0.25, rotate: 180, zIndex: 4, rotationDuration: 1200 }, config.persist));
+    sequence.addSequence(_createCloudEffect(position, `jb2a.sleep.cloud.02.${color}`, { size: 1, opacity: 0.15, rotate: 180, zIndex: 5, rotationDuration: 1100 }, config.persist));
 
     return sequence;
 }
@@ -198,24 +146,36 @@ function _targetEffects(targets) {
 }
 
 /**
- *
- * @param {object} token
- * @param {object[]} targets
- * @param {object} config
+ * Plays the Cloud of Sand animation.
+ * @param {object} token - The casting token.
+ * @param {object[]} targets - The array of target tokens.
+ * @param {object} config - Configuration options.
+ * @param {boolean} config.persist - Whether the effect should persist.
  */
 async function play(token, targets, config = { persist: false }) {
+    if (!targets || targets.length === 0) {
+        console.warn("Cloud of Sand: No targets provided for play function.");
+        return;
+    }
     const sequence = await create(token, targets, config);
-    sequence.play();
     const targetSequence = _targetEffects(targets);
-    targetSequence.play();
+
+    return Promise.all([
+        sequence.play(),
+        targetSequence.play()
+    ]);
 }
 
-function stop(token, { id = 'Cloud of Sand' } = {}) {
-    Sequencer.EffectManager.endEffects({ name: id, object: token });
+/**
+ * Stops the Cloud of Sand animation and cleans up effects.
+ * @param {string} effectName - The name of the effect to stop (e.g., "Cloud of Sand").
+ */
+function stop(effectName = 'Cloud of Sand') {
+    Sequencer.EffectManager.endEffects({ name: effectName });
 }
 
 export const cloudOfSand = {
     create,
     play,
-    stop
-}
+    stop,
+};
