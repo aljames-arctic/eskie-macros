@@ -67,8 +67,25 @@ async function stop(token, {id = 'surprised'} = {}) {
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
+async function exclaim(token, {id = 'surprised', duration = 0, anchor = { x: 0.5, y: 1.55 }} = {}) {
+    let seq = new Sequence()
+        .effect()
+        .name(id)
+        .file("https://i.imgur.com/8Yr9fMC.png")
+        .atLocation(token)
+        .anchor(anchor)
+        .scaleIn(0, 500, {ease: "easeOutElastic"})
+        .scaleOut(0, 500, {ease: "easeOutExpo"})
+        .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true})
+        .scaleToObject(0.6)
+        .attachTo(token, {bindAlpha: false});
+    seq = (duration > 0) ? seq.duration(duration) : seq.persist();
+    return seq;
+}
+
 export const surprised = {
     create,
     play,
     stop,
+    exclaim,
 };
