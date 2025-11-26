@@ -2,24 +2,46 @@
 // Updater: @bakanabaka
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = { id: "speakWithDead" };
+
 /**
  * Creates the animation sequence for Speak With Dead.
- * @param {object} token - The casting token.
  * @param {object} target - The target token.
  * @param {object} config - Configuration options.
- * @param {boolean} config.toggleDeathOverlay - Whether to toggle the death overlay icon.
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  * @returns {Sequence} The animation sequence.
  */
-async function create(token, target, config = { toggleDeathOverlay: true, id: 'speakWithDead' }) {
+async function create(target, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     if (!target) return new Sequence();
 
     let sequence = new Sequence();
 
-    // Magic Circle Effect
+    _addMagicCircleEffects(sequence, target, `${mergedConfig.id} ${target.id}`);
+
+    sequence.wait(500);
+
+    // Simplified corner flame effects
+    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, 0.5, 0.5, 2); // Bottom Right Flame
+    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, -0.5, 0.5, 2); // Bottom Left Flame
+    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, -0.5, -0.5, 1); // Top Left Flame
+    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, 0.5, -0.5, 1); // Top Right Flame
+
+    _addTokenVisualEffects(sequence, target, `${mergedConfig.id} ${target.id}`);
+
+    return sequence;
+}
+
+/**
+ * Helper function to add the magic circle effects to the sequence.
+ * @param {Sequence} sequence - The main animation sequence.
+ * @param {object} target - The target token.
+ * @param {string} id - The unique ID for the effect to manage persistence.
+ */
+function _addMagicCircleEffects(sequence, target, id) {
     sequence
         .effect()
-        .name(config.id)
+        .name(id)
         .atLocation(target)
         .file(img(`jb2a.magic_signs.circle.02.necromancy.loop.blue`))
         .scaleToObject(1.25)
@@ -32,7 +54,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .persist()
 
         .effect()
-        .name(config.id)
+        .name(id)
         .atLocation(target)
         .file(img(`jb2a.magic_signs.circle.02.necromancy.loop.green`))
         .scaleToObject(1.25)
@@ -44,149 +66,20 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(1)
         .duration(1200)
         .fadeIn(200, {ease: "easeOutCirc", delay: 500})
-        .fadeOut(300, {ease: "linear"})
+        .fadeOut(300, {ease: "linear"});
+}
 
-        .wait(500)
-
-        // Bottom Right Flame
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:0.5, y:0.5}, gridUnits:true})
-        .file(img("jb2a.impact.008.blue"))
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(1)
-        .zIndex(1)
-
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:0.5, y:0.5}, gridUnits:true})
-        .file(img("jb2a.flames.01.blue"))
-        .belowTokens()
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(0.5)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        .effect()
-        .name(config.id)
-        .delay(250)
-        .atLocation(target, {offset: {x:0.5, y:0.5-0.35}, gridUnits:true})
-        .file(img("animated-spell-effects-cartoon.smoke.97"))
-        .scaleToObject(0.8)
-        .opacity(0.4)
-        .tint("#6ff087")
-        .fadeIn(500)
-        .zIndex(2)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        // Bottom Left Flame
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:-0.5, y:0.5}, gridUnits:true})
-        .file(img("jb2a.impact.008.blue"))
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(1)
-        .zIndex(1)
-
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:-0.5, y:0.5}, gridUnits:true})
-        .file(img("jb2a.flames.01.blue"))
-        .belowTokens()
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(0.5)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        .effect()
-        .name(config.id)
-        .delay(250)
-        .atLocation(target, {offset: {x:-0.5, y:0.5-0.35}, gridUnits:true})
-        .file(img("animated-spell-effects-cartoon.smoke.97"))
-        .scaleToObject(0.8)
-        .opacity(0.4)
-        .tint("#6ff087")
-        .fadeIn(500)
-        .zIndex(2)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        // Top Left Flame
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:-0.5, y:-0.5}, gridUnits:true})
-        .file(img("jb2a.impact.008.blue"))
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(1)
-        .zIndex(1)
-
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:-0.5, y:-0.5}, gridUnits:true})
-        .file(img("jb2a.flames.01.blue"))
-        .belowTokens()
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(0.5)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        .effect()
-        .name(config.id)
-        .delay(250)
-        .atLocation(target, {offset: {x:-0.5, y:-0.5-0.35}, gridUnits:true})
-        .file(img("animated-spell-effects-cartoon.smoke.97"))
-        .scaleToObject(0.8)
-        .opacity(0.4)
-        .tint("#6ff087")
-        .fadeIn(500)
-        .zIndex(1)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        // Top Right Flame
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:0.5, y:-0.5}, gridUnits:true})
-        .file(img("jb2a.impact.008.blue"))
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(1)
-        .zIndex(1)
-
-        .effect()
-        .name(config.id)
-        .atLocation(target, {offset: {x:0.5, y:-0.5}, gridUnits:true})
-        .file(img("jb2a.flames.01.blue"))
-        .belowTokens()
-        .filter("ColorMatrix", {hue:-65})
-        .scaleToObject(0.5)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
-        .effect()
-        .name(config.id)
-        .delay(250)
-        .atLocation(target, {offset: {x:0.5, y:-0.5-0.35}, gridUnits:true})
-        .file(img("animated-spell-effects-cartoon.smoke.97"))
-        .scaleToObject(0.8)
-        .opacity(0.4)
-        .tint("#6ff087")
-        .fadeIn(500)
-        .zIndex(1)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .randomizeMirrorX()
-        .persist()
-
+/**
+ * Helper function to add various token-related visual effects to the sequence.
+ * @param {Sequence} sequence - The main animation sequence.
+ * @param {object} target - The target token.
+ * @param {string} id - The unique ID for the effect to manage persistence.
+ */
+function _addTokenVisualEffects(sequence, target, id) {
+    sequence
         // Token effect
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(1000)
         .file(img("animated-spell-effects-cartoon.magic.mind sliver"))
         .atLocation(target, {offset:{y:-0.75*target.document.width}, gridUnits:true})
@@ -198,7 +91,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(2)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(100)
         .file(img("jb2a.particles.outward.blue.01.03"))
         .atLocation(target)
@@ -212,7 +105,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(2)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(100)
         .file(img("jb2a.detect_magic.circle.blue"))
         .atLocation(target)
@@ -227,7 +120,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .opacity(0)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .file(img("jb2a.token_border.circle.static.blue.012"))
         .attachTo(target, {bindAlpha: false, bindRotation: false})
         .scaleToObject(1.85, {considerTokenScale: true})
@@ -240,7 +133,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .persist()
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(100)
         .copySprite(target)
         .attachTo(target, {bindAlpha: false, bindRotation: false})
@@ -253,7 +146,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .persist()
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(2000)
         .file(img("jb2a.spirit_guardians.blue.spirits"))
         .attachTo(target, {offset: {y:0}, gridUnits:true, bindAlpha: false, bindRotation: false})
@@ -265,7 +158,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(0.1)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(3000)
         .file(img("jb2a.magic_signs.rune.necromancy.complete.blue"))
         .attachTo(target, {offset: {y:-0.77*target.document.width}, gridUnits:true, bindAlpha: false, bindRotation: false})
@@ -277,7 +170,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(2)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(3000)
         .file(img("jb2a.magic_signs.rune.necromancy.complete.blue"))
         .attachTo(target, {offset: {y:-0.55*target.document.width}, gridUnits:true, bindAlpha: false, bindRotation: false})
@@ -290,7 +183,7 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .zIndex(2)
 
         .effect()
-        .name(config.id)
+        .name(id)
         .delay(100)
         .copySprite(target)
         .attachTo(target, {bindAlpha: false, bindRotation: false})
@@ -302,43 +195,82 @@ async function create(token, target, config = { toggleDeathOverlay: true, id: 's
         .persist()
         .zIndex(0.2)
         .waitUntilFinished(-500); // Small wait to ensure persistence starts before play returns
+}
 
-    return sequence;
+/**
+ * Helper function to add a single corner flame effect to the sequence.
+ * @param {Sequence} sequence - The main animation sequence.
+ * @param {object} target - The target token.
+ * @param {string} id - The unique ID for the effect to manage persistence.
+ * @param {number} xOffset - The x-offset for the flame position.
+ * @param {number} yOffset - The y-offset for the flame position.
+ * @param {number} smokeZIndex - The zIndex for the smoke effect.
+ */
+function _addCornerFlameEffects(sequence, target, id, xOffset, yOffset, smokeZIndex) {
+    sequence
+        .effect()
+        .name(id)
+        .atLocation(target, {offset: {x:xOffset, y:yOffset}, gridUnits:true})
+        .file(img("jb2a.impact.008.blue"))
+        .filter("ColorMatrix", {hue:-65})
+        .scaleToObject(1)
+        .zIndex(1)
+
+        .effect()
+        .name(id)
+        .atLocation(target, {offset: {x:xOffset, y:yOffset}, gridUnits:true})
+        .file(img("jb2a.flames.01.blue"))
+        .belowTokens()
+        .filter("ColorMatrix", {hue:-65})
+        .scaleToObject(0.5)
+        .scaleIn(0, 500, {ease: "easeOutCubic"})
+        .randomizeMirrorX()
+        .persist()
+
+        .effect()
+        .name(id)
+        .delay(250)
+        .atLocation(target, {offset: {x:xOffset, y:yOffset-0.35}, gridUnits:true})
+        .file(img("animated-spell-effects-cartoon.smoke.97"))
+        .scaleToObject(0.8)
+        .opacity(0.4)
+        .tint("#6ff087")
+        .fadeIn(500)
+        .zIndex(smokeZIndex)
+        .scaleIn(0, 500, {ease: "easeOutCubic"})
+        .randomizeMirrorX()
+        .persist();
 }
 
 /**
  * Plays the Speak With Dead animation.
- * @param {object} token - The casting token.
  * @param {object} target - The target token.
  * @param {object} config - Configuration options.
- * @param {boolean} config.toggleDeathOverlay - Whether to toggle the death overlay icon.
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
-async function play(token, target, config = { toggleDeathOverlay: true, id: 'speakWithDead' }) {
-    if (!target) return;
-
-    if (Tagger.hasTags(target, "SpeakWithDead")) {
-        await stop(target, { id: config.id, toggleDeathOverlay: config.toggleDeathOverlay });
-    } else {
-        await Tagger.addTags(target, "SpeakWithDead");
-        const sequence = await create(token, target, config);
-        sequence.play();
-    }
+async function play(target, config) {
+    const sequence = await create(target, config);
+    return Promise.all([
+        Tagger.addTags(target, "SpeakWithDead"),
+        sequence.play(),
+    ]);
 }
 
 /**
  * Stops the Speak With Dead animation and cleans up effects.
  * @param {object} target - The target token.
  * @param {object} config - Configuration options.
- * @param {boolean} config.toggleDeathOverlay - Whether to toggle the death overlay icon.
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
-async function stop(target, config = { id: 'speakWithDead', toggleDeathOverlay: true }) {
-    new Sequence().animation().on(target).opacity(1).play(); // Restore opacity
-    Sequencer.EffectManager.endEffects({ name: config.id, object: target });
-    Tagger.removeTags(target, "SpeakWithDead");
-    // Optionally restore opacity if not handled by play, but play seems to handle it on re-trigger
-    // new Sequence().animation().on(target).opacity(1).play();
+async function stop(target, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    let opacity = new Sequence().animation().on(target).opacity(1);
+    return Promise.all([
+        opacity.play(),
+        Sequencer.EffectManager.endEffects({ name: `${mergedConfig.id} ${target.id}`, object: target }),
+        Sequencer.EffectManager.endEffects({ name: `${mergedConfig.id} ${target.id}` }),
+        Tagger.removeTags(target, "SpeakWithDead")
+    ]);
 }
 
 export const speakWithDead = {
