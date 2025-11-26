@@ -24,6 +24,7 @@ import { sleep } from "./target/sleep.js";
 import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
+import { farStep } from "./token/far-step.js";
 import { firecracker } from "./location/firecracker.js";
 
 export const effect = {
@@ -53,5 +54,6 @@ export const effect = {
     speakWithDead,
     teleport,
     vortexWarp,
+    farStep,
     firecracker,
 };
