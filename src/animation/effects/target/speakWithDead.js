@@ -1,5 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
+import { dependency } from "../../../lib/dependency.js";
 import { img } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = { id: "speakWithDead" };
@@ -249,6 +250,7 @@ function _addCornerFlameEffects(sequence, target, id, xOffset, yOffset, smokeZIn
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
 async function play(target, config) {
+    dependency.required({ id: 'tagger' });
     const sequence = await create(target, config);
     return Promise.all([
         Tagger.addTags(target, "SpeakWithDead"),
@@ -263,6 +265,7 @@ async function play(target, config) {
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
 async function stop(target, config) {
+    dependency.required({ id: 'tagger' });
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     let opacity = new Sequence().animation().on(target).opacity(1);
     return Promise.all([
