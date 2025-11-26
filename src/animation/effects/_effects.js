@@ -20,6 +20,7 @@ import { revivify } from "./target/revivify.js";
 import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
 import { sleep } from "./target/sleep.js";
+import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 
@@ -46,6 +47,7 @@ export const effect = {
     sanctuary,
     shuffle,
     sleep,
+    speakWithDead,
     teleport,
     vortexWarp,
 };
