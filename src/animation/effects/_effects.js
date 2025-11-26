@@ -1,3 +1,4 @@
+import { armorOfAgathys } from "./token/armor-of-agathys.js";
 import { bless } from "./target/bless.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
@@ -25,6 +26,7 @@ import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 
 export const effect = {
+    armorOfAgathys,
     bless,
     charmPerson,
     cloudOfSand,
