@@ -1,4 +1,4 @@
-import { armorOfAgathys } from "./token/armor-of-agathys.js";
+import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { bless } from "./target/bless.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
