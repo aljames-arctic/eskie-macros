@@ -2,25 +2,33 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../../lib/filemanager.js";
+import { util } from './rageUtil.js';
 
-async function create(token, config = {}) {
-    const sequence = new Sequence();
+const DEFAULT_CONFIG = {
+    id: 'RageV1',
+    color: 'red'
+};
 
-    sequence.effect()
+async function create(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const { id, color } = mergedConfig;
+
+    let seq = new Sequence();
+    seq = seq.effect()
         .file(img("jb2a.extras.tmfx.outpulse.circle.02.normal"))
         .atLocation(token)
         .size(4, { gridUnits: true })
         .opacity(0.25);
 
-    sequence.effect()
-        .file(img("jb2a.impact.ground_crack.orange.02"))
+    seq = seq.effect()
+        .file(img(`jb2a.impact.ground_crack.${color}.02`))
         .atLocation(token)
         .belowTokens()
         .filter("ColorMatrix", { hue: -15, saturate: 1 })
         .size(3.5, { gridUnits: true })
         .zIndex(1);
 
-    sequence.effect()
+    seq = seq.effect()
         .file(img("jb2a.impact.ground_crack.still_frame.02"))
         .atLocation(token)
         .belowTokens()
@@ -28,23 +36,23 @@ async function create(token, config = {}) {
         .filter("ColorMatrix", { hue: -15, saturate: 1 })
         .size(3.5, { gridUnits: true })
         .persist()
-        .name(`Rage-Effect-${token.id}`)
+        .name(`${id} - ground-crack - ${token.uuid}`)
         .zIndex(0);
 
-    sequence.effect()
+    seq = seq.effect()
         .file(img("jb2a.wind_stream.white"))
         .atLocation(token, { offset: { y: -0.05 }, gridUnits: true })
         .size(1.75, { gridUnits: true })
         .rotate(90)
         .opacity(0.9)
         .filter("ColorMatrix", { saturate: 1 })
-        .tint("#FF0000")
+        .tint(util.hexValue(color))
         .loopProperty("sprite", "position.y", { from: -5, to: 5, duration: 50, pingPong: true })
         .duration(8000)
         .fadeOut(3000);
 
-    sequence.effect()
-        .file(img("jb2a.particles.outward.orange.01.03"))
+    seq = seq.effect()
+        .file(img(`jb2a.particles.outward.${color}.01.03`))
         .atLocation(token)
         .scaleToObject(2.5)
         .opacity(1)
@@ -54,49 +62,51 @@ async function create(token, config = {}) {
         .animateProperty("sprite", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
         .duration(8000);
 
-    sequence.effect()
+    seq = seq.effect()
         .file(img("jb2a.wind_stream.white"))
         .atLocation(token)
-        .name(`Rage-Effect-${token.id}`)
+        .name(`${id} - ${token.uuid}`)
         .attachTo(token)
         .scaleToObject()
         .rotate(90)
         .opacity(1)
         .filter("ColorMatrix", { saturate: 1 })
-        .tint("#FF0000")
+        .tint(util.hexValue(color))
         .persist()
         .private();
 
-    sequence.effect()
-        .file(img("jb2a.token_border.circle.static.orange.012"))
+    seq = seq.effect()
+        .file(img(`jb2a.token_border.circle.static.${color}.012`))
         .atLocation(token)
-        .name(`Rage-Effect-${token.id}`)
+        .name(`${id} - ${token.uuid}`)
         .attachTo(token)
         .opacity(0.6)
         .scaleToObject(1.9)
         .filter("ColorMatrix", { saturate: 1 })
-        .tint("#FF0000")
+        .tint(util.hexValue(color))
         .persist();
 
-    return sequence;
+    return seq;
 }
 
 async function play(token, config) {
-    const sequence = await create(token, config);
-    if (sequence) { return sequence.play(); }
+    let seq = await create(token, config);
+    if (seq) { await seq.play(); }
 }
 
 async function stop(token, config) {
-    Sequencer.EffectManager.endEffects({ name: `Rage-Effect-${token.id}`, object: token });
-    new Sequence()
-        .animation()
-        .on(token)
-        .opacity(1)
-        .play();
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    return util.stop(token, mergedConfig);
+}
+
+async function clean(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    return util.clean(token, mergedConfig);
 }
 
 export const rageV1 = {
     create,
     play,
     stop,
+    clean,
 };

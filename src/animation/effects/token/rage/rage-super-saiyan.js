@@ -4,38 +4,39 @@
  */
 
 import { img } from '../../../../lib/filemanager.js';
+import { util } from './rageUtil.js';
+
+const DEFAULT_CONFIG = {
+    id: 'SSJRage',
+    color: 'orange'
+};
 
 async function create(token, config) {
-    const defaultConfig = {
-        id: 'rageSuperSaiyan',
-        duration: 0, // This is a persistent effect, duration will be set on individual effects.
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
-    const { id, duration } = mergedConfig;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const { id, color } = mergedConfig;
 
     let seq = new Sequence();
-
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-outpulse`)
+        .name(`${id} - ${token.uuid}`)
         .file(img("jb2a.extras.tmfx.outpulse.circle.02.normal"))
         .atLocation(token)
         .size(4, { gridUnits: true })
         .opacity(0.25);
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-ground-crack-impact`)
-        .file(img("jb2a.impact.ground_crack.orange.02"))
+        .name(`${id} - ${token.uuid}`)
+        .file(img(`jb2a.impact.ground_crack.${color}.02`))
         .atLocation(token)
         .belowTokens()
         .filter("ColorMatrix", { hue: 20, saturate: 1 })
         .size(3.5, { gridUnits: true })
         .zIndex(1);
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-ground-crack-still`)
+        .name(`${id} - ground-crack - ${token.uuid}`)
         .file(img("jb2a.impact.ground_crack.still_frame.02"))
         .atLocation(token)
         .belowTokens()
@@ -45,9 +46,9 @@ async function create(token, config) {
         .persist()
         .zIndex(0);
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-wind-stream-offset`)
+        .name(`${id} - ${token.uuid}`)
         .file(img("jb2a.wind_stream.white"))
         .atLocation(token, { offset: { y: 75 } })
         .size(1.75, { gridUnits: true })
@@ -56,12 +57,12 @@ async function create(token, config) {
         .loopProperty("sprite", "position.y", { from: -5, to: 5, duration: 50, pingPong: true })
         .duration(8000)
         .fadeOut(3000)
-        .tint("#FFDD00");
+        .tint(util.hexValue(color));
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-particles-outward`)
-        .file(img("jb2a.particles.outward.orange.01.03"))
+        .name(`${id} - ${token.uuid}`)
+        .file(img(`jb2a.particles.outward.${color}.01.03`))
         .atLocation(token)
         .scaleToObject(2.5)
         .opacity(1)
@@ -71,9 +72,9 @@ async function create(token, config) {
         .animateProperty("sprite", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
         .duration(8000);
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-wind-stream-persist`)
+        .name(`${id} - ${token.uuid}`)
         .file(img("jb2a.wind_stream.white"))
         .atLocation(token)
         .attachTo(token)
@@ -81,14 +82,14 @@ async function create(token, config) {
         .rotate(90)
         .opacity(1)
         .filter("ColorMatrix", { saturate: 1 })
-        .tint("#FFDD00")
+        .tint(util.hexValue(color))
         .persist()
         .private();
 
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-token-border`)
-        .file(img("jb2a.token_border.circle.static.orange.012"))
+        .name(`${id} - ${token.uuid}`)
+        .file(img(`jb2a.token_border.circle.static.${color}.012`))
         .atLocation(token)
         .attachTo(token)
         .opacity(0.7)
@@ -99,38 +100,24 @@ async function create(token, config) {
     return seq;
 }
 
-async function play(token, config = {}) {
-    const id = config.id || 'rageSuperSaiyan';
-    const tag = "SSRaging"; // Use a specific tag for this rage type
-
-    if (Tagger.hasTags(token, tag)) {
-        await stop(token, { id: id, tag: tag });
-        await new Sequence()
-            .animation()
-            .on(token)
-            .opacity(1)
-            .play();
-    } else {
-        Tagger.addTags(token, tag);
-        let seq = await create(token, config);
-        if (seq) { await seq.play(); }
-    }
+async function play(token, config) {
+    let seq = await create(token, config);
+    if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = 'rageSuperSaiyan', tag = "SSRaging" } = {}) {
-    Tagger.removeTags(token, tag);
-    // End all effects associated with this rage
-    Sequencer.EffectManager.endEffects({ name: `${id}-outpulse`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-ground-crack-impact`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-ground-crack-still`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-wind-stream-offset`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-particles-outward`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-wind-stream-persist`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-token-border`, object: token });
+async function stop(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    return util.stop(token, mergedConfig);
+}
+
+async function clean(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    return util.clean(token, mergedConfig);
 }
 
 export const superSaiyan = {
     create,
     play,
     stop,
+    clean,
 };

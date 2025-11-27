@@ -4,27 +4,21 @@
  */
 
 import { img } from '../../../../lib/filemanager.js';
+import { util } from './rageUtil.js';
 
-// Global map to store original token images for restoration
-const originalTokenImages = new Map();
+const DEFAULT_CONFIG = {
+    id: 'RageV2',
+    color: 'red'
+};
 
 async function create(token, config) {
-    const defaultConfig = {
-        id: 'rageVersion2',
-        duration: 0, // This is a persistent effect, duration will be set on individual effects.
-        groundCrack: false,
-        changeToken: false,
-        rageImg: "", // Path to the image for the raged token
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
-    const { id, duration, groundCrack, changeToken, rageImg } = mergedConfig;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const { id, color } = mergedConfig;
 
     let seq = new Sequence();
-
-    // Initial token sprite animation
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-sprite-scale`)
+        .name(`${id} - ${token.uuid}`)
         .copySprite(token)
         .attachTo(token)
         .duration(750)
@@ -36,15 +30,15 @@ async function create(token, config) {
         .waitUntilFinished(-450);
 
     // Canvas pan and shake
-    seq
+    seq = seq
         .canvasPan()
         .delay(250)
         .shake({ duration: 1100, strength: 1, rotation: false, fadeOut: 500 });
 
     // Copy sprite effect for blur
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-sprite-blur`)
+        .name(`${id} - ${token.uuid}`)
         .delay(250)
         .copySprite(token)
         .attachTo(token)
@@ -57,11 +51,11 @@ async function create(token, config) {
         .zIndex(2);
 
     // Ground crack impact
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-ground-crack-impact`)
+        .name(`${id} - ${token.uuid}`)
         .delay(250)
-        .file(img("jb2a.impact.ground_crack.orange.02"))
+        .file(img(`jb2a.impact.ground_crack.${color}.02`))
         .atLocation(token)
         .belowTokens()
         .filter("ColorMatrix", { hue: -15, saturate: 1 })
@@ -69,9 +63,9 @@ async function create(token, config) {
         .zIndex(1);
 
     // Ground crack still frame (persistent based on groundCrack config)
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-ground-crack-still`)
+        .name(`${id} - ground-crack - ${token.uuid}`)
         .delay(250)
         .file(img("jb2a.impact.ground_crack.still_frame.02"))
         .atLocation(token)
@@ -79,13 +73,13 @@ async function create(token, config) {
         .fadeIn(1000)
         .filter("ColorMatrix", { hue: -15, saturate: 1 })
         .size(3.5, { gridUnits: true })
-        .persist(groundCrack) // Use config option here
+        .persist()
         .zIndex(0);
 
     // Roar sound effect
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-roar-sound`)
+        .name(`${id} - ${token.uuid}`)
         .delay(250)
         .file(img("eskie.sound.roar.02"))
         .atLocation(token)
@@ -93,11 +87,11 @@ async function create(token, config) {
         .opacity(0.5);
 
     // Buff loop simple red effect (initial burst)
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-buff-loop-initial`)
+        .name(`${id} - ${token.uuid}`)
         .delay(250)
-        .file(img("eskie.buff.loop.simple.red"))
+        .file(img(`eskie.buff.loop.simple.${color}`))
         .attachTo(token, { offset: { y: -0.05 }, gridUnits: true })
         .scaleToObject(1.5)
         .opacity(0.9)
@@ -108,11 +102,11 @@ async function create(token, config) {
         .zIndex(1);
 
     // Buff loop simple red effect (persistent)
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-buff-loop-persist`)
+        .name(`${id} - ${token.uuid}`)
         .delay(250)
-        .file(img("eskie.buff.loop.simple.red"))
+        .file(img(`eskie.buff.loop.simple.${color}`))
         .attachTo(token, { offset: { y: -0.05 }, gridUnits: true })
         .scaleToObject(1)
         .opacity(0.5)
@@ -123,9 +117,9 @@ async function create(token, config) {
         .zIndex(1);
 
     // Wind stream (persistent)
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-wind-stream-persist`)
+        .name(`${id} - ${token.uuid}`)
         .file(img("jb2a.wind_stream.white"))
         .atLocation(token)
         .attachTo(token)
@@ -133,16 +127,16 @@ async function create(token, config) {
         .rotate(90)
         .opacity(1)
         .filter("ColorMatrix", { saturate: 1 })
-        .tint("#FF0000")
+        .tint(util.hexValue(color))
         .persist()
         .private()
         .zIndex(1);
 
     // Aura token generic red (persistent)
-    seq
+    seq = seq
         .effect()
-        .name(`${id}-aura-token`)
-        .file(img("eskie.aura.token.generic.02.red"))
+        .name(`${id} - ${token.uuid}`)
+        .file(img(`eskie.aura.token.generic.02.${color}`))
         .attachTo(token)
         .scaleToObject(2.1)
         .persist();
@@ -150,55 +144,44 @@ async function create(token, config) {
     return seq;
 }
 
-async function play(token, config = {}) {
-    const id = config.id || 'rageVersion2';
-    const tag = "Raging"; // Use a specific tag for this rage type
+async function play(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const { rageImg } = mergedConfig;
 
-    if (Tagger.hasTags(token, tag)) {
-        await stop(token, { id: id, tag: tag, ...config }); // Pass config to stop
-        await new Sequence()
-            .animation()
-            .on(token)
-            .opacity(1)
-            .play();
-    } else {
-        Tagger.addTags(token, tag);
-
-        if (config.changeToken && config.rageImg) {
-            originalTokenImages.set(token.id, token.document.texture.src); // Store original
-            await token.document.update({ texture: { src: config.rageImg } }, { animate: false });
-        }
-
-        let seq = await create(token, config);
-        if (seq) { await seq.play({ preload: true }); }
+    if ( rageImg ) {
+        let originalImg = token.document.getFlag('eskie', 'rage_v2');   // Make sure we don't have an original yet...
+        if (!originalImg) await token.document.setFlag('eskie', 'rage_v2', token.document.texture.src); // Store original
+        await token.document.update({ texture: { src: rageImg } }, { animate: true });
     }
+
+    let seq = await create(token, config);
+    if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = 'rageVersion2', tag = "Raging", groundCrack = false, changeToken = false } = {}) {
-    Tagger.removeTags(token, tag);
+async function stop(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const { rageImg } = mergedConfig;
 
-    // End all effects associated with this rage
-    Sequencer.EffectManager.endEffects({ name: `${id}-sprite-scale`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-sprite-blur`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-ground-crack-impact`, object: token });
-    if (groundCrack) { // Only stop if it was made persistent
-        Sequencer.EffectManager.endEffects({ name: `${id}-ground-crack-still`, object: token });
+    if ( rageImg ) {
+        let originalImg = token.document.getFlag('eskie', 'rage_v2');
+        if (originalImg) {
+            await Promise.all([
+                token.document.update({ texture: { src: originalImg } }, { animate: true }),
+                token.document.unsetFlag('eskie', 'rage_v2')    // Cleanup flag
+            ]);
+        }
     }
-    Sequencer.EffectManager.endEffects({ name: `${id}-roar-sound`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-buff-loop-initial`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-buff-loop-persist`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-wind-stream-persist`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-aura-token`, object: token });
+    return util.stop(token, mergedConfig);
+}
 
-
-    if (changeToken && originalTokenImages.has(token.id)) {
-        await token.document.update({ texture: { src: originalTokenImages.get(token.id) } }, { animate: true });
-        originalTokenImages.delete(token.id); // Clean up
-    }
+async function clean(token, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    return util.clean(token, mergedConfig);
 }
 
 export const rageV2 = {
     create,
     play,
     stop,
+    clean,
 };

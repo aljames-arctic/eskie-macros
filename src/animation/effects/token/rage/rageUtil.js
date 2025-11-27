@@ -1,0 +1,49 @@
+async function stop(token, config) {
+    const { id } = config;
+
+    let opacity = new Sequence()
+        .animation()
+        .on(token)
+        .opacity(1);
+    
+    // End all effects associated with this rage
+    return Promise.all([
+        Sequencer.EffectManager.endEffects({ name: `${id} - ${token.uuid}`, object: token }),
+        opacity.play()
+    ]);
+}
+
+async function clean(token, config) {
+    const { id } = config;
+    return Promise.all([
+        stop(token, config),
+        Sequencer.EffectManager.endEffects({ name: `${id} - ground-crack - ${token.uuid}` })
+    ]);
+}
+
+function hexValue(color) {
+    switch (color) {
+        case "red": return "#FF0000";
+        case "orange": return "#FF8800";
+        case "yellow": return "#FFFF00";
+        case "green": return "#00FF00";
+        case "blue": return "#0000FF";
+        case "purple": return "#FF00FF";
+        
+        case "dark_red": return "#600000";
+        case "dark_orange": return "#603000";
+        case "dark_yellow": return "#606000";
+        case "dark_green": return "#005000";
+        case "dark_blue": return "#000070";
+        case "dark_purple": return "#3F003F";
+        
+        case "white": return "#FFFFFF";
+        default: return "#FFFFFF";
+    }
+}
+
+export const util = {
+    stop,
+    clean,
+    hexValue
+};
