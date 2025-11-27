@@ -1,12 +1,14 @@
 import { dependency } from './dependency.js'
 
 function closestImage(modulePrefix, ...categories) {
+    let diverged = false;
     let currentPath = modulePrefix;
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
 
     // Traverse the categories that the user has provided
     while (remainingOptions && remainingOptions.length > 0 && categories.length > 0) {
         if (!remainingOptions.includes(categories[0])) {
+            diverged = true;
             currentPath += `.${remainingOptions[0]}`;
             remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
             categories.shift(); // Remove the used category and continue (try to match as best we can)
@@ -17,6 +19,10 @@ function closestImage(modulePrefix, ...categories) {
         remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
     }
 
+    if (diverged) { 
+        console.warn(`Path not found: ${modulePrefix}.${categories.join('.')}`);
+        console.warn(`Defaulting to first closest match: ${currentPath}`);
+    }
     return currentPath;
 }
 
