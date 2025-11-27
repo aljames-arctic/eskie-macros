@@ -26,6 +26,9 @@ import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 import { farStep } from "./token/far-step.js";
 import { firecracker } from "./location/firecracker.js";
+import { drainingTouch } from "./target/drainingTouch.js";
+import { fingerOfDeath } from "./target/fingerOfDeath.js";
+import { eyesOfNight } from "./target/eyesOfNight.js";
 
 export const effect = {
     armorOfAgathys,
@@ -56,4 +59,7 @@ export const effect = {
     vortexWarp,
     farStep,
     firecracker,
+    drainingTouch,
+    fingerOfDeath,
+    eyesOfNight,
 };
