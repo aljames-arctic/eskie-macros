@@ -32,6 +32,7 @@ import { eyesOfNight } from "./target/eyesOfNight.js";
 import { divineSmite } from "./target/divine-smite.js";
 import { flurryOfBlows } from "./token/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
+import { romanCandle } from "./target/roman-candle.js";
 import { skyRocket } from "./target/sky-rocket.js";
 
 export const effect = {
@@ -61,6 +62,7 @@ export const effect = {
     petrifyingGaze,
     rage,
     revivify,
+    romanCandle,
     sanctuary,
     shuffle,
     skyRocket,
