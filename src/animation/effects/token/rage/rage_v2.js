@@ -3,7 +3,7 @@
  * Update Author: bakanabaka
  */
 
-import { img } from '../../../lib/filemanager.js';
+import { img } from '../../../../lib/filemanager.js';
 
 // Global map to store original token images for restoration
 const originalTokenImages = new Map();
@@ -197,7 +197,7 @@ async function stop(token, { id = 'rageVersion2', tag = "Raging", groundCrack = 
     }
 }
 
-export const rageVersion2 = {
+export const rageV2 = {
     create,
     play,
     stop,

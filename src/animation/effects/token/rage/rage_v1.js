@@ -1,7 +1,7 @@
 // Original Author: EskieMoh#2969
 // Modular Conversion: bakanabaka
 
-import { img } from "../../../lib/filemanager.js";
+import { img } from "../../../../lib/filemanager.js";
 
 async function create(token, config = {}) {
     const sequence = new Sequence();
@@ -95,7 +95,7 @@ async function stop(token, config) {
         .play();
 }
 
-export const rage = {
+export const rageV1 = {
     create,
     play,
     stop,
