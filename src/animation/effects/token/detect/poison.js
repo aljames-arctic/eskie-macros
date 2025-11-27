@@ -7,15 +7,10 @@ const defaultDetectionConfig = {
 };
 
 const defaultValidator = async function (target, tags) {
-    function taggerVerify(target, tags) {
-        dependency.required({id: "tagger"});
-        return Tagger?.hasTags(target, tags);
-    }
-
     for (let tag of tags) {
         if (target.actor.statuses.has(tag)) { return true; }
     }
-    return taggerVerify(target, tags);
+    return Tagger?.hasTags(target, tags);
 }
 
 const DEFAULT_CONFIG = {

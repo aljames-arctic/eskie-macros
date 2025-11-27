@@ -13,13 +13,8 @@ const defaultDetectionConfig = {
 };
 
 const defaultValidator = async function (target, tags) {
-    function taggerVerify(target, tags) {
-        dependency.required({id: "tagger"});
-        return Tagger?.hasTags(target, tags);
-    }
-
     const targetRace = target?.actor.system.details.type.value;
-    return (targetRace && tags.includes(targetRace)) || taggerVerify(target, tags);
+    return (targetRace && tags.includes(targetRace)) || Tagger?.hasTags(target, tags);
 }
 
 const DEFAULT_CONFIG = {
