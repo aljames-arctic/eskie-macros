@@ -26,6 +26,9 @@ import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 import { farStep } from "./token/far-step.js";
 import { firecracker } from "./location/firecracker.js";
+import { ragePurpleLightning } from "./token/rage-purple-lightning.js";
+import { rageSuperSaiyan } from "./token/rage-super-saiyan.js";
+import { rageVersion2 } from "./token/rage-version2.js";
 
 export const effect = {
     armorOfAgathys,
@@ -56,4 +59,7 @@ export const effect = {
     vortexWarp,
     farStep,
     firecracker,
+    ragePurpleLightning,
+    rageSuperSaiyan,
+    rageVersion2,
 };
