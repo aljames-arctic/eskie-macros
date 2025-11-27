@@ -5,7 +5,7 @@ function closestImage(modulePrefix, ...categories) {
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
 
     // Traverse the categories that the user has provided
-    while (remainingOptions && remainingOptions.length > 0) {
+    while (remainingOptions && remainingOptions.length > 0 && categories.length > 0) {
         if (!remainingOptions.includes(categories[0])) {
             currentPath += `.${remainingOptions[0]}`;
             remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
