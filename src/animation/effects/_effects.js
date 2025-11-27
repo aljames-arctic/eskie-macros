@@ -30,6 +30,7 @@ import { drainingTouch } from "./target/drainingTouch.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
 import { divineSmite } from "./target/divine-smite.js";
+import { flurryOfBlows } from "./token/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
 
 export const effect = {
@@ -46,6 +47,7 @@ export const effect = {
     eyesOfNight,
     farStep,
     fireShield,
+    flurryOfBlows,
     fly,
     gate,
     guidingBolt,
