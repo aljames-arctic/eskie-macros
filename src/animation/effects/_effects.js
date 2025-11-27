@@ -2,7 +2,7 @@ import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { bless } from "./target/bless.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
-import { detect } from "./token/detect.js";
+import { detect } from "./token/detect/_detect.js";
 import { dimensionDoor } from "./token/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { drainingKiss } from "./target/draining-kiss.js";

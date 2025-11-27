@@ -22,9 +22,19 @@ const defaultValidator = async function (target, tags) {
     return (targetRace && tags.includes(targetRace)) || taggerVerify(target, tags);
 }
 
+const DEFAULT_CONFIG = {
+    distance: 30,
+    effect: {
+        pulse: {
+            img: 'jb2a.detect_magic.circle.grey',
+        },
+    },
+    detection: defaultDetectionConfig,
+    validator: defaultValidator,
+}
+
 async function createGoodEvil(token, config) {
-    const defaultConfig = { distance: 30, effect: {pulse: {img:'jb2a.detect_magic.circle.grey'}, ionConfig: defaultDetectionConfig, validator: defaultValidator} };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     return detectUtil.create(token, mergedConfig);
 }
 

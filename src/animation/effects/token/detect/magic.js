@@ -1,6 +1,13 @@
 import { detectUtil } from './detectUtil.js'
 import { dependency } from '../../../../lib/dependency.js';
 
+/*
+    Originally Published: 8/21/2023
+    Original Author: EskieMoh#2969 for Divine Sense
+    Modified by Tyreal2012
+    Update Author: bakanabaka
+*/
+
 const defaultDetectionConfig = {
     abjuration: 'jb2a.magic_signs.rune.abjuration.complete.red',
     conjuration: 'jb2a.magic_signs.rune.conjuration.complete.pink',
@@ -15,9 +22,19 @@ const defaultValidator = async function (target, tags) {
     return Tagger.hasTags(target, tags);
 }
 
+const DEFAULT_CONFIG = {
+    distance: 30,
+    effect: {
+        pulse: {
+            img: 'jb2a.detect_magic.circle.purple',
+        },
+    },
+    detection: defaultDetectionConfig,
+    validator: defaultValidator,
+}
+
 async function createMagic(token, config) {
-    const defaultConfig = { distance: 30, effect: {pulse: {img:'jb2a.detect_magic.circle.purple'}, ionConfig: defaultDetectionConfig, validator: defaultValidator} };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     return detectUtil.create(token, mergedConfig);
 }
 

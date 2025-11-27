@@ -18,9 +18,19 @@ const defaultValidator = async function (target, tags) {
     return taggerVerify(target, tags);
 }
 
+const DEFAULT_CONFIG = {
+    distance: 30,
+    effect: {
+        pulse: {
+            img: 'jb2a.detect_magic.circle.green',
+        },
+    },
+    detection: defaultDetectionConfig,
+    validator: defaultValidator,
+}
+
 async function createPoisonDisease(token, config) {
-    const defaultConfig = { distance: 30, effect: {pulse: {img:'jb2a.detect_magic.circle.greenorange'}, ionConfig: defaultDetectionConfig, validator: defaultValidator} };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     return detectUtil.create(token, mergedConfig);
 }
 

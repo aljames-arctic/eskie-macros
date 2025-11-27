@@ -7,13 +7,24 @@ const defaultValidator = async function (target, tags) {
     return false;
 }
 
+const DEFAULT_CONFIG = {
+    distance: 30,
+    effect: {
+        pulse: {
+            img: 'jb2a.detect_magic.circle.purple',
+        },
+    },
+    detection: defaultDetectionConfig,
+    validator: defaultValidator,
+}
+
 async function _createDetectionEffects(target, config) {
-    const tags = Object.keys(config.effect.detectionConfig);
+    const tags = Object.keys(config.detection);
     let sequence = new Sequence();
 
     let filteredTags = [];
     for (const tag of tags) {
-        let validated = await config.effect.validator(target, [tag]);
+        let validated = await config.validator(target, [tag]);
         if (validated) { filteredTags.push(tag); }
     }
     if (filteredTags.length === 0) { return sequence; }
@@ -52,7 +63,7 @@ async function _createDetectionEffects(target, config) {
             if (delay >= totalDuration) { continue; }
 
             sequence.effect()
-                .file(img(config.effect.detectionConfig[tag]))
+                .file(img(config.detection[tag]))
                 .attachTo(target, {bindRotation:false})
                 .scaleToObject(1, { considerTokenScale: true })
                 .delay(delay)
@@ -77,12 +88,7 @@ async function _createDetectionEffects(target, config) {
  * @returns {Promise<Sequence>} A promise that resolves with the sequence.
  */
 async function create(token, config) {
-    if (config?.effect?.ionConfig) {
-        config.effect.detectionConfig = foundry.utils.mergeObject(config.effect.detectionConfig || {}, config.effect.ionConfig);
-        delete config.effect.ionConfig;
-    }
-    const defaultConfig = { distance: 30, effect: {pulse: {img:'jb2a.detect_magic.circle.purple'}, detectionConfig: defaultDetectionConfig, validator: defaultValidator} };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     const targets = canvas.tokens.placeables.filter((t) => {
         if (t.id === token.id) return false;
         const targetDistance = canvas.grid.measurePath([token, t]).euclidean ?? 0;
