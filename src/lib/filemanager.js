@@ -49,7 +49,7 @@ export function img(path) {
             isFreeUser = dependency.isActivated({ id: 'JB2A_DnD5e' });
             isPatreonUser = dependency.isActivated({ id: 'jb2a_patreon' });
             if (isPatreonUser && isFreeUser) 
-                ui.notifications.warn('Both JB2A Patreon and Free are installed!! Both modules use the path `jb2a.` to prefix files. This can cause conflicts! Recommend disabling the free version.');
+                ui.notifications.warn('Both JB2A Patreon and Free are activated!! Both modules use the path `jb2a.` to prefix files. This will cause conflicts! Recommend disabling the free version.');
             modulePrefix = `jb2a`;
             break;
         case 'animated-spell-effects':
