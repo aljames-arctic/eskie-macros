@@ -30,6 +30,7 @@ import { drainingTouch } from "./target/drainingTouch.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
 import { divineSmite } from "./target/divine-smite.js";
+import { fly } from "./token/fly.js";
 
 export const effect = {
     armorOfAgathys,
@@ -43,6 +44,7 @@ export const effect = {
     drainingKiss,
     elementalBlast,
     fireShield,
+    fly,
     gate,
     guidingBolt,
     healingWord,
