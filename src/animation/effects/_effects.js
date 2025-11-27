@@ -43,6 +43,8 @@ export const effect = {
     divineSmite,
     drainingKiss,
     elementalBlast,
+    eyesOfNight,
+    farStep,
     fireShield,
     fly,
     gate,
