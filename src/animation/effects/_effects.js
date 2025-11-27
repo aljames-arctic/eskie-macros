@@ -29,6 +29,7 @@ import { firecracker } from "./location/firecracker.js";
 import { drainingTouch } from "./target/drainingTouch.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
+import { divineSmite } from "./target/divine-smite.js";
 
 export const effect = {
     armorOfAgathys,
@@ -38,6 +39,7 @@ export const effect = {
     detect,
     dimensionDoor,
     disintegrate,
+    divineSmite,
     drainingKiss,
     elementalBlast,
     fireShield,
