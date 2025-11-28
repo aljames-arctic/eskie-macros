@@ -88,7 +88,7 @@ async function _createDetectionEffects(target, config) {
  * @returns {Promise<Sequence>} A promise that resolves with the sequence.
  */
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const targets = canvas.tokens.placeables.filter((t) => {
         if (t.id === token.id) return false;
         const targetDistance = canvas.grid.measurePath([token, t]).euclidean ?? 0;

@@ -25,7 +25,7 @@ const DEFAULT_CONFIG = {
 }
 
 async function createPoisonDisease(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     return detectUtil.create(token, mergedConfig);
 }
 

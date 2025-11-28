@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
 
 async function create(token, config = {}) {
     var items = Sequencer.Database.getPathsUnder('jb2a.bolt.fire');
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     let { shots, position } = mergedConfig;
     if (!position) {

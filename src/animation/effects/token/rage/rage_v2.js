@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false}, {inplace:false});
     const { id, color, effect } = mergedConfig;
 
     let seq = new Sequence();
@@ -134,7 +134,7 @@ async function create(token, config) {
 }
 
 async function play(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { rageImg } = mergedConfig;
 
     if ( rageImg ) {
@@ -148,7 +148,7 @@ async function play(token, config) {
 }
 
 async function stop(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { rageImg } = mergedConfig;
 
     if ( rageImg ) {
@@ -164,7 +164,7 @@ async function stop(token, config) {
 }
 
 async function clean(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     return util.clean(token, mergedConfig);
 }
 

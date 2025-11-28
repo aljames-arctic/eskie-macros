@@ -12,7 +12,7 @@ const DEFAULT_CONFIG = { id: "speakWithDead" };
  * @returns {Sequence} The animation sequence.
  */
 async function create(target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     if (!target) return new Sequence();
 
     let sequence = new Sequence();
@@ -260,7 +260,7 @@ async function play(target, config) {
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
 async function stop(target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let opacity = new Sequence().animation().on(target).opacity(1);
     return Promise.all([
         opacity.play(),
