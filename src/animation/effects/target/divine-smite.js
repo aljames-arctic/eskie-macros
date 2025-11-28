@@ -3,9 +3,15 @@
 
 import { img } from "../../../lib/filemanager.js";
 
-async function create(token, target, config = {}) {
-    let seq = new Sequence();
+const DEFAULT_CONFIG = {
+    id: "divineSmite",
+    color: "yellowwhite"
+};
 
+async function create(token, target, config = {}) {
+    const { id, color } = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+
+    let seq = new Sequence();
     seq = seq.effect()
         .delay(500)
         .file(img(`jb2a.particles.outward.white.02.03`))
@@ -22,14 +28,14 @@ async function create(token, target, config = {}) {
 
     seq = seq.effect()
         .delay(1050)
-        .file(img("jb2a.divine_smite.caster.reversed.yellowwhite"))
+        .file(img(`jb2a.divine_smite.caster.reversed.${color}`))
         .atLocation(token)
         .scaleToObject(2.2)
         .startTime(900)
         .fadeIn(200);
 
     seq = seq.effect()
-        .file(img("jb2a.divine_smite.caster.yellowwhite"))
+        .file(img(`jb2a.divine_smite.caster.${color}`))
         .atLocation(token)
         .scaleToObject(1.85)
         .belowTokens()
@@ -50,7 +56,7 @@ async function create(token, target, config = {}) {
         .randomRotation();
 
     seq = seq.effect()
-        .file(img("jb2a.divine_smite.target.yellowwhite"))
+        .file(img(`jb2a.divine_smite.target.${color}`))
         .atLocation(target)
         .rotateTowards(token)
         .scaleToObject(3)
