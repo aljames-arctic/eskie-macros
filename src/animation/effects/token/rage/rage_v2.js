@@ -8,12 +8,15 @@ import { util } from './rageUtil.js';
 
 const DEFAULT_CONFIG = {
     id: 'RageV2',
-    color: 'red'
+    color: 'red',
+    effect: {
+        ground: { enabled: true, persist: true },
+    }
 };
 
 async function create(token, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
-    const { id, color } = mergedConfig;
+    const { id, color, effect } = mergedConfig;
 
     let seq = new Sequence();
     seq = seq
@@ -50,6 +53,7 @@ async function create(token, config) {
         .belowTokens()
         .zIndex(2);
 
+    if (effect.ground.enabled) {
     // Ground crack impact
     seq = seq
         .effect()
@@ -73,8 +77,9 @@ async function create(token, config) {
         .fadeIn(1000)
         .filter("ColorMatrix", { hue: -15, saturate: 1 })
         .size(3.5, { gridUnits: true })
-        .persist()
         .zIndex(0);
+        seq = (effect.ground.persist) ? seq.persist() : seq.duration(10000);
+    }
 
     // Roar sound effect
     seq = seq
@@ -114,22 +119,6 @@ async function create(token, config) {
         .playbackRate(1)
         .fadeOut(500)
         .persist()
-        .zIndex(1);
-
-    // Wind stream (persistent)
-    seq = seq
-        .effect()
-        .name(`${id} - ${token.uuid}`)
-        .file(img("jb2a.wind_stream.white"))
-        .atLocation(token)
-        .attachTo(token)
-        .scaleToObject()
-        .rotate(90)
-        .opacity(1)
-        .filter("ColorMatrix", { saturate: 1 })
-        .tint(util.hexValue(color))
-        .persist()
-        .private()
         .zIndex(1);
 
     // Aura token generic red (persistent)
