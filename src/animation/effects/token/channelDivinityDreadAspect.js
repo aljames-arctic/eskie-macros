@@ -3,8 +3,13 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    darkMap: true,
+}
+
 async function create(token, targets, config = {}) {
-    config.darkMap = config.darkMap ?? true;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const {darkMap} = mergedConfig;
 
     const sequence = new Sequence();
 
@@ -28,7 +33,7 @@ async function create(token, targets, config = {}) {
         .belowTokens()
         .zIndex(2);
 
-    if (config.darkMap && canvas.scene.background.src) {
+    if (darkMap && canvas.scene.background.src) {
         sequence.effect()
             .file(img(canvas.scene.background.src))
             .filter("ColorMatrix", { brightness: 0.3 })
