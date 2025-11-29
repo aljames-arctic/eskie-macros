@@ -1,9 +1,11 @@
 import { magic } from './magic.js'
-import { goodevil } from './goodevil.js'
+import { goodevil } from './good-evil.js'
+import { divineSense } from './divine-sense.js';
 import { poison } from './poison.js'
 
 export const detect = {
-    magic,
+    divineSense,
     goodevil,
+    magic,
     poison
 };

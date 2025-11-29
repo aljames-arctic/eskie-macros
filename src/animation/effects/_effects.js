@@ -1,4 +1,5 @@
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
+import { banishment } from "./target/banishment.js";
 import { bless } from "./target/bless.js";
 import { channelDivinityControlUndead } from "./target/channelDivinityControlUndead.js";
 import { channelDivinityDreadAspect } from "./token/channelDivinityDreadAspect.js";
@@ -9,6 +10,7 @@ import { detect } from "./token/detect/_detect.js";
 import { dimensionDoor } from "./token/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { divineSmite } from "./target/divine-smite.js";
+import { divineStrike } from "./target/divine-strike.js";
 import { drainingKiss } from "./target/draining-kiss.js";
 import { drainingTouch } from "./target/drainingTouch.js";
 import { dreadLord } from "./token/dreadLord.js";
@@ -33,16 +35,19 @@ import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { rage } from "./token/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
 import { romanCandle } from "./target/roman-candle.js";
+import { sandevistan } from "./token/sandevistan.js";
 import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
 import { skyRocket } from "./target/sky-rocket.js";
 import { sleep } from "./target/sleep.js";
+import { sneakAttack } from "./target/sneak-attack.js";
 import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 
 export const effect = {
     armorOfAgathys,
+    banishment,
     bless,
     channelElement,
     channelDivinityControlUndead,
@@ -53,6 +58,7 @@ export const effect = {
     dimensionDoor,
     disintegrate,
     divineSmite,
+    divineStrike,
     drainingKiss,
     drainingTouch,
     dreadLord,
@@ -77,10 +83,12 @@ export const effect = {
     rage,
     revivify,
     romanCandle,
+    sandevistan,
     sanctuary,
     shuffle,
     skyRocket,
     sleep,
+    sneakAttack,
     speakWithDead,
     teleport,
     vortexWarp,

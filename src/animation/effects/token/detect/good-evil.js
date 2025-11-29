@@ -1,5 +1,4 @@
 import { detectUtil } from './detectUtil.js'
-import { dependency } from '../../../../lib/dependency.js';
 
 const defaultDetectionConfig = {
     aberration: 'jb2a.condition.curse.01.006.blue',
@@ -28,17 +27,17 @@ const DEFAULT_CONFIG = {
     validator: defaultValidator,
 }
 
-async function createGoodEvil(token, config) {
+async function create(token, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     return detectUtil.create(token, mergedConfig);
 }
 
-async function playGoodEvil(token, config) {
-    const seq = await createGoodEvil(token, config);
+async function play(token, config) {
+    const seq = await create(token, config);
     if (seq) { return seq.play(); }
 }
 
 export const goodevil = {
-    create : createGoodEvil,
-    play : playGoodEvil,
+    create,
+    play,
 };

@@ -1,5 +1,4 @@
 import { detectUtil } from './detectUtil.js'
-import { dependency } from '../../../../lib/dependency.js';
 
 const defaultDetectionConfig = {
     poisoned: 'jb2a.magic_signs.rune.abjuration.complete.red',
@@ -24,17 +23,17 @@ const DEFAULT_CONFIG = {
     validator: defaultValidator,
 }
 
-async function createPoisonDisease(token, config) {
+async function create(token, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     return detectUtil.create(token, mergedConfig);
 }
 
-async function playPoisonDisease(token, config) {
-    const seq = await createPoisonDisease(token, config);
+async function play(token, config) {
+    const seq = await create(token, config);
     if (seq) { return seq.play(); }
 }
 
 export const poison = {
-    create : createPoisonDisease,
-    play : playPoisonDisease,
+    create,
+    play,
 };
