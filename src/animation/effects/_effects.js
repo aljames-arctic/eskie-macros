@@ -14,7 +14,7 @@ import { drainingTouch } from "./target/drainingTouch.js";
 import { dreadLord } from "./token/dreadLord.js";
 import { dreadLordAttack } from "./target/dreadLordAttack.js";
 import { dreadLordFear } from "./target/dreadLordFear.js";
-import { elementalBlast } from "./elementalBlast/_elementalBlast.js";
+import { elementalBlast } from "./target/elementalBlast/_elementalBlast.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
 import { farStep } from "./token/far-step.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";

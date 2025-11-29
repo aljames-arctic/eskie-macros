@@ -1,7 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
-
+import { img } from "../../../../lib/filemanager.js";
 /**
  *
  * @param {object} token
@@ -30,24 +29,29 @@ async function create(token, target, config = {}) {
 
     let projHeight = [];
     let projX = [];
+    let impactSize = [];
     if (gridDistance >= 85){
 
-    projHeight = canvas.grid.size/200;
+    projHeight = canvas.grid.size/150;
     projX = true;
+    impactSize = 1.75;
 
     } else if (gridDistance >= 55) {
 
-    projHeight = canvas.grid.size/250;
+    projHeight = canvas.grid.size/225;
     projX = true;
+    impactSize = 1.5*2;
 
     } else if (gridDistance > 30) {
 
     projHeight = canvas.grid.size/300;
     projX = true;
+    impactSize = 1.25*2;
     } else  {
 
     projHeight = 1;
     projX = false;
+    impactSize = 1*2;
 
     }
 
@@ -56,35 +60,30 @@ async function create(token, target, config = {}) {
     let sequence = new Sequence()
 
     .effect()
-    .file(img("animated-spell-effects-cartoon.smoke.17"))
+    .file(img("animated-spell-effects-cartoon.fire.33"))
     .atLocation(token,{offset:{x:-0, y: -0}, gridUnits:true, local:false})
     .rotateTowards(targetCenter, {local: true})
-    .spriteOffset({x: -1.0+ranOffset, y:-1.2- (token.document.width-1)/2}, {gridUnits:true})
-    .scaleToObject(2)
+    .spriteOffset({x: (-1.0+ranOffset)*token.document.width, y:-0.4*token.document.width}, {gridUnits:true})
+    .size({width: token.document.width*2, height: token.document.width*1.25}, {gridUnits:true, uniform: false})
     .rotate(-90)
     .zIndex(1)
 
     .effect()
     .delay(0)
-    .file(img("animated-spell-effects-cartoon.air.bolt.ray"))
-    .atLocation(token,{offset:{x:0.5* token.document.width, y: ranOffset}, gridUnits:true, local:true})
+    .file(img("animated-spell-effects-cartoon.fire.29"))
+    .atLocation(token,{offset:{x:0* token.document.width, y: ranOffset}, gridUnits:true, local:true})
     .stretchTo(target, {onlyX: projX})
-    .scale(projHeight)
-    .waitUntilFinished(-2000)
+    .playbackRate(1)
+    .scale(projHeight*2)
+    .waitUntilFinished(-900)
 
     .effect()
-    .file(img("jb2a.impact.007.white"))
+    .file(img("animated-spell-effects-cartoon.fire.14"))
     .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
-    .scale(0.6)
-    .filter("ColorMatrix", { hue: 150 })
-
-    .effect()
-    .file(img("animated-spell-effects-cartoon.smoke.43"))
-    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
-    .scale(0.3)
-    .filter("ColorMatrix", { hue: 150 })
-    .randomRotation()
-    .zIndex(1)
+    .size(impactSize, {gridUnits:true})
+    .rotateTowards(token)
+    .rotate(180)
+    .spriteOffset({x: 0-impactSize/4, y:-0}, {gridUnits:true})
     return sequence;
 }
 /**
@@ -98,12 +97,11 @@ async function play(token, target, config = {}) {
     sequence.play();
 }
 
-
-function stop(token, { id = 'elementalBlast.air' } = {}) {
+function stop(token, { id = 'elementalBlast.fire' } = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const airBlast = {
+export const fireBlast = {
     create,
     play,
     stop

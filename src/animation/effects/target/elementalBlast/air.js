@@ -1,6 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
+import { img } from "../../../../lib/filemanager.js";
 
 /**
  *
@@ -30,29 +30,24 @@ async function create(token, target, config = {}) {
 
     let projHeight = [];
     let projX = [];
-    let impactSize = [];
     if (gridDistance >= 85){
 
-    projHeight = 2.5;
+    projHeight = canvas.grid.size/200;
     projX = true;
-    impactSize = 1.5*4;
 
     } else if (gridDistance >= 55) {
 
-    projHeight = 2;
+    projHeight = canvas.grid.size/250;
     projX = true;
-    impactSize = 1.25*4;
 
     } else if (gridDistance > 30) {
 
-    projHeight = 1.5;
+    projHeight = canvas.grid.size/300;
     projX = true;
-    impactSize = 1*4;
     } else  {
 
     projHeight = 1;
     projX = false;
-    impactSize = 0.75*4;
 
     }
 
@@ -61,38 +56,35 @@ async function create(token, target, config = {}) {
     let sequence = new Sequence()
 
     .effect()
-    .file(img("animated-spell-effects-cartoon.water.11"))
+    .file(img("animated-spell-effects-cartoon.smoke.17"))
     .atLocation(token,{offset:{x:-0, y: -0}, gridUnits:true, local:false})
     .rotateTowards(targetCenter, {local: true})
-    .spriteOffset({x: -1.0+ranOffset, y:-0.65- (token.document.width-1)/2}, {gridUnits:true})
+    .spriteOffset({x: -1.0+ranOffset, y:-1.2- (token.document.width-1)/2}, {gridUnits:true})
     .scaleToObject(2)
     .rotate(-90)
+    .zIndex(1)
 
     .effect()
     .delay(0)
-    .file(img("animated-spell-effects-cartoon.water.71"))
-    .atLocation(token,{offset:{x:0*token.document.width, y: ranOffset}, gridUnits:true, local:true})
-    .rotateTowards(target)
-    .spriteRotation(90)
-    .playbackRate(1.5)
-    .size({width:(gridDistance/5),height:gridDistance/5}, {gridUnits:true})
+    .file(img("animated-spell-effects-cartoon.air.bolt.ray"))
+    .atLocation(token,{offset:{x:0.5* token.document.width, y: ranOffset}, gridUnits:true, local:true})
+    .stretchTo(target, {onlyX: projX})
+    .scale(projHeight)
+    .waitUntilFinished(-2000)
+
+    .effect()
+    .file(img("jb2a.impact.007.white"))
+    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
+    .scale(0.6)
+    .filter("ColorMatrix", { hue: 150 })
+
+    .effect()
+    .file(img("animated-spell-effects-cartoon.smoke.43"))
+    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
+    .scale(0.3)
+    .filter("ColorMatrix", { hue: 150 })
+    .randomRotation()
     .zIndex(1)
-    .waitUntilFinished(-1000)
-
-    .effect()
-    .file(img("jb2a.impact.007.yellow"))
-    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
-    .size(impactSize/2, {gridUnits:true})
-    .filter("ColorMatrix", {saturate: -1, hue: -20 })
-
-    .effect()
-    .file(img("animated-spell-effects-cartoon.water.23"))
-    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
-    .size(impactSize, {gridUnits:true})
-    .rotateTowards(token)
-    .rotate(90)
-    .spriteOffset({x: -1.5*projHeight  , y:-0.5- (token.document.width-1)/2}, {gridUnits:true})
-    .zIndex(1.1)
     return sequence;
 }
 /**
@@ -106,11 +98,12 @@ async function play(token, target, config = {}) {
     sequence.play();
 }
 
-function stop(token, { id = 'elementalBlast.water' } = {}) {
+
+function stop(token, { id = 'elementalBlast.air' } = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const waterBlast = {
+export const airBlast = {
     create,
     play,
     stop

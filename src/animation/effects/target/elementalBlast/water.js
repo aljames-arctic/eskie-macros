@@ -1,6 +1,7 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
+import { img } from "../../../../lib/filemanager.js";
+
 /**
  *
  * @param {object} token
@@ -32,26 +33,26 @@ async function create(token, target, config = {}) {
     let impactSize = [];
     if (gridDistance >= 85){
 
-    projHeight = canvas.grid.size/150;
+    projHeight = 2.5;
     projX = true;
-    impactSize = 1.75;
+    impactSize = 1.5*4;
 
     } else if (gridDistance >= 55) {
 
-    projHeight = canvas.grid.size/225;
+    projHeight = 2;
     projX = true;
-    impactSize = 1.5;
+    impactSize = 1.25*4;
 
     } else if (gridDistance > 30) {
 
-    projHeight = canvas.grid.size/300;
+    projHeight = 1.5;
     projX = true;
-    impactSize = 1.25;
+    impactSize = 1*4;
     } else  {
 
     projHeight = 1;
     projX = false;
-    impactSize = 1;
+    impactSize = 0.75*4;
 
     }
 
@@ -60,32 +61,38 @@ async function create(token, target, config = {}) {
     let sequence = new Sequence()
 
     .effect()
-    .file(img("animated-spell-effects-cartoon.energy.pulse.yellow"))
+    .file(img("animated-spell-effects-cartoon.water.11"))
     .atLocation(token,{offset:{x:-0, y: -0}, gridUnits:true, local:false})
     .rotateTowards(targetCenter, {local: true})
-    .spriteOffset({x: -0.5+ranOffset, y:-0.7- (token.document.width-1)/2}, {gridUnits:true})
-    .filter("ColorMatrix", {saturate: 0.25, hue: -20 })
-    .belowTokens()
-    .scale(0.2)
-    .rotate(-90)
-
-    .effect()
-    .file(img("animated-spell-effects-cartoon.earth.debris.03"))
-    .atLocation(token,{offset:{x:-0, y: -0}, gridUnits:true, local:false})
-    .rotateTowards(targetCenter, {local: true})
-    .spriteOffset({x: -1.5+ranOffset, y:-0.75- (token.document.width-1)/2}, {gridUnits:true})
-    .scale(0.35)
+    .spriteOffset({x: -1.0+ranOffset, y:-0.65- (token.document.width-1)/2}, {gridUnits:true})
+    .scaleToObject(2)
     .rotate(-90)
 
     .effect()
     .delay(0)
-    .file(img("jb2a.boulder.toss.02"))
-    .atLocation(token,{offset:{x:0.5* token.document.width, y: ranOffset}, gridUnits:true, local:true})
-    .stretchTo(target, {onlyX: false})
-    .playbackRate(1)
-    .scaleIn(0, 500, {ease: "easeOutCubic"})
+    .file(img("animated-spell-effects-cartoon.water.71"))
+    .atLocation(token,{offset:{x:0*token.document.width, y: ranOffset}, gridUnits:true, local:true})
+    .rotateTowards(target)
+    .spriteRotation(90)
+    .playbackRate(1.5)
+    .size({width:(gridDistance/5),height:gridDistance/5}, {gridUnits:true})
     .zIndex(1)
-    .waitUntilFinished(-900)
+    .waitUntilFinished(-1000)
+
+    .effect()
+    .file(img("jb2a.impact.007.yellow"))
+    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
+    .size(impactSize/2, {gridUnits:true})
+    .filter("ColorMatrix", {saturate: -1, hue: -20 })
+
+    .effect()
+    .file(img("animated-spell-effects-cartoon.water.23"))
+    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
+    .size(impactSize, {gridUnits:true})
+    .rotateTowards(token)
+    .rotate(90)
+    .spriteOffset({x: -1.5*projHeight  , y:-0.5- (token.document.width-1)/2}, {gridUnits:true})
+    .zIndex(1.1)
     return sequence;
 }
 /**
@@ -99,11 +106,11 @@ async function play(token, target, config = {}) {
     sequence.play();
 }
 
-function stop(token, { id = 'elementalBlast.earth' } = {}) {
+function stop(token, { id = 'elementalBlast.water' } = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const earthBlast = {
+export const waterBlast = {
     create,
     play,
     stop

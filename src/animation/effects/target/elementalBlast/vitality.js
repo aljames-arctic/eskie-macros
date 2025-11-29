@@ -1,6 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
+import { img } from "../../../../lib/filemanager.js";
 /**
  *
  * @param {object} token
@@ -32,26 +32,26 @@ async function create(token, target, config = {}) {
     let impactSize = [];
     if (gridDistance >= 85){
 
-    projHeight = canvas.grid.size/150;
+    projHeight = 2.5;
     projX = true;
-    impactSize = 1.75;
+    impactSize = 1.5;
 
     } else if (gridDistance >= 55) {
 
-    projHeight = canvas.grid.size/225;
+    projHeight = 2;
     projX = true;
-    impactSize = 1.5*2;
+    impactSize = 1.25;
 
     } else if (gridDistance > 30) {
 
-    projHeight = canvas.grid.size/300;
+    projHeight = 1.5;
     projX = true;
-    impactSize = 1.25*2;
+    impactSize = 1;
     } else  {
 
     projHeight = 1;
     projX = false;
-    impactSize = 1*2;
+    impactSize = 0.75;
 
     }
 
@@ -60,30 +60,46 @@ async function create(token, target, config = {}) {
     let sequence = new Sequence()
 
     .effect()
-    .file(img("animated-spell-effects-cartoon.fire.33"))
+    .file(img("jb2a.swirling_leaves.outburst.01.greenorange"))
     .atLocation(token,{offset:{x:-0, y: -0}, gridUnits:true, local:false})
     .rotateTowards(targetCenter, {local: true})
-    .spriteOffset({x: (-1.0+ranOffset)*token.document.width, y:-0.4*token.document.width}, {gridUnits:true})
+    .spriteOffset({x: (-1.0+ranOffset)*token.document.width, y:-0.4- (token.document.width-1)/2}, {gridUnits:true})
     .size({width: token.document.width*2, height: token.document.width*1.25}, {gridUnits:true, uniform: false})
     .rotate(-90)
-    .zIndex(1)
+
+    .effect()
+    .file(img("jb2a.swirling_leaves.ranged.greenorange"))
+    .atLocation(token, {offset:{x:0 , y: 0+ranOffset},local: true, gridUnits:true})
+    .stretchTo(target)
+    .playbackRate(2.1)
+    .fadeIn(500, {delay: (gridDistance/5*100)/2})
+    .scale(0.85)
 
     .effect()
     .delay(0)
-    .file(img("animated-spell-effects-cartoon.fire.29"))
-    .atLocation(token,{offset:{x:0* token.document.width, y: ranOffset}, gridUnits:true, local:true})
-    .stretchTo(target, {onlyX: projX})
+    .file(img("jb2a.energy_strands.range.standard.dark_green.{{num}}"))
+    .atLocation(token, {offset:{x:0.15* token.document.width, y: 0+ranOffset},local: true, gridUnits:true})
+    .stretchTo(target)
     .playbackRate(1)
-    .scale(projHeight*2)
-    .waitUntilFinished(-900)
+    .zIndex(1)
+    .fadeIn(100)
+    .filter("ColorMatrix", {saturate: 0, brightness:1.25, hue:-50 })
+    .setMustache({
+    "num": ()=> {
+    const nums = [`01`,`02`,`03`];
+    return nums[Math.floor(Math.random()*nums.length)];
+    }
+    })
+    .repeats(3, 50,50)
+    .opacity(0.8)
+    .randomizeMirrorY()
+    .waitUntilFinished(-1500)
 
     .effect()
-    .file(img("animated-spell-effects-cartoon.fire.14"))
-    .atLocation(target,{offset:{x:0, y:0}, gridUnits:true})
-    .size(impactSize, {gridUnits:true})
-    .rotateTowards(token)
-    .rotate(180)
-    .spriteOffset({x: 0-impactSize/4, y:-0}, {gridUnits:true})
+    .file(img("jb2a.healing_generic.400px.green"))
+    .atLocation(target)
+    .scale(0.5)
+    .filter("ColorMatrix", {saturate: 0, brightness:1.25, hue:-50 })
     return sequence;
 }
 /**
@@ -97,11 +113,11 @@ async function play(token, target, config = {}) {
     sequence.play();
 }
 
-function stop(token, { id = 'elementalBlast.fire' } = {}) {
+function stop(token, { id = 'elementalBlast.vitality' } = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const fireBlast = {
+export const vitalityBlast = {
     create,
     play,
     stop

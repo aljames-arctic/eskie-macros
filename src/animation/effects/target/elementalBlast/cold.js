@@ -1,6 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
+import { img } from "../../../../lib/filemanager.js";
 
 /**
  *
