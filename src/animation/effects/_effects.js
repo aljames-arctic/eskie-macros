@@ -1,13 +1,25 @@
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { bless } from "./target/bless.js";
+import { channelElement } from "./token/channelElement/_channelElement.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
 import { detect } from "./token/detect/_detect.js";
 import { dimensionDoor } from "./token/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
+import { divineSmite } from "./target/divine-smite.js";
 import { drainingKiss } from "./target/draining-kiss.js";
+import { drainingTouch } from "./target/drainingTouch.js";
+import { dreadLord } from "./token/dreadLord.js";
+import { dreadLordAttack } from "./target/dreadLordAttack.js";
+import { dreadLordFear } from "./target/dreadLordFear.js";
 import { elementalBlast } from "./elementalBlast/_elementalBlast.js";
+import { eyesOfNight } from "./target/eyesOfNight.js";
+import { farStep } from "./token/far-step.js";
+import { fingerOfDeath } from "./target/fingerOfDeath.js";
+import { firecracker } from "./location/firecracker.js";
 import { fireShield } from "./token/fire-shield.js";
+import { flurryOfBlows } from "./token/flurry-of-blows.js";
+import { fly } from "./token/fly.js";
 import { gate } from "./location/gate.js";
 import { guidingBolt } from "./target/guiding-bolt.js";
 import { healingWord } from "./target/healing-word.js";
@@ -18,26 +30,19 @@ import { petrified } from "./target/petrified.js";
 import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { rage } from "./token/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
+import { romanCandle } from "./target/roman-candle.js";
 import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
+import { skyRocket } from "./target/sky-rocket.js";
 import { sleep } from "./target/sleep.js";
 import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
-import { farStep } from "./token/far-step.js";
-import { firecracker } from "./location/firecracker.js";
-import { drainingTouch } from "./target/drainingTouch.js";
-import { fingerOfDeath } from "./target/fingerOfDeath.js";
-import { eyesOfNight } from "./target/eyesOfNight.js";
-import { divineSmite } from "./target/divine-smite.js";
-import { flurryOfBlows } from "./token/flurry-of-blows.js";
-import { fly } from "./token/fly.js";
-import { romanCandle } from "./target/roman-candle.js";
-import { skyRocket } from "./target/sky-rocket.js";
 
 export const effect = {
     armorOfAgathys,
     bless,
+    channelElement,
     charmPerson,
     cloudOfSand,
     detect,
@@ -45,9 +50,14 @@ export const effect = {
     disintegrate,
     divineSmite,
     drainingKiss,
+    drainingTouch,
+    dreadLord,
+    dreadLordAttack,
+    dreadLordFear,
     elementalBlast,
     eyesOfNight,
     farStep,
+    fingerOfDeath,
     firecracker,
     fireShield,
     flurryOfBlows,
@@ -70,9 +80,4 @@ export const effect = {
     speakWithDead,
     teleport,
     vortexWarp,
-    farStep,
-    firecracker,
-    drainingTouch,
-    fingerOfDeath,
-    eyesOfNight,
 };
