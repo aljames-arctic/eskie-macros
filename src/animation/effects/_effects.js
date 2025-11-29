@@ -1,5 +1,7 @@
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { bless } from "./target/bless.js";
+import { channelDivinityControlUndead } from "./target/channelDivinityControlUndead.js";
+import { channelDivinityDreadAspect } from "./token/channelDivinityDreadAspect.js";
 import { channelElement } from "./token/channelElement/_channelElement.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
@@ -43,6 +45,8 @@ export const effect = {
     armorOfAgathys,
     bless,
     channelElement,
+    channelDivinityControlUndead,
+    channelDivinityDreadAspect,
     charmPerson,
     cloudOfSand,
     detect,
