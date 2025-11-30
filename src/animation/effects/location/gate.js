@@ -81,12 +81,25 @@ async function create(token, config) {
             interval: 0
         },
         destinationList: [
-            { label: 'First World', value: 'First World' }, { label: 'Astral Plane', value: 'Astral Plane' }, { label: 'Ethereal Plane', value: 'Ethereal Plane' },
-            { label: 'Shadow Plane', value: 'Shadow Plane' }, { label: 'Plane of Air', value: 'Plane of Air' }, { label: 'Plane of Earth', value: 'Plane of Earth' },
-            { label: 'Plane of Fire', value: 'Plane of Fire' }, { label: 'Plane of Water', value: 'Plane of Water' }, { label: 'Negative Energy Plane', value: 'Negative Energy Plane' },
-            { label: 'Positive Energy Plane', value: 'Positive Energy Plane' }, { label: 'Heaven', value: 'Heaven' }, { label: 'Nirvana', value: 'Nirvana' },
-            { label: 'Elysium', value: 'Elysium' }, { label: 'Axis', value: 'Axis' }, { label: 'Boneyard', value: 'Boneyard' }, { label: 'Maelstrom', value: 'Maelstrom' },
-            { label: 'Hell', value: 'Hell' }, { label: 'Abaddon', value: 'Abaddon' }, { label: 'Abyss', value: 'Abyss' }
+            { label: 'First World', value: 'First World' },
+            { label: 'Astral Plane', value: 'Astral Plane' },
+            { label: 'Ethereal Plane', value: 'Ethereal Plane' },
+            { label: 'Shadow Plane', value: 'Shadow Plane' },
+            { label: 'Plane of Air', value: 'Plane of Air' },
+            { label: 'Plane of Earth', value: 'Plane of Earth' },
+            { label: 'Plane of Fire', value: 'Plane of Fire' },
+            { label: 'Plane of Water', value: 'Plane of Water' },
+            { label: 'Negative Energy Plane', value: 'Negative Energy Plane' },
+            { label: 'Positive Energy Plane', value: 'Positive Energy Plane' },
+            { label: 'Heaven', value: 'Heaven' },
+            { label: 'Nirvana', value: 'Nirvana' },
+            { label: 'Elysium', value: 'Elysium' },
+            { label: 'Axis', value: 'Axis' },
+            { label: 'Boneyard', value: 'Boneyard' },
+            { label: 'Maelstrom', value: 'Maelstrom' },
+            { label: 'Hell', value: 'Hell' },
+            { label: 'Abaddon', value: 'Abaddon' },
+            { label: 'Abyss', value: 'Abyss' }
         ]
     };
     const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
