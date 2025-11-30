@@ -29,9 +29,11 @@ import { guidingBolt } from "./target/guiding-bolt.js";
 import { healingWord } from "./target/healing-word.js";
 import { hex } from "./target/hex/_hex.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
+import { incorporeal } from "./token/incorporeal/incorporeal.js";
 import { mistyStep } from "./token/misty-step.js";
 import { petrified } from "./target/petrified.js";
 import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
+import { possession } from "./token/possession/possession.js";
 import { rage } from "./token/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
 import { romanCandle } from "./target/roman-candle.js";
@@ -77,9 +79,11 @@ export const effect = {
     healingWord,
     hex,
     iaijutsuStrike,
+    incorporeal,
     mistyStep,
     petrified,
     petrifyingGaze,
+    possession,
     rage,
     revivify,
     romanCandle,
