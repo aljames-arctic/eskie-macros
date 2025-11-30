@@ -115,7 +115,7 @@ function getDissolveConfig() {
     ];
 }
 
-function dissolve(target, config) {
+function dissolveCreate(target, config) {
     const defaultConfig = {
         id: 'disintegrate',
     };
@@ -128,6 +128,15 @@ function dissolve(target, config) {
         seq = seq.addSequence(_dissolve({ id, target, offset: section.offset, steps: section.steps, shape }));
     }
     return seq;
+}
+
+async function dissolvePlay(target, config) {
+    let dissolve = dissolveCreate(target, config);
+    let hide = new Sequence().animation().on(target).show(false);
+    if (dissolve && hide) {
+        await dissolve.play();
+        return hide.play();
+    }
 }
 
 /**
@@ -190,7 +199,7 @@ function death(target, config) {
         .belowTokens()
 
         // Dissolve and wait
-        .addSequence(dissolve(target, config))
+        .addSequence(dissolveCreate(target, config))
         .wait(1500);
 
     return seq;
@@ -265,7 +274,7 @@ async function stop(token, {id = 'disintegrate'} = {}) {
  * @param {object} config Configuration for the effect.
  * @returns {Sequence} A Sequencer sequence object.
  */
-function reform(target, config) {
+function reformCreate(target, config) {
     const defaultConfig = {
         id: 'disintegrate',
         duration: 500,
@@ -304,6 +313,14 @@ function reform(target, config) {
     return reformSequence;
 }
 
+async function reformPlay(target, config) {
+    let reform = new Sequence();
+    reform = reform
+                .animation().on(target).show(true)
+                .addSequence(reformCreate(target, config));
+    if (reform) { return reform.play(); }
+}
+
 export const disintegrate = {
     create,
     play,
@@ -311,6 +328,12 @@ export const disintegrate = {
     // Subfunctions
     beam,
     death,
-    dissolve,
-    reform,
+    dissolve : {
+        create: dissolveCreate,
+        play: dissolvePlay,
+    },
+    reform : {
+        create: reformCreate,
+        play: reformPlay,
+    },
 };
