@@ -2,7 +2,14 @@
 // Updater: @bakanabaka
 import { img } from "../../../lib/filemanager.js";
 
-const DEFAULT_CONFIG = { id: "speakWithDead" };
+const DEFAULT_CONFIG = { 
+    id: "speakWithDead",
+    sound: {
+        enabled: false,
+        file: "psfx.magic-signs.circle.v1.necromancy.complete",
+        volume: 0.5,
+    }
+};
 
 /**
  * Creates the animation sequence for Speak With Dead.
@@ -13,21 +20,23 @@ const DEFAULT_CONFIG = { id: "speakWithDead" };
  */
 async function create(target, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, sound } = mergedConfig;
+
     if (!target) return new Sequence();
 
     let sequence = new Sequence();
+    if (config.sound.enabled) sequence.sound().volume(sound.volume).file(sound.file)
 
-    _addMagicCircleEffects(sequence, target, `${mergedConfig.id} ${target.id}`);
+    sequence.addSequence(_addMagicCircleEffects(target, `${id} ${target.id}`));
 
     sequence.wait(500);
 
     // Simplified corner flame effects
-    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, 0.5, 0.5, 2); // Bottom Right Flame
-    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, -0.5, 0.5, 2); // Bottom Left Flame
-    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, -0.5, -0.5, 1); // Top Left Flame
-    _addCornerFlameEffects(sequence, target, `${mergedConfig.id} ${target.id}`, 0.5, -0.5, 1); // Top Right Flame
-
-    _addTokenVisualEffects(sequence, target, `${mergedConfig.id} ${target.id}`);
+    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, 0.5, 0.5, 2)); // Bottom Right Flame
+    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, -0.5, 0.5, 2)); // Bottom Left Flame
+    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, -0.5, -0.5, 1)); // Top Left Flame
+    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, 0.5, -0.5, 1)); // Top Right Flame
+    sequence.addSequence(_addTokenVisualEffects(target, `${id} ${target.id}`));
 
     return sequence;
 }
@@ -38,7 +47,8 @@ async function create(target, config) {
  * @param {object} target - The target token.
  * @param {string} id - The unique ID for the effect to manage persistence.
  */
-function _addMagicCircleEffects(sequence, target, id) {
+function _addMagicCircleEffects(target, id) {
+    let sequence = new Sequence();
     sequence
         .effect()
         .name(id)
@@ -67,6 +77,7 @@ function _addMagicCircleEffects(sequence, target, id) {
         .duration(1200)
         .fadeIn(200, {ease: "easeOutCirc", delay: 500})
         .fadeOut(300, {ease: "linear"});
+    return sequence;
 }
 
 /**
@@ -75,7 +86,8 @@ function _addMagicCircleEffects(sequence, target, id) {
  * @param {object} target - The target token.
  * @param {string} id - The unique ID for the effect to manage persistence.
  */
-function _addTokenVisualEffects(sequence, target, id) {
+function _addTokenVisualEffects(target, id) {
+    let sequence = new Sequence();
     sequence
         // Token effect
         .effect()
@@ -195,6 +207,7 @@ function _addTokenVisualEffects(sequence, target, id) {
         .persist()
         .zIndex(0.2)
         .waitUntilFinished(-500); // Small wait to ensure persistence starts before play returns
+        return sequence;
 }
 
 /**
@@ -206,7 +219,8 @@ function _addTokenVisualEffects(sequence, target, id) {
  * @param {number} yOffset - The y-offset for the flame position.
  * @param {number} smokeZIndex - The zIndex for the smoke effect.
  */
-function _addCornerFlameEffects(sequence, target, id, xOffset, yOffset, smokeZIndex) {
+function _addCornerFlameEffects(target, id, xOffset, yOffset, smokeZIndex) {
+    let sequence = new Sequence();
     sequence
         .effect()
         .name(id)
@@ -240,6 +254,7 @@ function _addCornerFlameEffects(sequence, target, id, xOffset, yOffset, smokeZIn
         .scaleIn(0, 500, {ease: "easeOutCubic"})
         .randomizeMirrorX()
         .persist();
+    return sequence;
 }
 
 /**
