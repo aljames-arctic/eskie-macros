@@ -1,6 +1,6 @@
 import { dependency } from './dependency.js'
 
-function closestImage(modulePrefix, ...categories) {
+function closestPath(modulePrefix, ...categories) {
     let diverged = false;
     let currentPath = modulePrefix;
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
@@ -26,9 +26,37 @@ function closestImage(modulePrefix, ...categories) {
     return currentPath;
 }
 
+export function sound(path) {
+    // Support http:// and https:// addresses
+    if (path.includes('/')) return path;
+
+    // Support Sequencer Database paths (. seperated)
+    let categories = path.split('.');
+    if (categories.length === 0) return;
+    let isPatreonUser = false;
+    let isFreeUser = false;
+    let modulePrefix = categories.shift();
+    switch (modulePrefix) {
+        case 'psfx':
+            dependency.someRequired([{ id: 'psfx-patreon' }, { id: 'psfx' }]);
+            isPatreonUser = dependency.isActivated({ id: 'psfx-patreon' });
+            isFreeUser = dependency.isActivated({ id: 'psfx' });
+            if (isPatreonUser && isFreeUser) 
+                ui.notifications.warn('Both PSFX Patreon and Free are activated, both modules use the path `psfx.` to prefix files! This will cause conflicts! Recommend disabling / uninstalling the free version.');
+            modulePrefix = 'psfx';
+            break;
+        case 'psfx-ambience':
+            // Only Patreon Version
+            break;
+    }
+
+    return closestPath(modulePrefix, ...categories);
+}
+
 export function img(path) {
     // Support http:// and https:// addresses
-    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    // Support direct filepaths
+    if (path.includes('/')) return path;
 
     // Support Sequencer Database paths (. seperated)
     let categories = path.split('.');
@@ -49,7 +77,7 @@ export function img(path) {
             isFreeUser = dependency.isActivated({ id: 'JB2A_DnD5e' });
             isPatreonUser = dependency.isActivated({ id: 'jb2a_patreon' });
             if (isPatreonUser && isFreeUser) 
-                ui.notifications.warn('Both JB2A Patreon and Free are activated!! Both modules use the path `jb2a.` to prefix files. This will cause conflicts! Recommend disabling the free version.');
+                ui.notifications.warn('Both JB2A Patreon and Free are activated, both modules use the path `jb2a.` to prefix files. This will cause conflicts! Recommend disabling / uninstalling the free version.');
             modulePrefix = `jb2a`;
             break;
         case 'animated-spell-effects':
@@ -58,9 +86,10 @@ export function img(path) {
             break;
     }
 
-    return closestImage(modulePrefix, ...categories);
+    return closestPath(modulePrefix, ...categories);
 }
 
 export const filemanager = {
     img,
+    sound,
 }
