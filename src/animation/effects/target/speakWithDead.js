@@ -1,6 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img } from "../../../lib/filemanager.js";
+import { img, sound as snd } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = { 
     id: "speakWithDead",
@@ -19,24 +19,25 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The animation sequence.
  */
 async function create(target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, sound } = mergedConfig;
-
     if (!target) return new Sequence();
 
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, sound } = mergedConfig;
+    const uniqueId = `${id} ${target.id}`;
+
     let sequence = new Sequence();
-    if (config.sound.enabled) sequence.sound().volume(sound.volume).file(sound.file)
+    // Initiate sound at start
+    if (config.sound.enabled) sequence.sound().name(uniqueId).volume(sound.volume).file(snd(sound.file));
 
-    sequence.addSequence(_addMagicCircleEffects(target, `${id} ${target.id}`));
-
+    // Animation effects
+    sequence.addSequence(_addMagicCircleEffects(target, uniqueId));
     sequence.wait(500);
-
     // Simplified corner flame effects
-    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, 0.5, 0.5, 2)); // Bottom Right Flame
-    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, -0.5, 0.5, 2)); // Bottom Left Flame
-    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, -0.5, -0.5, 1)); // Top Left Flame
-    sequence.addSequence(_addCornerFlameEffects(target, `${id} ${target.id}`, 0.5, -0.5, 1)); // Top Right Flame
-    sequence.addSequence(_addTokenVisualEffects(target, `${id} ${target.id}`));
+    sequence.addSequence(_addCornerFlameEffects(target, uniqueId, 0.5, 0.5, 2)); // Bottom Right Flame
+    sequence.addSequence(_addCornerFlameEffects(target, uniqueId, -0.5, 0.5, 2)); // Bottom Left Flame
+    sequence.addSequence(_addCornerFlameEffects(target, uniqueId, -0.5, -0.5, 1)); // Top Left Flame
+    sequence.addSequence(_addCornerFlameEffects(target, uniqueId, 0.5, -0.5, 1)); // Top Right Flame
+    sequence.addSequence(_addTokenVisualEffects(target, uniqueId));
 
     return sequence;
 }
@@ -265,7 +266,30 @@ function _addCornerFlameEffects(target, id, xOffset, yOffset, smokeZIndex) {
  */
 async function play(target, config) {
     const sequence = await create(target, config);
+    await preload(config);
     return sequence.play();
+}
+
+async function preload(config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { sound } = mergedConfig;
+
+    let files = [
+        img("jb2a.magic_signs.circle.02.necromancy.loop.blue"),
+        img("jb2a.magic_signs.circle.02.necromancy.loop.green"),
+        img("jb2a.particles.outward.blue.01.03"),
+        img("jb2a.detect_magic.circle.blue"),
+        img("animated-spell-effects-cartoon.magic.mind sliver"),
+        img("jb2a.token_border.circle.static.blue.012"),
+        img("jb2a.spirit_guardians.blue.spirits"),
+        img("jb2a.magic_signs.rune.necromancy.complete.blue"),
+        img("jb2a.impact.008.blue"),
+        img("jb2a.flames.01.blue"),
+        img("animated-spell-effects-cartoon.smoke.97")
+    ]
+    if (sound.enabled) files.push(snd(sound.file));
+
+    return Sequencer.Preloader.preloadForClients(files, false);
 }
 
 /**
