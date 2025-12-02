@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false}, {inplace:false});
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, color, effect } = mergedConfig;
 
     let seq = new Sequence();
@@ -24,6 +24,7 @@ async function create(token, config) {
         .name(`${id} - ${token.uuid}`)
         .copySprite(token)
         .attachTo(token)
+        .rotate(0)
         .duration(750)
         .animateProperty("sprite", "width", { from: 0, to: 0.05, duration: 400, gridUnits: true, ease: "easeOutCubic" })
         .animateProperty("sprite", "height", { from: 0, to: 0.05, duration: 400, gridUnits: true, ease: "easeOutCubic" })
