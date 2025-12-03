@@ -46,6 +46,13 @@ import { sneakAttack } from "./target/sneak-attack.js";
 import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
+import { animateDead } from "./target/animate-dead.js";
+import { enlargeReduce } from "./token/enlarge-reduce.js";
+import { leap } from "./token/leap.js";
+import { silence } from "./location/silence.js";
+import { shockingGrasp } from "./target/shocking-grasp.js";
+import { spikedGrowth } from "./location/spiked-growth.js";
+import { suggestion } from "./target/suggestion.js";
 
 export const effect = {
     armorOfAgathys,
@@ -96,4 +103,11 @@ export const effect = {
     speakWithDead,
     teleport,
     vortexWarp,
+    animateDead,
+    enlargeReduce,
+    leap,
+    silence,
+    shockingGrasp,
+    spikedGrowth,
+    suggestion,
 };
