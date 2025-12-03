@@ -1,6 +1,15 @@
+// Original Author: EskieMoh#2969
+// Modular Conversion: bakanabaka
+
 import { img } from "../../../../lib/filemanager.js";
 
-function create(token, targets, config) {
+const DEFAULT_CONFIG = {
+    id: 'TeleportOut',
+};
+
+function create(token, targets, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const maxDistance = Math.max(...targets.map(target => 3 * Math.max(Math.abs(target.x - token.x), Math.abs(target.y - token.y)) / canvas.dimensions.size + 1));
 
     let sequence = new Sequence();
@@ -54,7 +63,7 @@ function create(token, targets, config) {
     return sequence;
 }
 
-async function play(token, targets, config) {
+async function play(token, targets, config = {}) {
     const sequence = create(token, targets, config);
     if (sequence) { return sequence.play(); }
 }

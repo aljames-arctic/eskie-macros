@@ -3,9 +3,14 @@
 
 import { img } from "../../../../lib/filemanager.js";
 
-const effectName = "ChannelWood";
+const DEFAULT_CONFIG = {
+    id: 'ChannelElementsWood',
+    effectName: "ChannelWood",
+};
 
 async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effectName } = mergedConfig;
     const sequence = new Sequence();
 
     sequence.effect()
@@ -58,12 +63,14 @@ async function create(token, config = {}) {
     return sequence;
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const sequence = await create(token, config);
     return sequence.play();
 }
 
-async function stop(token) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effectName } = mergedConfig;
     return Sequencer.EffectManager.endEffects({ name: effectName, object: token });
 }
 

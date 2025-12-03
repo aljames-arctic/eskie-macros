@@ -5,11 +5,12 @@
 
 import { img } from '../../../lib/filemanager.js';
 
-async function create(position, config) {
-    const defaultConfig = {
-        id: 'firecracker',
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+const DEFAULT_CONFIG = {
+    id: 'firecracker',
+};
+
+async function create(position, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
 
     // Sequencer Crosshairs options

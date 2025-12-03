@@ -1,7 +1,16 @@
+// Original Author: EskieMoh#2969
+// Modular Conversion: bakanabaka
+
 import { dependency } from "../../../lib/dependency.js";
 import { img } from "../../../lib/filemanager.js";
 
-async function create(token) {
+const DEFAULT_CONFIG = {
+    id: 'Sandevistan',
+};
+
+async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     dependency.required({ id: "fxmaster" });
 
     const sequence = new Sequence();
@@ -72,12 +81,16 @@ async function create(token) {
     return afterImageSequence;
 }
 
-async function play(token) {
+async function play(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const sequence = await create(token);
     if (sequence) { return sequence.play(); }
 }
 
-async function stop(token) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const endSequence = new Sequence();
     endSequence.effect()
         .atLocation(token)
@@ -104,7 +117,7 @@ async function stop(token) {
         .zIndex(1);
 
     endSequence.thenDo(() => {
-        Sequencer.EffectManager.endEffects({ name: "Sandevistan" });
+        Sequencer.EffectManager.endEffects({ name: id });
         FXMASTER.filters.switch("SandyfilterID", "color", {
             color: { value: "#76feb1", apply: true },
             gamma: 1.0,

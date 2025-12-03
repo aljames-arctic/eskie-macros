@@ -1,7 +1,18 @@
+/* **
+   Original Author: unknown
+   Update Author: bakanabaka
+** */
+
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    weaponType: 'slashing',
+};
+
+
 async function create(token, target, config = {}) {
-    const weaponType = config.weaponType ?? 'slashing';
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { weaponType } = mergedConfig;
 
     const hitSeq = new Sequence()
         .effect()
@@ -139,7 +150,7 @@ async function create(token, target, config = {}) {
     }
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const sequence = await create(token, target, config);
     if (sequence) { return sequence.play(); }
 }

@@ -2,7 +2,14 @@
  * Original Author: EskieMoh#2969
  * Update Author: bakanabaka
  */
+
 import { img } from '../../../lib/filemanager.js';
+
+const DEFAULT_CONFIG = {
+    id: 'healing-word',
+    color: 'green',
+    word: 'Heal!',
+};
 
 function getColor(color) {
     if (!color) return { hue: -35, hex: '#00FF00' }; // default to green
@@ -16,16 +23,12 @@ function getColor(color) {
     }
 }
 
-async function create(token, target, config) {
-    const defaultConfig = {
-        id: 'healing-word',
-        color: 'green',
-        word: 'Heal!',
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, color, word } = mergedConfig;
 
     const colorVal = getColor(color);
+    const hue = colorVal.hue;
 
     const style = {
         "fill": "#ffffff",
@@ -121,12 +124,14 @@ async function create(token, target, config) {
     return seq;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     let seq = await create(token, target, config);
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = 'healing-word' } = {}) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

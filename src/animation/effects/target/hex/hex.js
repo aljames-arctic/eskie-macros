@@ -5,12 +5,13 @@
 
 import { img } from '../../../../lib/filemanager.js';
 
-async function create(token, target, config) {
-    const defaultConfig = {
-        id: 'hex',
-        duration: 10000
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+const DEFAULT_CONFIG = {
+    id: 'hex',
+    duration: 10000
+};
+
+async function create(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, duration } = mergedConfig;
 
     let seq = new Sequence()
@@ -72,13 +73,15 @@ async function create(token, target, config) {
     return seq;
 }
 
-async function play(token, target, config = {}) {
-    let seq = await create(token, target, config);
+async function play(target, config = {}) {
+    let seq = await create(target, config);
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = 'hex' } = {}) {
-    Sequencer.EffectManager.endEffects({ name: id, object: token });
+async function stop(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
+    Sequencer.EffectManager.endEffects({ name: id, object: target });
 }
 
 export const hexCast = {

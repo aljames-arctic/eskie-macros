@@ -3,7 +3,10 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {};
+
 async function create(position, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let seq = new Sequence();
     seq = seq.effect()
         .file(img(`jb2a.firework.02.{{color}}`))
@@ -32,7 +35,7 @@ async function create(position, config = {}) {
     return seq;
 }
 
-async function play(position, config) {
+async function play(position, config = {}) {
     if (!position) {
         const crosshairConfig = {
             size: 5,

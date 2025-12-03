@@ -1,23 +1,27 @@
-import { img } from "../../../../lib/filemanager.js";
-import { utils } from "../../../../lib/utils.js";
+// Original Author: EskieMoh#2969
+// Modular Conversion: bakanabaka
 
-function create(token, target, config) {
-    const defaultConfig = {
-        id: 'beam',
-        effect: [
-            { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
-            { img: `jb2a.particles.outward.white.01.02` },
-            { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
-            { img: `jb2a.disintegrate.green` },
-        ],
-    };
-    let { id, effect } = utils.mergeObject(defaultConfig, config);
+import { img } from "../../../../lib/filemanager.js";
+
+const DEFAULT_CONFIG = {
+    id: 'beam',
+    effects: [
+        { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
+        { img: `jb2a.particles.outward.white.01.02` },
+        { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
+        { img: `jb2a.disintegrate.green` },
+    ],
+};
+
+function create(token, target, config = {}) {
+    let mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    let { id, effects } = mergedConfig;
 
     let seq = new Sequence()
         .effect()
         .name(id)
         .atLocation(token)
-        .file(img(effect[0].img))
+        .file(img(effects[0].img))
         .scaleToObject(1.25)
         .rotateIn(180, 600, {ease: "easeOutCubic"})
         .scaleIn(0, 600, {ease: "easeOutCubic"})
@@ -29,7 +33,7 @@ function create(token, target, config) {
         .effect()
         .name(id)
         .atLocation(token)
-        .file(img(effect[0].img))
+        .file(img(effects[0].img))
         .scaleToObject(1.25)
         .rotateIn(180, 600, {ease: "easeOutCubic"})
         .scaleIn(0, 600, {ease: "easeOutCubic"})
@@ -45,7 +49,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(img(effect[1].img))
+        .file(img(effects[1].img))
         .scaleIn(0, 1000, {ease: "easeOutQuint"})
         .delay(500)
         .fadeOut(1000)
@@ -57,7 +61,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(img(effect[1].img))
+        .file(img(effects[1].img))
         .scaleIn(0, 1000, {ease: "easeOutQuint"})
         .delay(500)
         .fadeOut(1000)
@@ -72,7 +76,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(img(effect[2].img))
+        .file(img(effects[2].img))
         .atLocation(token)
         .tint("#d9df53")
         .scaleToObject(1.5)
@@ -81,7 +85,7 @@ function create(token, target, config) {
 
         .effect()
         .name(id)
-        .file(img(effect[3].img))
+        .file(img(effects[3].img))
         .atLocation(token)
         .stretchTo(target)
         .zIndex(1)
@@ -96,7 +100,9 @@ async function play(token, target, config = {}) {
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, target, {id = 'beam'} = {}) {
+async function stop(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     return Promise.all([
         Sequencer.EffectManager.endEffects({ name: id, object: token }),
         Sequencer.EffectManager.endEffects({ name: id, object: target })

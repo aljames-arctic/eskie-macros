@@ -3,9 +3,13 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    color: 'yellow',
+};
+
 async function create(token, targets, config = {}) {
-    // colors = blue, green purple yellow -- default to yellow
-    config.color = (config?.color && ['blue', 'green', 'purple', 'yellow'].includes(config.color)) ? config.color : 'yellow';
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { color } = mergedConfig;
     let hue = -20;
 
     const sequence = new Sequence();
@@ -111,7 +115,7 @@ async function create(token, targets, config = {}) {
     return sequence;
 }
 
-async function play(token, targets, config) {
+async function play(token, targets, config = {}) {
     const sequence = await create(token, targets, config);
     if (sequence) { return sequence.play(); }
 }

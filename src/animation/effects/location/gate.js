@@ -1,11 +1,46 @@
-import { img } from '../../../lib/filemanager.js';
-
 /* **
     Original Author: EskieMoh#2969
     Last Updated: 02/18/23
     Author: Carnage Asada#3647
     Updated: bakanabaka
 ** */
+
+import { img } from '../../../lib/filemanager.js';
+
+const DEFAULT_CONFIG = {
+    id: `gate`,
+    destination: undefined,
+    crosshairs: {
+        size: 4,
+        icon: 'icons/magic/symbols/circled-gem-pink.webp',
+        label: 'Gate',
+        tag: 'Gate',
+        drawIcon: true,
+        drawOutline: true,
+        interval: 0
+    },
+    destinationList: [
+        { label: 'First World', value: 'First World' },
+        { label: 'Astral Plane', value: 'Astral Plane' },
+        { label: 'Ethereal Plane', value: 'Ethereal Plane' },
+        { label: 'Shadow Plane', value: 'Shadow Plane' },
+        { label: 'Plane of Air', value: 'Plane of Air' },
+        { label: 'Plane of Earth', value: 'Plane of Earth' },
+        { label: 'Plane of Fire', value: 'Plane of Fire' },
+        { label: 'Plane of Water', value: 'Plane of Water' },
+        { label: 'Negative Energy Plane', value: 'Negative Energy Plane' },
+        { label: 'Positive Energy Plane', value: 'Positive Energy Plane' },
+        { label: 'Heaven', value: 'Heaven' },
+        { label: 'Nirvana', value: 'Nirvana' },
+        { label: 'Elysium', value: 'Elysium' },
+        { label: 'Axis', value: 'Axis' },
+        { label: 'Boneyard', value: 'Boneyard' },
+        { label: 'Maelstrom', value: 'Maelstrom' },
+        { label: 'Hell', value: 'Hell' },
+        { label: 'Abaddon', value: 'Abaddon' },
+        { label: 'Abyss', value: 'Abyss' }
+    ]
+};
 
 async function _getDestination(destinations) {
     return new Promise((resolve) => {
@@ -68,41 +103,8 @@ function _getPlaneConfig(destination) {
 
 
 async function create(token, config) {
-    const defaultConfig = {
-        id: `${token.id} - gate`,
-        destination: undefined,
-        crosshairs: {
-            size: 4,
-            icon: 'icons/magic/symbols/circled-gem-pink.webp',
-            label: 'Gate',
-            tag: 'Gate',
-            drawIcon: true,
-            drawOutline: true,
-            interval: 0
-        },
-        destinationList: [
-            { label: 'First World', value: 'First World' },
-            { label: 'Astral Plane', value: 'Astral Plane' },
-            { label: 'Ethereal Plane', value: 'Ethereal Plane' },
-            { label: 'Shadow Plane', value: 'Shadow Plane' },
-            { label: 'Plane of Air', value: 'Plane of Air' },
-            { label: 'Plane of Earth', value: 'Plane of Earth' },
-            { label: 'Plane of Fire', value: 'Plane of Fire' },
-            { label: 'Plane of Water', value: 'Plane of Water' },
-            { label: 'Negative Energy Plane', value: 'Negative Energy Plane' },
-            { label: 'Positive Energy Plane', value: 'Positive Energy Plane' },
-            { label: 'Heaven', value: 'Heaven' },
-            { label: 'Nirvana', value: 'Nirvana' },
-            { label: 'Elysium', value: 'Elysium' },
-            { label: 'Axis', value: 'Axis' },
-            { label: 'Boneyard', value: 'Boneyard' },
-            { label: 'Maelstrom', value: 'Maelstrom' },
-            { label: 'Hell', value: 'Hell' },
-            { label: 'Abaddon', value: 'Abaddon' },
-            { label: 'Abyss', value: 'Abyss' }
-        ]
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    mergedConfig.id = `${token.id} - ${mergedConfig.id}`;
     const { id, crosshairs, destination, destinationList } = mergedConfig;
 
     const position = await Sequencer.Crosshair.show(crosshairs);
@@ -209,7 +211,10 @@ async function play(token, config = {}) {
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = `${token.id} - gate` } = {}) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    mergedConfig.id = `${token.id} - ${mergedConfig.id}`;
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id });
     // This stops scene-wide filters, might need a more robust way to handle this
     // For now, assuming we want to clear all filters.

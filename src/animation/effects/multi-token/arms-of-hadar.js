@@ -1,10 +1,14 @@
-import { img } from "../../../lib/filemanager.js";
-
 /* **
     Last Updated: 5/10/2023
     Author: EskieMoh#2969
     Updated: bakanabaka
 ** */
+
+import { img } from "../../../lib/filemanager.js";
+
+const DEFAULT_CONFIG = {
+    id: 'armsOfHadar',
+};
 
 /**
  * Creates an Arms of Hadar effect.
@@ -18,10 +22,7 @@ import { img } from "../../../lib/filemanager.js";
  * @returns {Promise<Sequence>} A promise that resolves with the Sequence object.
  */
 async function create(token, targetTokens, config = {}) {
-    const defaultConfig = {
-        id: 'armsOfHadar',
-    };
-    const { id } = foundry.utils.mergeObject(defaultConfig, config);
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     let sequence = new Sequence();
 

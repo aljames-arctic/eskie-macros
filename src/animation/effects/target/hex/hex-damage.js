@@ -3,7 +3,10 @@
 
 import { img } from "../../../../lib/filemanager.js";
 
-async function create(token, target, config) {
+const DEFAULT_CONFIG = {};
+
+async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const sequence = new Sequence();
 
     sequence.effect()
@@ -48,7 +51,7 @@ async function create(token, target, config) {
     return sequence;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const sequence = await create(token, target, config);
     if (sequence) { sequence.play(); }
 }

@@ -3,7 +3,12 @@
 
 import { img } from '../../../lib/filemanager.js';
 
+const DEFAULT_CONFIG = {
+    id: 'Sanctuary',
+};
+
 async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let seq = new Sequence()
         .effect()
             .atLocation(token)
@@ -139,13 +144,15 @@ async function create(token, target, config = {}) {
     return seq;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const seq = await create(token, target, config);
     if (seq) { seq.play(); }
 }
 
-function stop(token, { id = 'Sanctuary' } = {}) {
-    return Sequencer.EffectManager.endEffects({ name: `${token.name} Sanctuary`, object: token });
+function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
+    return Sequencer.EffectManager.endEffects({ name: `${token.name} ${id}`, object: token });
 }
 
 export const sanctuary = {

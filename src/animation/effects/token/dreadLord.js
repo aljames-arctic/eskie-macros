@@ -179,7 +179,7 @@ async function create(token, config = {}) {
     return seq;
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const {form} = mergedConfig;
 
@@ -192,7 +192,7 @@ async function play(token, config) {
     }
 }
 
-async function stop(token, config) {
+async function stop(token, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const {id, form} = mergedConfig;
 

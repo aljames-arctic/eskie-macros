@@ -4,23 +4,24 @@
 import { teleportIn } from "./teleport/teleportIn.js";
 import { teleportOut } from "./teleport/teleportOut.js";
 
-async function create(token, targets) {
-    const crosshairConfig = {
-        size: 3,
-        icon: 'icons/magic/symbols/ring-circle-smoke-blue.webp',
-        label: 'Teleport',
-        tag: 'Teleport',
-        drawIcon: true,
-        drawOutline: true,
-        interval: -1
-    };
+const DEFAULT_CONFIG = {
+    size: 3,
+    icon: 'icons/magic/symbols/ring-circle-smoke-blue.webp',
+    label: 'Teleport',
+    tag: 'Teleport',
+    drawIcon: true,
+    drawOutline: true,
+    interval: -1
+};
 
-    const position = await Sequencer.Crosshair.show(crosshairConfig);
+async function create(token, targets, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+
+    const position = await Sequencer.Crosshair.show(mergedConfig);
     if (!position.x || !position.y) {
         console.error('Invalid position given... aborting')
         return;
     }
-    const config = { position };
 
     let [tOut, tIn] = await Promise.all([
         teleportOut.create(token, targets, config),
@@ -32,8 +33,8 @@ async function create(token, targets) {
         .addSequence(tIn);
 }
 
-async function play(token, targets, config) {
-    let seq = await create(token, targets);
+async function play(token, targets, config = {}) {
+    let seq = await create(token, targets, config);
     if (seq) return seq.play();
 }
 

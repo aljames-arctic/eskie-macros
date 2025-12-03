@@ -1,6 +1,10 @@
 // Original Author: EskieMoh#2969
-// Updater: @bakanabaka
+// Updater: bakanabaka
 import { img } from "../../../../lib/filemanager.js";
+
+const DEFAULT_CONFIG = {
+    id: 'elementalBlast.cold',
+};
 
 /**
  *
@@ -10,6 +14,7 @@ import { img } from "../../../../lib/filemanager.js";
  * @returns {Sequence}
  */
 async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let ranOffset = (Math.random() * (0.4 +0.4)  -0.4);
 
     const targetCenter = {
@@ -102,7 +107,9 @@ async function play(token, target, config = {}) {
     sequence.play();
 }
 
-function stop(token, { id = 'elementalBlast.cold' } = {}) {
+function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

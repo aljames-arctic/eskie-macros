@@ -1,13 +1,36 @@
-import { img } from '../../../lib/filemanager.js';
-import { utils } from '../../../lib/utils.js';
-import { beam as beamEffect } from './beam/beam.js';
-
-
 /* **
     Last Updated: 4/20/2023
     Author: EskieMoh#2969
     Updated: bakanabaka
 ** */
+
+import { img } from '../../../lib/filemanager.js';
+import { beam as beamEffect } from './beam/beam.js';
+
+const DEFAULT_CONFIG = {
+    id: 'disintegrate',
+    targetDeath: true,
+    duration: 500, // For reformCreate
+    effect: { // For death and beam
+        smoke: { // For death
+            img: "animated-spell-effects-cartoon.smoke.97",
+            delay: 1000,
+            duration: 10000,
+            scale: 0.5,
+        },
+        spirit: { // For death
+            img: "jb2a.spirit_guardians.green.particles",
+            duration: 7500,
+            scale: 0.35,
+        },
+        beam: [ // For beam
+            { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
+            { img: `jb2a.particles.outward.white.01.02` },
+            { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
+            { img: `jb2a.disintegrate.green` },
+        ],
+    }
+};
 
 /**
  * Helper function to apply a series of dissolving mask effects to a sequence.
@@ -115,11 +138,9 @@ function getDissolveConfig() {
     ];
 }
 
-function dissolveCreate(target, config) {
-    const defaultConfig = {
-        id: 'disintegrate',
-    };
-    const { id } = foundry.utils.mergeObject(defaultConfig, config);
+function dissolveCreate(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
 
     let seq = new Sequence();
     const dissolveSections = getDissolveConfig();
@@ -130,7 +151,7 @@ function dissolveCreate(target, config) {
     return seq;
 }
 
-async function dissolvePlay(target, config) {
+async function dissolvePlay(target, config = {}) {
     let dissolve = dissolveCreate(target, config);
     let hide = new Sequence().animation().on(target).show(false);
     if (dissolve && hide) {
@@ -151,25 +172,9 @@ async function dissolvePlay(target, config) {
  * @param {string} config.id The unique ID for the effects sequence.
  * @returns {Sequence} A Sequencer sequence object representing the death animation.
  */
-function death(target, config) {
-    const defaultConfig = {
-        id: 'disintegrate',
-        effect: [
-            { // Smoke Effect
-                img: "animated-spell-effects-cartoon.smoke.97",
-                delay: 1000,
-                duration: 10000,
-                scale: 0.5,
-            },
-            { // Spirit Effect
-                img: "jb2a.spirit_guardians.green.particles",
-                duration: 7500,
-                scale: 0.35,
-            }
-        ]
-    };
-    const { id, effect } = utils.mergeObject(defaultConfig, config);
-    const [smokeEffect, spiritEffect] = effect;
+function death(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effect: { smoke: smokeEffect, spirit: spiritEffect } } = mergedConfig;
 
     let seq = new Sequence()
         // Add a smoke puff effect
@@ -205,18 +210,10 @@ function death(target, config) {
     return seq;
 }
 
-function beam(token, target, config) { 
-    const defaultConfig = {
-        id: 'disintegrate',
-        effect: [
-            { img: `jb2a.magic_signs.circle.02.transmutation.loop.dark_green` },
-            { img: `jb2a.particles.outward.white.01.02` },
-            { img: `jb2a.extras.tmfx.border.circle.inpulse.01.fast` },
-            { img: `jb2a.disintegrate.green` },
-        ],
-    };
-    let mergeConfig = utils.mergeObject(defaultConfig, config);
-    return beamEffect.create(token, target, mergeConfig);
+function beam(token, target, config = {}) { 
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effect: { beam: beamEffects } } = mergedConfig;
+    return beamEffect.create(token, target, { id, effects: beamEffects });
 }
 
 /**
@@ -230,13 +227,9 @@ function beam(token, target, config) {
  * 
  * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
  */
-async function create(token, target, config) {
+async function create(token, target, config = {}) {
     // Merge user config with default config
-    const defaultConfig = {
-        id: 'disintegrate',
-        targetDeath: true,
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     let disintegrateEffect = beam(token, target, mergedConfig);
     if (mergedConfig.targetDeath) // Chain the death animation if the target is dead
@@ -264,7 +257,9 @@ async function play(token, target, config = {}) {
  * @param {string} [config.id='disintegrate'] The id of the effect to stop.
  * @returns {Promise<void>}
  */
-async function stop(token, {id = 'disintegrate'} = {}) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
@@ -274,12 +269,9 @@ async function stop(token, {id = 'disintegrate'} = {}) {
  * @param {object} config Configuration for the effect.
  * @returns {Sequence} A Sequencer sequence object.
  */
-function reformCreate(target, config) {
-    const defaultConfig = {
-        id: 'disintegrate',
-        duration: 500,
-    };
-    const { id, duration } = foundry.utils.mergeObject(defaultConfig, config);
+function reformCreate(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, duration } = mergedConfig;
     const reformSequence = new Sequence();
     const dissolveSections = getDissolveConfig();
     const shape = getDissolveShape();
@@ -313,7 +305,7 @@ function reformCreate(target, config) {
     return reformSequence;
 }
 
-async function reformPlay(target, config) {
+async function reformPlay(target, config = {}) {
     let reform = new Sequence();
     reform = reform
                 .animation().on(target).show(true)

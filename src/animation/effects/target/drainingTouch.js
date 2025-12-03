@@ -1,9 +1,16 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
+
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    color: "teal",
+    changeLight: true,
+};
+
 async function create(token, target, config = {}) {
-    let { color = "teal", changeLight = true } = config;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { color, changeLight } = mergedConfig;
     let tintColor;
     let hue;
 
@@ -25,7 +32,7 @@ async function create(token, target, config = {}) {
     }
 
     const middleposition = {
-        x: (targe.center.x - token.center.x) * 0.25,
+        x: (target.center.x - token.center.x) * 0.25,
         y: (target.center.y - token.center.y) * 0.25,
     };
 
@@ -149,7 +156,8 @@ async function play(token, target, config = {}) {
     await Tagger.removeTags(token, "DrainingTouch");
 
     if (Tagger.hasTags(token, "Incorporeal")) {
-        let { color = "teal", changeLight = true } = config;
+        const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+        const { color, changeLight } = mergedConfig;
         let tintColor;
         if (color == "teal") { tintColor = '#6ff087' }
         else if (color == "green") { tintColor = '#6cde3b' }
@@ -225,7 +233,9 @@ async function play(token, target, config = {}) {
     }
 }
 
-async function stop(token, { id = 'drainingTouch' } = {}) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

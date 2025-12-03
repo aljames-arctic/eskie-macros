@@ -2,19 +2,18 @@
  * Original Author: EskieMoh#2969
  * Update Author: bakanabaka
  */
+
 import { img } from '../../../lib/filemanager.js';
-import { utils } from '../../../lib/utils.js';
 
-function getEffectId(casterId, targetId) {
-    return `draining-kiss-${casterId}-${targetId}`;
-}
+const DEFAULT_CONFIG = {
+    id: 'draining-kiss',
+};
 
-function create(token, target, config) {
-    const defaultConfig = {
-        id: getEffectId(token.id, target.id),
-    };
-    const mergedConfig = utils.mergeObject(defaultConfig, config);
+function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
+
+    const label = `${id} - ${token.id} - ${target.id}`;
 
     let seq = new Sequence()
         .effect()
@@ -42,7 +41,7 @@ function create(token, target, config) {
         .fadeOut(2000)
 
         .effect()
-        .name(id)
+        .name(label)
         .file(img("jb2a.icon.heart.pink"))
         .atLocation(target)
         .attachTo(target)
@@ -78,7 +77,7 @@ function create(token, target, config) {
         .waitUntilFinished(-500)
 
         .effect()
-        .name(id)
+        .name(label)
         .file(img("jb2a.energy_strands.range.multiple.purple.01"))
         .atLocation(target)
         .stretchTo(token, { attachTo: true })
@@ -88,7 +87,7 @@ function create(token, target, config) {
         .private()
 
         .effect()
-        .name(id)
+        .name(label)
         .file(img("jb2a.token_border.circle.static.purple.012"))
         .atLocation(token)
         .attachTo(token)
@@ -103,7 +102,7 @@ function create(token, target, config) {
         .private()
 
         .effect()
-        .name(id)
+        .name(label)
         .file(img("jb2a.ground_cracks.purple.02"))
         .atLocation(target)
         .scaleToObject(0.9)
@@ -119,7 +118,7 @@ function create(token, target, config) {
         .mask(target)
 
         .effect()
-        .name(id)
+        .name(label)
         .copySprite(target)
         .delay(1500)
         .fadeIn(10000)
@@ -139,7 +138,8 @@ async function play(token, target, config = {}) {
 }
 
 async function stop(token, target, config = {}) {
-    const id = getEffectId(token.id, target.id);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id });
 }
 

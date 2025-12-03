@@ -3,13 +3,17 @@
    Update Author: bakanabaka
 ** */
 
+const DEFAULT_CONFIG = {
+    repeat: 0,
+    delay: 1000,
+    sendToCenter: false,
+    destinationPoints: undefined,
+};
+
 function create(targets, config = {}) {
-    // Merge user config with default config
-    const defaultConfig = {
-        sendToCenter: false,
-        destinationPoints: targets.map(t => ({ x: t.x, y: t.y })),
-    };
-    let { sendToCenter, destinationPoints } = foundry.utils.mergeObject(defaultConfig, config, {inplace:false});
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    mergedConfig.destinationPoints = targets?.map(t => ({ x: t.x, y: t.y })) ?? [];
+    let { sendToCenter, destinationPoints } = mergedConfig;
 
     if (targets.length !== destinationPoints.length)
         throw `User provided ${targets.length} targets but ${destinationPoints.length} destination points. Can not shuffle.`;
@@ -41,7 +45,11 @@ function create(targets, config = {}) {
     return shuffleSeq;
 }
 
-async function play(targets, {repeat = 0, delay = 1000, sendToCenter = false} = {}) {
+async function play(targets, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    mergedConfig.destinationPoints = targets?.map(t => ({ x: t.x, y: t.y })) ?? [];
+    const {repeat, delay, sendToCenter} = mergedConfig;
+
     const destinationPoints = targets.map(target => ({ x: target.x, y: target.y }));
     for (let i = 0; i <= repeat; i++) {
         let seq = create(targets, {sendToCenter, destinationPoints});

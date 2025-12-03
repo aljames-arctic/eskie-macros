@@ -1,5 +1,10 @@
+const DEFAULT_CONFIG = {
+    id : 'rageUtil',
+}
+
 async function stop(token, config) {
-    const { id } = config;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
 
     let opacity = new Sequence()
         .animation()
@@ -14,7 +19,9 @@ async function stop(token, config) {
 }
 
 async function clean(token, config) {
-    const { id } = config;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
+
     return Promise.all([
         stop(token, config),
         Sequencer.EffectManager.endEffects({ name: `${id} - ground-crack - ${token.uuid}` })

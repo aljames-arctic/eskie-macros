@@ -5,11 +5,12 @@
 
 import { img } from '../../../lib/filemanager.js';
 
-async function create(token, position, config) {
-    const defaultConfig = {
-        id: 'farStep'
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+const DEFAULT_CONFIG = {
+    id: 'farStep',
+};
+
+async function create(token, position, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
 
     let seq = new Sequence();
@@ -96,7 +97,7 @@ async function play(token, position, config = {}) {
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, { id = 'farStep' } = {}) {
+async function stop(token, config = {}) {
     Sequencer.EffectManager.endEffects({ name: id, object: token });
     Sequencer.EffectManager.endEffects({ name: `${id}-con`, object: token }); // Stop the persistent condition effect
 }

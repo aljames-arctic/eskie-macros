@@ -4,6 +4,7 @@
 import { img } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = {
+    id: 'ChannelDivinityDreadAspect',
     darkMap: true,
 }
 
@@ -167,7 +168,7 @@ async function create(token, targets, config = {}) {
     return sequence;
 }
 
-async function play(token, targets, config) {
+async function play(token, targets, config = {}) {
     const sequence = await create(token, targets, config);
     if (sequence) { return sequence.play(); }
 }

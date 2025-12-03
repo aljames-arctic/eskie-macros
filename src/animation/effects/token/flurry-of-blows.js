@@ -3,7 +3,13 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    id: 'FlurryOfBlows',
+};
+
 async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     let seq = new Sequence();
     seq = seq.effect()
         .copySprite(token)
@@ -88,7 +94,7 @@ async function create(token, target, config = {}) {
     return seq;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const seq = await create(token, target, config);
     if (seq) { return seq.play(); }
 }

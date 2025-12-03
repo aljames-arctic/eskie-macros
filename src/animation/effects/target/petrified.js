@@ -1,10 +1,15 @@
-import { img } from '../../../lib/filemanager.js';
-
 /* **
     Last Updated: 7/12/2022
     Author: EskieMoh#2969
     Updated: bakanabaka
 ** */
+
+import { img } from '../../../lib/filemanager.js';
+
+const DEFAULT_CONFIG = {
+    id: 'Petrify',
+    remove: false,
+};
 
 /**
  * Creates a Petrified effect sequence for a target token.
@@ -17,11 +22,7 @@ import { img } from '../../../lib/filemanager.js';
  * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
  */
 async function create(token, config = {}) {
-    const defaultConfig = {
-        id: 'Petrify',
-        remove: false,
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, remove } = mergedConfig;
 
     let sequence = new Sequence()
@@ -73,7 +74,9 @@ async function play(token, config = {}) {
  * @param {string} [config.id='Petrify'] The id of the effect to stop.
  * @returns {Promise<void>}
  */
-async function stop(token, { id = 'Petrify' } = {}) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     let sequence =  new Sequence()
                 .effect()
                 .file(img("animated-spell-effects-cartoon.earth.explosion.02"))

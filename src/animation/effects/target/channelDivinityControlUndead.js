@@ -3,7 +3,13 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    id: 'Control Undead',
+};
+
 async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const sequence = new Sequence();
 
     sequence.effect()
@@ -160,12 +166,14 @@ async function create(token, target, config = {}) {
     return sequence;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const sequence = await create(token, target, config);
     if (sequence) { return sequence.play(); }
 }
 
-function stop(token, { id = 'Control Undead' } = {}) {
+function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: `${id} ${token.document.name}` });
 }
 

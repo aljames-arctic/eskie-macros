@@ -3,8 +3,13 @@
 
 import { img } from "../../../lib/filemanager.js";
 
-async function create(token, target, { id = 'GuidingBolt' } = {}) {
-    const sequence = new Sequence();
+const DEFAULT_CONFIG = {
+    id: 'GuidingBolt',
+};
+
+async function create(token, target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
 
     sequence.effect()
         .atLocation(token)
@@ -105,12 +110,14 @@ async function create(token, target, { id = 'GuidingBolt' } = {}) {
     return sequence;
 }
 
-async function play(token, target, config) {
+async function play(token, target, config = {}) {
     const sequence = await create(token, target, config);
     if (sequence) { return sequence.play(); }
 }
 
-function stop(target, { id = 'GuidingBolt' } = {}) {
+function stop(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: target });
 }
 

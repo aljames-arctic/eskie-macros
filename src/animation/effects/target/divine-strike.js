@@ -1,9 +1,15 @@
-import { img } from "../../../lib/filemanager.js";
-
 // Original Author: eskiemoh#2969
 // Modularized: bakanabaka
+
+import { img } from "../../../lib/filemanager.js";
+
+const DEFAULT_CONFIG = {
+    darkMap: true,
+};
+
 async function createMelee(token, target, config = {}) {
-    const darkMap = config.darkMap ?? true;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mergedConfig;
 
     const sequence = new Sequence();
     for (let i = 0; i < 4; i++) {
@@ -99,13 +105,14 @@ async function createMelee(token, target, config = {}) {
     return sequence;
 }
 
-async function playMelee(token, target, config) {
+async function playMelee(token, target, config = {}) {
     const sequence = await createMelee(token, target, config);
     if (sequence) { return sequence.play(); }
 }
 
 async function createRanged(token, target, config = {}) {
-    const darkMap = config.darkMap ?? true;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mergedConfig;
 
     const sequence = new Sequence();
     const distance = {
@@ -207,7 +214,7 @@ async function createRanged(token, target, config = {}) {
     return sequence;
 }
 
-async function playRanged(token, target, config) {
+async function playRanged(token, target, config = {}) {
     const sequence = await createRanged(token, target, config);
     if (sequence) { return sequence.play(); }
 }

@@ -1,7 +1,17 @@
+/* **
+   Original Author: unknown
+   Update Author: bakanabaka
+** */
 
 import { img } from "../../../lib/filemanager.js";
 
-async function createBanish(target) {
+const DEFAULT_CONFIG = {
+    id: 'banish',
+};
+
+async function createBanish(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const sequence = new Sequence();
     sequence.effect()
         .file(img("jb2a.magic_signs.circle.02.conjuration.intro.dark_yellow"))
@@ -178,12 +188,14 @@ async function createBanish(target) {
     return sequence;
 }
 
-async function playBanish(target) {
-    const sequence = await createBanish(target);
+async function playBanish(target, config = {}) {
+    const sequence = await createBanish(target, config);
     if (sequence) { return sequence.play(); }
 }
 
-async function createReturn(target) {
+async function createReturn(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     const sequence = new Sequence();
     sequence.effect()
         .file(img("jb2a.explosion.01.yellow"))
@@ -214,9 +226,17 @@ async function createReturn(target) {
     return sequence;
 }
 
-async function playReturn(target) {
-    const sequence = await createReturn(target);
+async function playReturn(target, config = {}) {
+    const sequence = await createReturn(target, config);
     if (sequence) { return sequence.play(); }
+}
+
+async function clean(target, config = {}) {
+    new Sequence()
+        .animation()
+        .on(target)
+        .opacity(1)
+        .play();
 }
 
 export const banishment = {
@@ -224,6 +244,7 @@ export const banishment = {
         create: createBanish,
         play: playBanish,
         stop: playReturn,
+        clean: clean,
     },
     return: {
         create: createReturn,

@@ -3,7 +3,12 @@
 
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    id: 'FireShield',
+};
+
 async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const sequence = new Sequence();
 
     sequence.effect()
@@ -80,12 +85,14 @@ async function play(token, config = {}) {
     }
 }
 
-function stop(token, { id = 'FireShield' } = {}) {
-    Sequencer.EffectManager.endEffects({ name: `FireShield-Particles-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `FireShield-Strands-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `FireShield-Border-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `FireShield-Below-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `FireShield-Above-${token.id}`, object: token });
+function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
+    Sequencer.EffectManager.endEffects({ name: `${id}-Particles-${token.id}`, object: token });
+    Sequencer.EffectManager.endEffects({ name: `${id}-Strands-${token.id}`, object: token });
+    Sequencer.EffectManager.endEffects({ name: `${id}-Border-${token.id}`, object: token });
+    Sequencer.EffectManager.endEffects({ name: `${id}-Below-${token.id}`, object: token });
+    Sequencer.EffectManager.endEffects({ name: `${id}-Above-${token.id}`, object: token });
 }
 
 export const fireShield = {

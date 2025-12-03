@@ -1,9 +1,15 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
+
 import { img } from "../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    darkMap: true,
+};
+
 async function create(token, targets, config = {}) {
-    let { darkMap = true } = config;
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mergedConfig;
 
     let sequence = new Sequence();
 
@@ -63,7 +69,9 @@ async function create(token, targets, config = {}) {
 }
 
 async function play(token, targets, config = {}) {
-    const sequence = await create(token, targets, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mergedConfig;
+    const sequence = await create(token, targets, mergedConfig);
     await sequence.play();
 
     let targetOrder = [token];
@@ -149,7 +157,9 @@ async function play(token, targets, config = {}) {
     }
 }
 
-function stop(token, { id = 'eyesOfNight' } = {}) {
+function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

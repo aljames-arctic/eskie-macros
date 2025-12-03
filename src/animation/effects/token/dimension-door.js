@@ -3,8 +3,14 @@
 
 import { img } from '../../../lib/filemanager.js';
 
-async function create(token, config) {
-    config = {
+const DEFAULT_CONFIG = {
+    id: 'DimensionDoor',
+};
+
+async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
+    const crosshairConfig = {
         size: token.w / canvas.grid.size,
         icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm',
         label: 'Dimension Door',
@@ -12,10 +18,9 @@ async function create(token, config) {
         drawIcon: true,
         drawOutline: true,
         interval: token.document.width % 2 === 0 ? 1 : -1,
-        ...config,
     };
 
-    let position = await Sequencer.Crosshair.show(config);
+    let position = await Sequencer.Crosshair.show(crosshairConfig);
 
     if (!position.cancelled) {
         let sequence = new Sequence()
@@ -74,14 +79,14 @@ async function create(token, config) {
     }
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const sequence = await create(token, config);
     if (sequence) {
         sequence.play();
     }
 }
 
-function stop(token, { id = 'DimensionDoor' } = {}) {
+function stop(token, config = {}) {
     // Sequencer effects are generally transient for teleportation, no persistent effect to stop
 }
 

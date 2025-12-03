@@ -1,6 +1,16 @@
+// Original Author: EskieMoh#2969
+// Modular Conversion: bakanabaka
+
 import { narrowView } from '../../misc/narrow-view.js';
 import { text } from '../../misc/text.js';
 import { img } from '../../../lib/filemanager.js';
+
+const DEFAULT_CONFIG = {
+    id: 'IaijutsuStrike',
+    targetDeath: true,
+    teleport: true,
+    cameraFocus: true,
+};
 
 function dimCanvas() {
     let sequence = new Sequence();
@@ -100,13 +110,9 @@ function deathAnimation(target) {
     return sequence;
 }
 
-async function create(source, target, config = {}) {
-    const defaultConfig = {
-        targetDeath: true,
-        teleport: true,
-        cameraFocus: true,
-    };
-    let {targetDeath, teleport, cameraFocus} = foundry.utils.mergeObject(defaultConfig, config, {inplace:false});
+async function create(source, target, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    let {targetDeath, teleport, cameraFocus} = mergedConfig;
 
     let position;
 
@@ -174,7 +180,7 @@ async function create(source, target, config = {}) {
     return sequence;
 }
 
-async function play(source, target, config = {}) {
+async function play(source, target, config) {
     const seq = await create(source, target, config);
     if (seq) { await seq.play(); }
 }

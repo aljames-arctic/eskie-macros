@@ -3,7 +3,10 @@
 
 import { img } from "../../../../lib/filemanager.js";
 
-const effectName = "ChannelEarth";
+const DEFAULT_CONFIG = {
+    id: 'ChannelElementsEarth',
+    effectName: "ChannelEarth",
+};
 
 function _createRock(sequence, token, xOffset, rockFile, smokeFile) {
     sequence.effect()
@@ -50,6 +53,8 @@ function _createRock(sequence, token, xOffset, rockFile, smokeFile) {
 }
 
 async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { effectName } = mergedConfig;
     const sequence = new Sequence();
 
     sequence.effect()
@@ -95,12 +100,14 @@ async function create(token, config = {}) {
     return sequence;
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const sequence = await create(token, config);
     return sequence.play();
 }
 
-async function stop(token) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { effectName } = mergedConfig;
     return Sequencer.EffectManager.endEffects({ name: effectName, object: token });
 }
 

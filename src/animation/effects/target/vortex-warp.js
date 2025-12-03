@@ -3,7 +3,12 @@
 
 import { img } from "../../../lib/filemanager.js";
 
-async function create(target, config) {
+const DEFAULT_CONFIG = {
+    position: undefined,
+};
+
+async function create(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let sequence = new Sequence();
 
     // Vortex out
@@ -62,7 +67,9 @@ async function create(target, config) {
     return sequence;
 }
 
-async function play(target, config) {
+async function play(target, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { position } = mergedConfig;
     const crosshairConfig = {
         size: target.w / canvas.grid.size,
         icon: 'icons/magic/air/wind-vortex-swirl-blue.webp',
@@ -73,10 +80,12 @@ async function play(target, config) {
         interval: target.document.width % 2 === 0 ? 1 : -1,
     };
 
-    const position = await Sequencer.Crosshair.show(crosshairConfig);
-    if (!position.x) return;
+    if (!position) {
+        mergedConfig.position = await Sequencer.Crosshair.show(crosshairConfig);
+        if (!mergedConfig.position.x) return;
+    }
 
-    const sequence = await create(target, { ...config, position });
+    const sequence = await create(target, mergedConfig);
     if (sequence) { return sequence.play(); }
 }
 

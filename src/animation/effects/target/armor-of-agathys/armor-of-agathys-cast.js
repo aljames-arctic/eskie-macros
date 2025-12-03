@@ -3,7 +3,12 @@
 
 import { img } from "../../../../lib/filemanager.js";
 
+const DEFAULT_CONFIG = {
+    id: 'Armor of Agathys',
+};
+
 async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let sequence = new Sequence();
 
     sequence = sequence.effect()
@@ -92,12 +97,14 @@ async function create(token, config = {}) {
     return sequence;
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const sequence = await create(token, config);
     if (sequence) { return sequence.play(); }
 }
 
-async function stop(token, config) {
+async function stop(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mergedConfig;
     let sequence = new Sequence()
         .effect()
         .attachTo(token)
@@ -107,7 +114,7 @@ async function stop(token, config) {
         .fadeOut(500)
         .zIndex(1)
         .thenDo(function () {
-            Sequencer.EffectManager.endEffects({ name: `${token.name} Armor of Agathys`, object: token });
+            Sequencer.EffectManager.endEffects({ name: `${token.name} ${id}`, object: token });
         });
 
     await sequence.play();

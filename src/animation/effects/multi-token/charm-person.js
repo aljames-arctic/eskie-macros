@@ -2,8 +2,12 @@
  * Original Author: EskieMoh#2969
  * Update Author: bakanabaka
  */
+
 import { img } from '../../../lib/filemanager.js';
-import { utils } from '../../../lib/utils.js';
+
+const DEFAULT_CONFIG = {
+    id: 'charm-person',
+};
 
 function _createCharmEffects(target, id) {
     let seq = new Sequence();
@@ -63,11 +67,8 @@ function _createCharmEffects(target, id) {
     return seq;
 }
 
-async function create(token, targets, config) {
-    const defaultConfig = {
-        id: 'charm-person',
-    };
-    const mergedConfig = utils.mergeObject(defaultConfig, config);
+async function create(token, targets, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
 
     let masterSeq = new Sequence();
@@ -90,10 +91,7 @@ async function play(token, targets, config = {}) {
 }
 
 async function stop(targets, config = {}) {
-    const defaultConfig = {
-        id: 'charm-person',
-    };
-    const mergedConfig = utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
 
     for (const target of targets) {

@@ -1,10 +1,14 @@
-import { img } from '../../../lib/filemanager.js';
-
 /* **
     Last Updated: 7/12/2022
     Author: EskieMoh#2969
     Updated: bakanabaka
 ** */
+
+import { img } from '../../../lib/filemanager.js';
+
+const DEFAULT_CONFIG = {
+    id: 'PetrifyingGaze',
+};
 
 /**
  * Creates a Petrifying Gaze effect sequence from a source token to multiple target tokens.
@@ -16,15 +20,10 @@ import { img } from '../../../lib/filemanager.js';
  * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
  */
 async function create(token, targetTokens, config = {}) {
-    const defaultConfig = {
-        id: 'PetrifyingGaze',
-    };
-    const mergedConfig = foundry.utils.mergeObject(defaultConfig, config);
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mergedConfig;
 
     let sequence = new Sequence();
-
-    // Source token effects
     sequence
         .effect()
         .file(img("animated-spell-effects-cartoon.misc.fiery eyes.04"))

@@ -1,6 +1,12 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
+
 import { img } from "../../../lib/filemanager.js";
+
+const DEFAULT_CONFIG = {
+    persist: false,
+    color: "yellow",
+};
 
 /**
  * Helper function to create a single cloud effect.
@@ -45,8 +51,10 @@ function _createCloudEffect(position, file, { size, opacity, rotate, zIndex, rot
  * @param {boolean} config.persist - Whether the effect should persist.
  * @returns {Sequence} The animation sequence.
  */
-async function create(position, config = { persist: false }) {
-    const color = config.color ?? "yellow";
+async function create(position, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { persist, color } = mergedConfig;
+
     if (!position) {
         let configWarpgate = {
             size:9,
@@ -140,7 +148,7 @@ async function create(position, config = { persist: false }) {
  * @param {object} config - Configuration options.
  * @param {boolean} config.persist - Whether the effect should persist.
  */
-async function play(position, config = { persist: false }) {
+async function play(position, config = {}) {
     const sequence = await create(position, config);
     if (sequence) return sequence.play();
 }

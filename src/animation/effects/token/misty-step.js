@@ -3,20 +3,34 @@
 
 import { img } from '../../../lib/filemanager.js';
 
-async function create(token, config) {
-    config = {
+const DEFAULT_CONFIG = {
+    id: 'MistyStep',
+    size: 1, // Default size for crosshair, will be updated by token.document.width
+    icon: 'icons/magic/movement/trail-streak-impact-blue.webp',
+    label: 'Misty Step',
+    tag: 'Misty Step',
+    drawIcon: true,
+    drawOutline: true,
+    interval: -1, // Default, will be updated by token.document.width
+    rememberControlled: true,
+};
+
+async function create(token, config = {}) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, size, icon, label, tag, drawIcon, drawOutline, interval, rememberControlled } = mergedConfig;
+
+    const crosshairConfig = {
         size: token.document.width,
-        icon: 'icons/magic/movement/trail-streak-impact-blue.webp',
-        label: 'Misty Step',
-        tag: 'Misty Step',
-        drawIcon: true,
-        drawOutline: true,
+        icon: icon,
+        label: label,
+        tag: tag,
+        drawIcon: drawIcon,
+        drawOutline: drawOutline,
         interval: token.document.width % 2 === 0 ? 1 : -1,
-        rememberControlled: true,
-        ...config
+        rememberControlled: rememberControlled,
     };
 
-    let position = await Sequencer.Crosshair.show(config);
+    let position = await Sequencer.Crosshair.show(crosshairConfig);
 
     if (!position.cancelled) {
         let sequence = new Sequence()
@@ -52,12 +66,12 @@ async function create(token, config) {
     }
 }
 
-async function play(token, config) {
+async function play(token, config = {}) {
     const sequence = await create(token, config);
     if (sequence) {  sequence.play(); }
 }
 
-function stop(token, { id = 'MistyStep' } = {}) {
+function stop(token, config = {}) {
     // Sequencer effects are generally transient for teleportation, no persistent effect to stop
 }
 
