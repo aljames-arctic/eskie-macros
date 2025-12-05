@@ -3,10 +3,19 @@ import { dependency } from './dependency.js'
 function closestPath(modulePrefix, ...categories) {
     let diverged = false;
     let currentPath = modulePrefix;
+    let originalPath = `${modulePrefix}.${categories.join('.')}`;
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
+
+    function isMustache(component) {
+        return component.startsWith('{{') && component.endsWith('}}');
+    }
 
     // Traverse the categories that the user has provided
     while (remainingOptions && remainingOptions.length > 0 && categories.length > 0) {
+        if (isMustache(categories[0])) {
+            return `${currentPath}.${categories.join('.')}`;
+        }
+
         if (!remainingOptions.includes(categories[0])) {
             diverged = true;
             currentPath += `.${remainingOptions[0]}`;
@@ -20,7 +29,7 @@ function closestPath(modulePrefix, ...categories) {
     }
 
     if (diverged) { 
-        console.warn(`Path not found: ${modulePrefix}.${categories.join('.')}`);
+        console.warn(`Path not found: ${originalPath}`);
         console.warn(`Defaulting to first closest match: ${currentPath}`);
     }
     return currentPath;

@@ -53,6 +53,12 @@ import { silence } from "./location/silence.js";
 import { shockingGrasp } from "./target/shocking-grasp.js";
 import { spikedGrowth } from "./location/spiked-growth.js";
 import { suggestion } from "./target/suggestion.js";
+import { wingsV2 } from "./token/wings-v2.js";
+import { surprised } from "./token/surprised.js";
+import { stunningStrike } from "./target/stunning-strike.js";
+import { mirrorImage } from "./token/mirror-image.js";
+import { trueStrike } from "./target/true-strike.js";
+import { viciousMockery } from "./target/vicious-mockery.js";
 
 export const effect = {
     armorOfAgathys,
@@ -110,4 +116,10 @@ export const effect = {
     shockingGrasp,
     spikedGrowth,
     suggestion,
+    wingsV2,
+    surprised,
+    stunningStrike,
+    mirrorImage,
+    trueStrike,
+    viciousMockery,
 };
