@@ -1,3 +1,6 @@
+import { grease } from "./token/grease.js";
+import { haloOfSpores } from "./token/halo-of-spores.js";
+import { lightningBolt } from "./token/lightning-bolt.js";
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { banishment } from "./target/banishment.js";
 import { bless } from "./target/bless.js";
@@ -122,4 +125,7 @@ export const effect = {
     mirrorImage,
     trueStrike,
     viciousMockery,
+    grease,
+    haloOfSpores,
+    lightningBolt,
 };
