@@ -1,3 +1,7 @@
+import { callLightning } from "./token/call-lightning.js";
+import { chainLightning } from "./token/chain-lightning.js";
+import { dash } from "./token/dash.js";
+import { frightfulMoan } from "./token/frightful-moan.js";
 import { grease } from "./token/grease.js";
 import { haloOfSpores } from "./token/halo-of-spores.js";
 import { lightningBolt } from "./token/lightning-bolt.js";
@@ -125,6 +129,10 @@ export const effect = {
     mirrorImage,
     trueStrike,
     viciousMockery,
+    callLightning,
+    chainLightning,
+    dash,
+    frightfulMoan,
     grease,
     haloOfSpores,
     lightningBolt,
