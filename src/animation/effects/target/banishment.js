@@ -1,5 +1,5 @@
 /* **
-   Original Author: unknown
+   Original Author: derkreigs
    Update Author: bakanabaka
 ** */
 
@@ -7,19 +7,20 @@ import { img } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = {
     id: 'banish',
+    color: 'yellow',
 };
 
 async function createBanish(target, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const { id, color } = mergedConfig;
     const sequence = new Sequence();
     sequence.effect()
-        .file(img("jb2a.magic_signs.circle.02.conjuration.intro.dark_yellow"))
+        .file(img(`jb2a.magic_signs.circle.02.conjuration.intro.${color}`))
         .atLocation(target)
         .scaleToObject(2)
         .belowTokens();
     sequence.effect()
-        .file(img("jb2a.magic_signs.circle.02.conjuration.loop.dark_yellow"))
+        .file(img(`jb2a.magic_signs.circle.02.conjuration.loop.${color}`))
         .atLocation(target)
         .scaleToObject(2)
         .belowTokens()
@@ -27,7 +28,7 @@ async function createBanish(target, config = {}) {
         .duration(13000)
         .fadeOut(1000);
     sequence.effect()
-        .file(img("jb2a.magic_signs.rune.conjuration.complete.yellow"))
+        .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
         .atLocation(target, { offset: { x: 70, y: 22 } })
         .scaleToObject(0.5)
         .delay(3750)
@@ -36,7 +37,7 @@ async function createBanish(target, config = {}) {
         .animateProperty("sprite", "position.y", { from: 0, to: -97, duration: 500, delay: 4000, ease: "easeInBack" })
         .duration(4500);
     sequence.effect()
-        .file(img("jb2a.magic_signs.rune.conjuration.complete.yellow"))
+        .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
         .atLocation(target, { offset: { x: 45, y: -61 } })
         .scaleToObject(0.5)
         .delay(4250)
@@ -45,7 +46,7 @@ async function createBanish(target, config = {}) {
         .animateProperty("sprite", "position.y", { from: 0, to: -14, duration: 500, delay: 3500, ease: "easeInBack" })
         .duration(4000);
     sequence.effect()
-        .file(img("jb2a.magic_signs.rune.conjuration.complete.yellow"))
+        .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
         .atLocation(target, { offset: { x: -45, y: -61 } })
         .scaleToObject(0.5)
         .delay(4750)
@@ -55,7 +56,7 @@ async function createBanish(target, config = {}) {
         .zIndex(0.9)
         .duration(3500);
     sequence.effect()
-        .file(img("jb2a.magic_signs.rune.conjuration.complete.yellow"))
+        .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
         .atLocation(target, { offset: { x: -70, y: 22 } })
         .scaleToObject(0.5)
         .delay(5250)
@@ -65,7 +66,7 @@ async function createBanish(target, config = {}) {
         .zIndex(0.9)
         .duration(3000);
     sequence.effect()
-        .file(img("jb2a.magic_signs.rune.conjuration.complete.yellow"))
+        .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
         .atLocation(target, { offset: { x: 0, y: 75 } })
         .scaleToObject(0.5)
         .delay(5750)
@@ -75,13 +76,13 @@ async function createBanish(target, config = {}) {
         .zIndex(0.9)
         .duration(2500);
     sequence.effect()
-        .file(img("jb2a.explosion.01.yellow"))
+        .file(img(`jb2a.explosion.01.${color}`))
         .atLocation(target, { offset: { x: 5, y: -75 } })
         .scaleToObject(1.5)
         .delay(8250)
         .zIndex(1);
     sequence.effect()
-        .file(img("jb2a.portals.vertical.vortex.yellow"))
+        .file(img(`jb2a.portals.vertical.vortex.${color}`))
         .atLocation(target, { offset: { x: 0, y: -75 } })
         .scaleToObject(2)
         .duration(6000)
@@ -93,7 +94,7 @@ async function createBanish(target, config = {}) {
         .belowTokens()
         .waitUntilFinished(-5750);
     sequence.effect()
-        .file(img("jb2a.wind_stream.1200.white"))
+        .file(img(`jb2a.wind_stream.1200.white`))
         .atLocation(target)
         .scaleToObject(1.03)
         .rotate(90)
@@ -101,7 +102,7 @@ async function createBanish(target, config = {}) {
         .fadeIn(250)
         .fadeOut(750);
     sequence.effect()
-        .file(img("jb2a.wind_stream.1200.white"))
+        .file(img(`jb2a.wind_stream.1200.white`))
         .atLocation(target, { offset: { x: 0, y: 100 } })
         .scaleToObject(1.03)
         .rotate(90)
@@ -109,7 +110,7 @@ async function createBanish(target, config = {}) {
         .fadeIn(250)
         .fadeOut(750);
     sequence.effect()
-        .file(img("jb2a.energy_beam.normal.yellow.03"))
+        .file(img(`jb2a.energy_beam.normal.${color}`))
         .atLocation(target, { offset: { x: 0, y: 50 } })
         .rotate(90)
         .size({ width: 400, height: 350 })
@@ -159,27 +160,27 @@ async function createBanish(target, config = {}) {
         .duration(375)
         .waitUntilFinished(-150);
     sequence.effect()
-        .file(img("animated-spell-effects-cartoon.flash.01"))
+        .file(img(`jb2a.explosion.02.${color}`))
         .atLocation(target, { offset: { x: 0, y: -85 } })
         .scaleToObject(0.5)
         .filter("ColorMatrix", { hue: 15 })
         .zIndex(0.9);
     sequence.effect()
-        .file(img("jb2a.detect_magic.cone.yellow"))
+        .file(img(`jb2a.detect_magic.cone.${color}`))
         .rotateTowards(target)
         .atLocation(target, { offset: { x: 0, y: -110 } })
         .scaleToObject(1)
         .playbackRate(1.5)
         .zIndex(1);
     sequence.effect()
-        .file(img("jb2a.template_circle.out_pulse.02.loop.yellowwhite"))
+        .file(img(`jb2a.template_circle.out_pulse.02.loop.${color}`))
         .atLocation(target, { offset: { x: 0, y: -75 } })
         .scaleToObject(1.75)
         .delay(1000)
         .fadeOut(1000)
         .waitUntilFinished(-1500);
     sequence.effect()
-        .file(img("jb2a.fireflies.many.02.yellow"))
+        .file(img(`jb2a.fireflies.many.02.${color}`))
         .atLocation(target, { offset: { x: 0, y: -75 } })
         .scaleToObject(0.75)
         .duration(2000)
@@ -196,15 +197,15 @@ async function playBanish(target, config = {}) {
 
 async function createReturn(target, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const { id, color } = mergedConfig;
     const sequence = new Sequence();
     sequence.effect()
-        .file(img("jb2a.explosion.01.yellow"))
+        .file(img(`jb2a.explosion.01.${color}`))
         .atLocation(target, { offset: { x: 5, y: -75 } })
         .scaleToObject(1.5)
         .zIndex(1);
     sequence.effect()
-        .file(img("jb2a.portals.vertical.vortex.yellow"))
+        .file(img(`jb2a.portals.vertical.vortex.${color}`))
         .atLocation(target, { offset: { x: 0, y: -75 } })
         .scaleToObject(2)
         .duration(6000)
