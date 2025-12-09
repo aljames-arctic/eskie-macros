@@ -249,5 +249,7 @@ export const banishment = {
     return: {
         create: createReturn,
         play: playReturn,
-    }
+    },
+    play: playBanish,
+    stop: playReturn,
 };

@@ -288,10 +288,10 @@ export const trueStrike = {
     cast: {
         create: createTrueStrikeCast,
         play: playTrueStrikeCast,
+        stop: stopTrueStrike,
     },
     attack: {
         create: createTrueStrikeAttack,
         play: playTrueStrikeAttack,
     },
-    stop: stopTrueStrike,
 };

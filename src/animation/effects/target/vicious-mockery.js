@@ -220,11 +220,10 @@ export const viciousMockery = {
     cast: {
         create: createViciousMockeryCast,
         play: playViciousMockery, // The main play function for the spell
+        stop: stopViciousMockery,
     },
     impact: {
         create: createViciousMockeryImpact,
         // play is integrated into playViciousMockery
     },
-    play: playViciousMockery, // Expose the main orchestrator play function
-    stop: stopViciousMockery,
 };
