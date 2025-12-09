@@ -121,6 +121,7 @@ async function createBanish(target, config = {}) {
     sequence.animation()
         .on(target)
         .opacity(0)
+        .show(false)
         .waitUntilFinished(-500);
     sequence.effect()
         .copySprite(target)
@@ -222,6 +223,7 @@ async function createReturn(target, config = {}) {
         .waitUntilFinished(-150);
     sequence.animation()
         .on(target)
+        .show(true)
         .opacity(1);
     return sequence;
 }
@@ -236,6 +238,7 @@ async function clean(target, config = {}) {
         .animation()
         .on(target)
         .opacity(1)
+        .show(true)
         .play();
 }
 
