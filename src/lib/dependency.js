@@ -12,9 +12,9 @@ function _isAscending(a, b, c) {
 }
 
 function _getEntity(dependency) {
-    let isModule = game.modules.get(dependency.id);
-    let entity = isModule ? game.modules.get(dependency.id) : globalThis[dependency.id];
-    if (dependency.id == 'foundry') entity = game;
+    let isModule = game.modules.get(dependency?.id);
+    let entity = isModule ? game.modules.get(dependency?.id) : globalThis[dependency?.id];
+    if (dependency?.id == 'foundry') entity = game;
     return entity;
 }
 
@@ -30,8 +30,8 @@ function _getEntity(dependency) {
 function _isInstalled(dependency) {
     let entity = _getEntity(dependency);
     let [minimum, maximum] = [dependency.min, dependency.max];
-    if (minimum == undefined) minimum = entity.version ?? '0.0.0';
-    if (maximum == undefined) maximum = entity.version ?? '0.0.0';
+    if (minimum == undefined) minimum = entity?.version ?? '0.0.0';
+    if (maximum == undefined) maximum = entity?.version ?? '0.0.0';
 
     let properInstall = !!(entity) && _isAscending(minimum, entity?.version, maximum);
     return [properInstall, entity?.version];
@@ -49,8 +49,8 @@ function _isInstalled(dependency) {
 function _isActivated(dependency) {
     let entity = _getEntity(dependency);
     let [minimum, maximum] = [dependency.min, dependency.max];
-    if (minimum == undefined) minimum = entity.version ?? '0.0.0';
-    if (maximum == undefined) maximum = entity.version ?? '0.0.0';
+    if (minimum == undefined) minimum = entity?.version ?? '0.0.0';
+    if (maximum == undefined) maximum = entity?.version ?? '0.0.0';
     let properActivated = !!(entity?.active) && _isAscending(minimum, entity?.version, maximum);
     return [properActivated, entity?.version];
 }
@@ -64,8 +64,8 @@ function _isActivated(dependency) {
  */
 function _versionMessageAppend(dependency, version) {
     let msg = '';
-    if (dependency.min) msg += `\n\tMinimum version: ${dependency.min}`;
-    if (dependency.max) msg += `\n\tMaximum version: ${dependency.max}`;
+    if (dependency?.min) msg += `\n\tMinimum version: ${dependency?.min}`;
+    if (dependency?.max) msg += `\n\tMaximum version: ${dependency?.max}`;
     msg += (version) ? `\n\tCurrent version: ${version}` : ``;
     msg += `\n\tCurrent state: `;
     msg += (version) ? `NOT ACTIVATED` : `NOT INSTALLED`;
@@ -73,12 +73,12 @@ function _versionMessageAppend(dependency, version) {
 }
 
 function isActivated(dependency, warnMessage) {
-    if (!dependency.id) return [false, undefined];
+    if (!dependency?.id) return [false, undefined];
     let [activated, versionValid] = _isActivated(dependency);
     let valid = activated && versionValid;
     if (!valid && warnMessage) {
         if (warnMessage.length) warnMessage += '\n';
-        warnMessage += `Warning: ${dependency.id} is not activated and between expected versions:`;
+        warnMessage += `Warning: ${dependency?.id} is not activated and between expected versions:`;
         warnMessage += _versionMessageAppend(dependency, versionValid);
         console.warn(warnMessage);
     }
@@ -90,7 +90,7 @@ function isInstalled(dependency) {
     let valid = !!entity && versionValid;
     if (!valid && warnMessage) {
         if (warnMessage.length) warnMessage += '\n';
-        warnMessage += `Warning: ${dependency.id} is not installed and between expected versions:`;
+        warnMessage += `Warning: ${dependency?.id} is not installed and between expected versions:`;
         warnMessage += _versionMessageAppend(dependency, versionValid);
         console.warn(warnMessage);
     }
@@ -117,7 +117,7 @@ function hasSomeRecommended(dependencyList) {
 
     let warnMsg = 'Recommend installing one of the following:';
     for (let dependency of dependencyList) {
-        warnMsg += `\nModule Id: ${dependency.id}`;
+        warnMsg += `\nModule Id: ${dependency?.id}`;
     }
     console.warn(warnMsg);
     return false;
@@ -132,7 +132,7 @@ function required(dependency) {
     let [isActivated, currentVersion] = _isActivated(dependency);
     if (isActivated) return;
 
-    let errorMsg = `Requires ${dependency.id} to be installed and activated.`;
+    let errorMsg = `Requires ${dependency?.id} to be installed and activated.`;
     errorMsg += _versionMessageAppend(dependency, currentVersion);
     throw errorMsg;
 }
@@ -149,7 +149,7 @@ function someRequired(dependencyList) {
         let [isActivated, currentVersion] = _isActivated(dependency);
         if (isActivated) return;
         if (errorMsg.length) errorMsg += '\n';
-        errorMsg += `Module Id: ${dependency.id}`;
+        errorMsg += `Module Id: ${dependency?.id}`;
         errorMsg += _versionMessageAppend(dependency, currentVersion);
     }
     throw errorMsg;
