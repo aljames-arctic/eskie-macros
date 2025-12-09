@@ -8,7 +8,7 @@
  */
 function _isAscending(a, b, c) {
     // Not true that b > a or c > b
-    return  ( !(foundry.utils.isNewerVersion(a, b) || foundry.utils.isNewerVersion(b, c)) );
+    return  !!( !(foundry.utils.isNewerVersion(a, b) || foundry.utils.isNewerVersion(b, c)) );
 }
 
 function _getEntity(dependency) {
@@ -24,7 +24,7 @@ function _getEntity(dependency) {
  * @param {string} dependency.id
  * @param {string} dependency.min Minimum allowable version
  * @param {string} dependency.max Maximum allowable version
- * @returns {[boolean, version || undefined]} [entity, isValidVersion]
+ * @returns {[boolean, version || undefined]} [installed, isValidVersion]
  * @private
  */
 function _isInstalled(dependency) {
@@ -33,8 +33,8 @@ function _isInstalled(dependency) {
     if (minimum == undefined) minimum = entity?.version ?? '0.0.0';
     if (maximum == undefined) maximum = entity?.version ?? '0.0.0';
 
-    let properInstall = !!(entity) && _isAscending(minimum, entity?.version, maximum);
-    return [properInstall, entity?.version];
+    let installed = !!(entity) && _isAscending(minimum, entity?.version, maximum);
+    return [installed, entity?.version];
 }
 
 /**
@@ -43,7 +43,7 @@ function _isInstalled(dependency) {
  * @param {string} dependency.id
  * @param {string} dependency.min Minimum allowable version
  * @param {string} dependency.max Maximum allowable version
- * @returns {[object, boolean]} [entity, isValidVersion]
+ * @returns {[boolean, boolean]} [activated, isValidVersion]
  * @private
  */
 function _isActivated(dependency) {
@@ -51,8 +51,8 @@ function _isActivated(dependency) {
     let [minimum, maximum] = [dependency.min, dependency.max];
     if (minimum == undefined) minimum = entity?.version ?? '0.0.0';
     if (maximum == undefined) maximum = entity?.version ?? '0.0.0';
-    let properActivated = !!(entity?.active) && _isAscending(minimum, entity?.version, maximum);
-    return [properActivated, entity?.version];
+    let activated = !!(entity?.active) && _isAscending(minimum, entity?.version, maximum);
+    return [activated, entity?.version];
 }
 
 /**
@@ -68,7 +68,9 @@ function _versionMessageAppend(dependency, version) {
     if (dependency?.max) msg += `\n\tMaximum version: ${dependency?.max}`;
     msg += (version) ? `\n\tCurrent version: ${version}` : ``;
     msg += `\n\tCurrent state: `;
-    msg += (version) ? `NOT ACTIVATED` : `NOT INSTALLED`;
+    // We are currently in a bad state... either not activated, not installed, or wrong version
+    msg += (!_isAscending(dependency?.min, version, dependency?.max)) ? `INCOMPATIBLE` 
+                                                         : (version) ? `NOT ACTIVATED` : `NOT INSTALLED`;
     return msg;
 }
 
@@ -86,12 +88,12 @@ function isActivated(dependency, warnMessage) {
 }
 
 function isInstalled(dependency) {
-    let [entity, versionValid] = _isInstalled(dependency);
-    let valid = !!entity && versionValid;
+    let [installed, currentVersion] = _isInstalled(dependency);
+    let valid = installed && !!currentVersion;
     if (!valid && warnMessage) {
         if (warnMessage.length) warnMessage += '\n';
         warnMessage += `Warning: ${dependency?.id} is not installed and between expected versions:`;
-        warnMessage += _versionMessageAppend(dependency, versionValid);
+        warnMessage += _versionMessageAppend(dependency, currentVersion);
         console.warn(warnMessage);
     }
     return valid;

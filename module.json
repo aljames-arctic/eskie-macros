@@ -67,5 +67,17 @@
       }
     ]
   },
+  "packs": [
+    {
+      "name": "eskie-aa-integration",
+      "label": "Automated Animation Integration",
+      "path": "packs/eskie-aa-integration",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
   "flags": {}
 }

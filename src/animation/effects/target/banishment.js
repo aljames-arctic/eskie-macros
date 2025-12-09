@@ -4,6 +4,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimation } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
     id: 'banish',
@@ -257,3 +258,5 @@ export const banishment = {
     play: playBanish,
     stop: playReturn,
 };
+
+autoanimation.register("Banishment", "effect", "eskie.effect.banishment", DEFAULT_CONFIG);

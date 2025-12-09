@@ -96,7 +96,6 @@ jobs:
 
       # Install npm dependencies. and build the dist folder
 
-
       # Create a "module.zip" archive containing all the module's required files.
       # If you have other directories or files that will need to be added to
       # your packaged module, add them here.
@@ -110,6 +109,7 @@ jobs:
             LICENSE                              \
             src/                                 \
             lang/                                \
+            packs/                               \        
 
       # Update the GitHub release with the manifest and module archive files.
       - name: Update Release With Files
