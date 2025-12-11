@@ -26,6 +26,7 @@ import { dreadLordFear } from "./target/dreadLordFear.js";
 import { elementalBlast } from "./target/elementalBlast/_elementalBlast.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
 import { farStep } from "./token/far-step.js";
+import { faerieFire } from "./location/faerie-fire.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { firecracker } from "./location/firecracker.js";
 import { fireShield } from "./token/fire-shield.js";
@@ -89,6 +90,7 @@ export const effect = {
     elementalBlast,
     eyesOfNight,
     farStep,
+    faerieFire,
     fingerOfDeath,
     firecracker,
     fireShield,
