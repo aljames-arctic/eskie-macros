@@ -74,12 +74,12 @@ function _versionMessageAppend(dependency, version) {
 
 function isActivated(dependency, warnMessage) {
     if (!dependency?.id) return [false, undefined];
-    let [activated, versionValid] = _isActivated(dependency);
-    let valid = activated && versionValid;
+    let [activated, currentVersion] = _isActivated(dependency);
+    let valid = activated && !!currentVersion;
     if (!valid && warnMessage) {
         if (warnMessage.length) warnMessage += '\n';
         warnMessage += `Warning: ${dependency?.id} is not activated and between expected versions:`;
-        warnMessage += _versionMessageAppend(dependency, versionValid);
+        warnMessage += _versionMessageAppend(dependency, currentVersion);
         console.warn(warnMessage);
     }
     return valid;
