@@ -1,22 +1,47 @@
 // Original Author: EskieMoh#2969
 // Modular Conversion: bakanabaka
 
-import { narrowView } from '../../misc/narrow-view.js';
-import { text } from '../../misc/text.js';
+import { text as textUtil } from '../../misc/text.js';
 import { img } from '../../../lib/filemanager.js';
 
 const DEFAULT_CONFIG = {
     id: 'IaijutsuStrike',
     targetDeath: true,
     teleport: true,
-    cameraFocus: true,
+    cameraFocus: {
+        enable: true,
+        scale: 0.3
+    },
+    text: {
+        id: 'IaijutsuStrike Text',
+        duration: 2500,
+        delay: 200,
+        style: {
+            "fill": "#da1b1bff",
+            "fontFamily": "Helvetica",
+            "fontSize": 106,
+            "strokeThickness": 0,
+            fontWeight: "bold",
+        },
+        kerning: 1.7,
+        verticalOffset: 0.75,
+    }
 };
 
 function dimCanvas() {
     let sequence = new Sequence();
+    
+    sequence.effect()
+        .name("CinemaBars")
+        .screenSpace()
+        .screenSpaceScale({fitX:true,fitY:true})
+        .file(img("eskie.cinema.bars.ultra.wide.01"))
+        .persist()
+
     if (canvas.scene.background.src) {
         sequence.effect()
             .file(canvas.scene.background.src)
+            .name("CinemaBars")
             .filter("ColorMatrix", { brightness: 0.3})
             .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
             .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
@@ -54,7 +79,7 @@ function deathAnimation(target) {
 
     sequence.effect()
         .copySprite(target)
-        .name(`${target.name}Top`)
+        .name(`IaijutsuStrike ${target.name} Top`)
         .scaleToObject(target.document.texture.scaleX)
         .atLocation(target)
         .shape("polygon", {
@@ -75,7 +100,7 @@ function deathAnimation(target) {
 
     sequence.effect()
         .copySprite(target)
-        .name(`${target.name}Bottom`)
+        .name(`IaijutsuStrike ${target.name} Bottom`)
         .scaleToObject(target.document.texture.scaleX)
         .atLocation(target)
         .shape("polygon", {
@@ -102,17 +127,13 @@ function deathAnimation(target) {
         .fadeOut(500)
         .rotate(45)
 
-    sequence.wait(1500)
-    sequence.thenDo(() => Sequencer.EffectManager.endEffects({ name: `${target.name}Top` }))
-
-    sequence.wait(4000)
-    sequence.thenDo(() => Sequencer.EffectManager.endEffects({ name: `${target.name}Bottom` }))
+    sequence.wait(5500)
     return sequence;
 }
 
 async function create(source, target, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    let {targetDeath, teleport, cameraFocus} = mergedConfig;
+    const {targetDeath, teleport, cameraFocus, text} = mergedConfig;
 
     let position;
 
@@ -133,9 +154,9 @@ async function create(source, target, config) {
 
     let sequence = new Sequence();
 
-    if( cameraFocus == true ){    
-        sequence.canvasPan({duration: 250, x: target.center.x, y: target.center.y, scale: 0.6})
-        sequence.add(narrowView.create({duration: 0}));
+    if( cameraFocus.enable ){    
+        sequence.addSequence(dimCanvas());
+        sequence.canvasPan({duration: 250, x: target.center.x, y: target.center.y, scale: cameraFocus.scale})
     }    
 
     sequence.effect()
@@ -149,9 +170,8 @@ async function create(source, target, config) {
         .waitUntilFinished()
 
     sequence.wait(500)
-
-    sequence.add(dimCanvas());
-    sequence.add(dashEffect(source, target));
+    
+    sequence.addSequence(dashEffect(source, target));
 
     if( teleport == true){
         sequence.animation()
@@ -163,18 +183,16 @@ async function create(source, target, config) {
 
     sequence.wait(500)
 
-    sequence.add(text.create(target, "居合術"));
+    sequence.addSequence(await textUtil.create(target, "居合術", text));
 
     if( targetDeath === true){
-        sequence.add(deathAnimation(target));
+        sequence.addSequence(deathAnimation(target));
     }
 
     sequence.wait(500)
 
-    if( cameraFocus == true){
-        sequence.thenDo(() => {
-            narrowView.stop();
-        })
+    if( cameraFocus.enable ){
+        sequence.thenDo(() => Sequencer.EffectManager.endEffects({ name: `CinemaBars` }))
     }
 
     return sequence;
@@ -185,7 +203,23 @@ async function play(source, target, config) {
     if (seq) { await seq.play(); }
 }
 
+async function clean(target, config) {
+    return Promise.all([
+        Sequencer.EffectManager.endEffects({ name: `IaijutsuStrike` }),
+        Sequencer.EffectManager.endEffects({ name: `IaijutsuText` }),
+        Sequencer.EffectManager.endEffects({ name: `CinemaBars` }),
+        Sequencer.EffectManager.endEffects({ name: `IaijutsuStrike ${target.name} *` }),
+        new Sequence()
+        .animation()
+            .on(target)
+            .opacity(1)
+            .show(true)
+            .play()
+    ]);
+}
+
 export const iaijutsuStrike = {
     create,
     play,
+    clean
 };
