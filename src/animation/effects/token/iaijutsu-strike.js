@@ -35,7 +35,7 @@ function dimCanvas() {
         .name("CinemaBars")
         .screenSpace()
         .screenSpaceScale({fitX:true,fitY:true})
-        .file(img("eskie.cinema.bars.ultra.wide.01"))
+        .file(img("eskie.screen_overlay.cinema_bars.02"))
         .persist()
 
     if (canvas.scene.background.src) {
