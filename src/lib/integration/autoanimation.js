@@ -35,7 +35,7 @@ function createAutorecEntry(label, trigger, animation, config) {
     trigger = standardizeTrigger(trigger);
     const defaultMenu = defaultMenuSettings[trigger];
     const defaultEntry = defaultMenu[0];
-    const compendium = `${moduleId}.aa-integration`;
+    const compendium = `Compendium.${moduleId}.eskie-aa-integration`;
 
     let name = "UNSPECIFIED MACRO";
     switch(trigger) {
