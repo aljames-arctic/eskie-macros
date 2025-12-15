@@ -13,7 +13,8 @@ function closestPath(modulePrefix, ...categories) {
     // Traverse the categories that the user has provided
     while (remainingOptions && remainingOptions.length > 0 && categories.length > 0) {
         if (isMustache(categories[0])) {
-            return `${currentPath}.${categories.join('.')}`;
+            currentPath = `${currentPath}.${categories.join('.')}`;
+            break;
         }
 
         if (!remainingOptions.includes(categories[0])) {
@@ -29,8 +30,10 @@ function closestPath(modulePrefix, ...categories) {
     }
 
     if (diverged) { 
-        console.warn(`Path not found: ${originalPath}`);
-        console.warn(`Defaulting to first closest match: ${currentPath}`);
+        let msg = `EMP  | Filemanager closest path diverged from requested path.`;
+        msg +=    `\n\tRequested: ${originalPath}`
+        msg +=    `\n\tResolved as: ${currentPath}`;
+        console.warn(msg);
     }
     return currentPath;
 }
@@ -77,12 +80,12 @@ export function img(path) {
     switch (modulePrefix) {
         case 'eskie':
         case 'eskie-free':
-            dependency.someRequired([{ id: 'eskie-effects' }, { id: 'eskie-effects-free' }]);
+            dependency.someRequired([{ id: 'eskie-effects', ref: 'Eskie Effects Patreon'}, { id: 'eskie-effects-free', ref: 'Eskie Effects Free' }]);
             isPatreonUser = dependency.isActivated({ id: 'eskie-effects' });
             modulePrefix = (isPatreonUser) ? `eskie` : `eskie-free`;
             break;
         case 'jb2a':
-            dependency.someRequired([{ id: 'jb2a_patreon' }, { id: 'JB2A_DnD5e' }]);
+            dependency.someRequired([{ id: 'jb2a_patreon', ref: 'JB2A Patreon'}, { id: 'JB2A_DnD5e', ref: 'JB2A Free' }]);
             isFreeUser = dependency.isActivated({ id: 'JB2A_DnD5e' });
             isPatreonUser = dependency.isActivated({ id: 'jb2a_patreon' });
             if (isPatreonUser && isFreeUser) 
@@ -90,8 +93,10 @@ export function img(path) {
             modulePrefix = `jb2a`;
             break;
         case 'animated-spell-effects':
+            dependency.required({ id: modulePrefix, ref: "Jack Kerouac's Animated Spell Effects" });
+            break;
         case 'animated-spell-effects-cartoon':
-            dependency.required({ id: modulePrefix });
+            dependency.required({ id: modulePrefix, ref: "Jack Kerouac's Animated Spell Effects - Cartoon" });
             break;
     }
 

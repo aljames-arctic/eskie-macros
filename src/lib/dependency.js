@@ -68,9 +68,14 @@ function _versionMessageAppend(dependency, version) {
     if (dependency?.max) msg += `\n\tMaximum version: ${dependency?.max}`;
     msg += (version) ? `\n\tCurrent version: ${version}` : ``;
     msg += `\n\tCurrent state: `;
-    // We are currently in a bad state... either not activated, not installed, or wrong version
-    msg += (!_isAscending(dependency?.min, version, dependency?.max)) ? `INCOMPATIBLE` 
-                                                         : (version) ? `NOT ACTIVATED` : `NOT INSTALLED`;
+
+    const entity = _getEntity(dependency);
+    const compatible = _isAscending(dependency.min, version, dependency.max);
+    if (!entity) return (msg + 'NOT INSTALLED');
+    else if (!compatible) msg += 'INCOMPATIBLE';
+    else if (!entity.activate) msg += 'NOT ACTIVATED';
+    else msg += '[AN UNKNOWN ERROR OCCURRED]';
+
     return msg;
 }
 
@@ -151,7 +156,8 @@ function someRequired(dependencyList) {
         let [isActivated, currentVersion] = _isActivated(dependency);
         if (isActivated) return;
         if (errorMsg.length) errorMsg += '\n';
-        errorMsg += `Module Id: ${dependency?.id}`;
+        errorMsg += `Module: ${dependency?.id}`;
+        if (dependency?.ref) errorMsg += ` (${dependency?.ref})`;
         errorMsg += _versionMessageAppend(dependency, currentVersion);
     }
     throw errorMsg;
