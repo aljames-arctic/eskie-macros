@@ -42,19 +42,26 @@ function createAutorecEntry(label, trigger, animation, config, version = "0.0.0"
 
     let name = "UNSPECIFIED MACRO";
     switch(trigger) {
+        case "ontoken":
+            /* play(token, config) */
+            name = `${compendium}.AA | Token`;
+            break;
         case "melee":
         case "range":
-        case "ontoken":
+            /* play(token, target, config) */
             name = `${compendium}.AA | Target`;
             break;
         case "aura":
         case "aefx":
+            /* play(token, config) */
             name = `${compendium}.AA | Effect`;
             break;
         case "templatefx":
+            /* play(token, config) */
             name = `${compendium}.AA | Template`;
             break;
         case "preset":
+            /* unused */
             break;
         default:
             throw new Error(`EMP + AA | Unknown trigger type "${trigger}" for effect "${name}".`);
