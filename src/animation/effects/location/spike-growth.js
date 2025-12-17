@@ -4,22 +4,23 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimation } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
-    id: 'spikedGrowth',
+    id: 'spikeGrowth',
     size: 8, // Default size for crosshairs and initial effect
-    tint: 0x922042, // Default tint for spikes
+    tint: "#033b0cff", // Default tint for spikes
 };
 
 /**
- * Creates the initial Sequencer effect for Spiked Growth spell.
+ * Creates the initial Sequencer effect for Spike Growth spell.
  * This handles the casting animation at the central position.
  *
  * @param {object} position The central position (x, y coordinates) for the effect.
  * @param {object} config Configuration options for the animation.
  * @returns {Sequence} The created Sequence object for the initial cast.
  */
-async function createInitialSpikedGrowth(position, config = {}) {
+async function createInitialSpikeGrowth(position, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
     const { size } = mergedConfig;
 
@@ -55,7 +56,7 @@ async function createInitialSpikedGrowth(position, config = {}) {
 }
 
 /**
- * Creates an array of Sequencer effects for the persistent Spiked Growth spikes.
+ * Creates an array of Sequencer effects for the persistent Spike Growth spikes.
  *
  * @param {Token} token The token casting the spell (used for effect naming).
  * @param {object} centralPosition The central position (x, y coordinates) where the spell is cast.
@@ -68,15 +69,15 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
 
     const gridSize = canvas.grid.size;
     const locations = [
-        { x: centralPosition.x, y: centralPosition.y },
-        { x: centralPosition.x, y: centralPosition.y - gridSize * 3 },
-        { x: centralPosition.x + gridSize * 2, y: centralPosition.y - gridSize * 2 },
-        { x: centralPosition.x + gridSize * 3, y: centralPosition.y },
-        { x: centralPosition.x + gridSize * 2, y: centralPosition.y + gridSize * 2 },
-        { x: centralPosition.x, y: centralPosition.y + gridSize * 3 },
-        { x: centralPosition.x - gridSize * 2, y: centralPosition.y + gridSize * 2 },
-        { x: centralPosition.x - gridSize * 3, y: centralPosition.y },
-        { x: centralPosition.x - gridSize * 2, y: centralPosition.y - gridSize * 2 },
+        //{ x: centralPosition.x, y: centralPosition.y },
+        { x: centralPosition.x, y: centralPosition.y - gridSize * 2 },
+        //{ x: centralPosition.x + gridSize * 2, y: centralPosition.y - gridSize * 2 },
+        { x: centralPosition.x + gridSize * 2, y: centralPosition.y },
+        //{ x: centralPosition.x + gridSize * 2, y: centralPosition.y + gridSize * 2 },
+        { x: centralPosition.x, y: centralPosition.y + gridSize * 2 },
+        //{ x: centralPosition.x - gridSize * 2, y: centralPosition.y + gridSize * 2 },
+        { x: centralPosition.x - gridSize * 2, y: centralPosition.y },
+        //{ x: centralPosition.x - gridSize * 2, y: centralPosition.y - gridSize * 2 },
     ];
 
     const persistentSpikeSequences = [];
@@ -85,7 +86,7 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
         const sequence = new Sequence();
         sequence
             .effect()
-            .name(`Spiked Growth ${token.document.name} ${id}`) // Unique name for stopping
+            .name(`Spike Growth ${token.document.name} ${id}`) // Unique name for stopping
             .delay(550)
             .file(img("jb2a.plant_growth.02.round.4x4.loop.greenred"))
             .atLocation(locations[i])
@@ -100,10 +101,10 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
             .zIndex(1)
 
             .effect()
-            .name(`Spiked Growth ${token.document.name} ${id}`) // Unique name for stopping
+            .name(`Spike Growth ${token.document.name} ${id}`) // Unique name for stopping
             .delay(30)
             .file(img("jb2a.ice_spikes.radial.burst.grey"))
-            .size(13, { gridUnits: true })
+            .size(7.5, { gridUnits: true })
             .playbackRate(4)
             .atLocation(locations[i], { randomOffset: 0.25 })
             .filter("ColorMatrix", { brightness: 0 })
@@ -122,35 +123,34 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
 
 
 /**
- * Plays the Spiked Growth effect.
+ * Plays the Spike Growth effect.
  * This function handles the crosshairs user interaction and manages active effects.
  *
  * @param {Token} token The token casting the spell.
  * @param {object} config Configuration options for the animation.
  * @returns {Promise<void>} A promise that resolves when the effect is played or stopped.
  */
-async function playSpikedGrowth(token, config = {}) {
+async function playSpikeGrowth(token, config = {}, options = {}) {
+    if (options.type == "aefx") return;
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    let { id, size, position } = mergedConfig;
+    const { id, size, template } = mergedConfig;
+
+    let position;
+    if (template) {
+        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
+    } else {
+        position = await Sequencer.Crosshair.show();
+        if (position.cancelled) { return; }
+    }
+    if (!position) { return; }
 
     // Effect is not active, so play it
     if (!position) {
-        const crosshairConfig = {
-            size: size,
-            icon: 'icons/magic/nature/root-vine-spiral-thorns-teal.webp',
-            label: 'Spiked Growth',
-            tag: 'Spiked Growth',
-            t: 'circle',
-            drawIcon: true,
-            drawOutline: true,
-            interval: -1,
-            rememberControlled: true,
-        };
         position = await Sequencer.Crosshair.show(crosshairConfig);
         if (position.cancelled) { return; }
     }
 
-    const initialSequence = await createInitialSpikedGrowth(position, config);
+    const initialSequence = await createInitialSpikeGrowth(position, config);
     const persistentSpikeSequences = await createPersistentSpikes(token, position, config);
     let seq = new Sequence().addSequence(initialSequence);
     for (const spike of persistentSpikeSequences) {
@@ -161,18 +161,21 @@ async function playSpikedGrowth(token, config = {}) {
 }
 
 /**
- * Stops the persistent Spiked Growth effects.
+ * Stops the persistent Spike Growth effects.
  *
  * @param {Token} token The token that cast the spell (used to identify the effect).
  * @param {object} options Options for stopping effects.
  */
-function stopSpikedGrowth(token, { id = DEFAULT_CONFIG.id } = {}) {
-    Sequencer.EffectManager.endEffects({ name: `Spiked Growth ${token.document.name} ${id}` });
+function stopSpikeGrowth(token, { id = DEFAULT_CONFIG.id } = {}) {
+    Sequencer.EffectManager.endEffects({ name: `Spike Growth ${token.document.name} ${id}` });
 }
 
-export const spikedGrowth = {
-    createInitial: createInitialSpikedGrowth, // Exposed for more granular control if needed
+export const spikeGrowth = {
+    createInitial: createInitialSpikeGrowth, // Exposed for more granular control if needed
     createPersistent: createPersistentSpikes, // Exposed for more granular control if needed
-    play: playSpikedGrowth,
-    stop: stopSpikedGrowth,
+    play: playSpikeGrowth,
+    stop: stopSpikeGrowth,
 };
+
+autoanimation.register("Spike Growth", "template", "eskie.effect.spikeGrowth", DEFAULT_CONFIG);
+autoanimation.register("Concentrating: Spike Growth", "effect", "eskie.effect.spikeGrowth", DEFAULT_CONFIG);

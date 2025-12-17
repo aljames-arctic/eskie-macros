@@ -59,7 +59,7 @@ import { enlargeReduce } from "./token/enlarge-reduce.js";
 import { leap } from "./token/leap.js";
 import { silence } from "./location/silence.js";
 import { shockingGrasp } from "./target/shocking-grasp.js";
-import { spikedGrowth } from "./location/spiked-growth.js";
+import { spikeGrowth } from "./location/spike-growth.js";
 import { suggestion } from "./target/suggestion.js";
 import { wingsV2 } from "./token/wings-v2.js";
 import { surprised } from "./token/surprised.js";
@@ -123,7 +123,7 @@ export const effect = {
     leap,
     silence,
     shockingGrasp,
-    spikedGrowth,
+    spikeGrowth,
     suggestion,
     wingsV2,
     surprised,
