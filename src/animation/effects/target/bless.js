@@ -2,45 +2,24 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimation } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
+    id: 'bless',
     color: 'yellow',
 };
 
-async function create(token, targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { color } = mergedConfig;
+function createCaster(token, config = {}) {
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { color } = mConfig;
     let hue = -20;
 
     const sequence = new Sequence();
         // Effect on the caster
         sequence.effect()
-            .file(img(`jb2a.bless.200px.intro.${config.color}`))
+            .file(img(`jb2a.bless.200px.intro.${color}`))
             .atLocation(token)
             .filter("ColorMatrix", { hue: hue });
-
-        // Effects on the targets
-        targets.forEach(target => {
-            sequence.effect()
-                .copySprite(target)
-                .atLocation(target)
-                .filter("ColorMatrix", { brightness: 5, saturate: -1 })
-                .filter("Blur", { blurX: 10, blurY: 10 })
-                .opacity(1)
-                .fadeIn(250)
-                .fadeOut(500)
-                .duration(1000)
-                .delay(1150);
-
-            sequence.effect()
-                .file(img(`jb2a.bless.200px.loop.${config.color}`))
-                .atLocation(target)
-                .fadeIn(500, { delay: 250 })
-                .fadeOut(500)
-                .delay(900)
-                .filter("ColorMatrix", { hue: hue })
-                .zIndex(1);
-        });
 
         // Ground effects
         sequence.effect()
@@ -71,7 +50,7 @@ async function create(token, targets, config = {}) {
             .zIndex(1);
 
         sequence.effect()
-            .file(img(`jb2a.markers.light.complete.${config.color}`))
+            .file(img(`jb2a.markers.light.complete.${color}`))
             .atLocation(token)
             .size(20, { gridUnits: true })
             .spriteScale({ x: 0.5, y: 1.25 })
@@ -115,12 +94,78 @@ async function create(token, targets, config = {}) {
     return sequence;
 }
 
+async function playCaster(token, config = {}) {
+    const sequence = createCaster(token, config);
+    if (sequence) { return sequence.play(); }
+}
+
+function createTarget(target, config = {}) {
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color } = mConfig;
+    let hue = -20;
+
+    const sequence = new Sequence();
+            // Effects on the targets
+            sequence.effect()
+                .copySprite(target)
+                .atLocation(target)
+                .filter("ColorMatrix", { brightness: 5, saturate: -1 })
+                .filter("Blur", { blurX: 10, blurY: 10 })
+                .opacity(1)
+                .fadeIn(250)
+                .fadeOut(500)
+                .duration(1000)
+                .delay(1150);
+
+            sequence.effect()
+                .file(img(`jb2a.bless.200px.loop.${color}`))
+                .name(`${id} - ${target.name}`)
+                .attachTo(target)
+                .fadeIn(500, { delay: 250 })
+                .fadeOut(500)
+                .delay(900)
+                .filter("ColorMatrix", { hue: hue })
+                .zIndex(1)
+                .persist();
+    return sequence;
+}
+
+async function playTarget(target, config = {}) {
+    const sequence = createTarget(target, config);
+    if (sequence) { return sequence.play(); }
+}
+async function stopTarget(target, config = {}) {
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const {id} = mConfig;
+    return Sequencer.EffectManager.endEffects({ name: `${id} - ${target.name}`, object: target });
+}
+
+function create(token, targets, config = {}) {
+    const sequence = createCaster(token, config);
+    targets.forEach(target => {
+        sequence.addSequence(createTarget(target, config));
+    });
+    return sequence;
+}
+
 async function play(token, targets, config = {}) {
-    const sequence = await create(token, targets, config);
+    const sequence = create(token, targets, config);
     if (sequence) { return sequence.play(); }
 }
 
 export const bless = {
     create,
     play,
+    cast: {
+        create: createCaster,
+        play: playCaster
+    },
+    effect: {
+        create: createTarget,
+        play: playTarget,
+        stop: stopTarget
+    }
 };
+
+autoanimation.register("Bless", "token", "eskie.effect.bless.cast", DEFAULT_CONFIG);
+autoanimation.register("Bless", "effect", "eskie.effect.bless.effect", DEFAULT_CONFIG);
