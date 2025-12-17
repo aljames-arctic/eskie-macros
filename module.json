@@ -17,6 +17,9 @@
   "esmodules": [
     "src/module.js"
   ],
+  "styles": [
+    "styles/eskie-macros.css"
+  ],
   "languages": [
     {
       "lang": "en",

@@ -1,6 +1,6 @@
 import { dependency } from "../dependency.js";
 import { defaultMenuSettings } from "./autoanimation/defaultMenuSettings.js";
-import { autorecUpdateFormApplication } from "./updateMenu.js";
+import { autorecUpdateFormApplication, generateAutorecUpdate } from "./updateMenu.js";
 
 const EMP_AA_Menu = {
     melee: [],
@@ -33,7 +33,7 @@ function standardizeTrigger(trigger) {
  * @param {string} macroName - The name of the globally exposed wrapper function.
  * @returns {object} The autorec entry.
  */
-function createAutorecEntry(label, trigger, animation, config) {
+function createAutorecEntry(label, trigger, animation, config, version = "0.0.0") {
     const moduleId = "eskie-macros";
     trigger = standardizeTrigger(trigger);
     const defaultMenu = defaultMenuSettings[trigger];
@@ -62,6 +62,7 @@ function createAutorecEntry(label, trigger, animation, config) {
     config.animation = animation;
 
     const entry = {
+        id: foundry.utils.randomID(),
         label: label,
         macro: {
             enable: true,
@@ -70,7 +71,8 @@ function createAutorecEntry(label, trigger, animation, config) {
             playWhen: "2"
         },
         metaData: {
-            name: "Eskie Macros"
+            name: "Eskie Macro Pack",
+            version: version
         }
     };
 
@@ -97,9 +99,9 @@ function JSONformatObject(obj, depth = 1) {
 }
 
 // Register internally but do not submit to AA yet
-async function register(name, trigger, animation, config) {
+async function register(name, trigger, animation, config, version) {
     trigger = standardizeTrigger(trigger);
-    const entry = createAutorecEntry(name, trigger, animation, config);
+    const entry = createAutorecEntry(name, trigger, animation, config, version);
     if (!entry) return;
     EMP_AA_Menu[trigger].push(entry);
 }
@@ -107,7 +109,12 @@ async function register(name, trigger, animation, config) {
 // Submit all registered animations to AA
 async function submit() {
     if (!dependency.isActivated({ id: "autoanimations", min: "6.5.1" }, "EMP | Automated Animations integration skipped.")) { return; }
-    new autorecUpdateFormApplication(EMP_AA_Menu).render(true);
+    const { missingEntriesList, updatedEntriesList, customEntriesList } = await generateAutorecUpdate(EMP_AA_Menu, true);
+    if (missingEntriesList.length || updatedEntriesList.length || customEntriesList.length) {
+        new autorecUpdateFormApplication(EMP_AA_Menu).render(true);
+    } else {
+        console.info("EMP | All Eskie Macro animations are up to date!");
+    }
 }
 
 export const autoanimation = {

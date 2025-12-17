@@ -1,8 +1,8 @@
 {
     "EMP.updateMenu.added": "(new)",
     "EMP.updateMenu.custom": "(not updating - conflict with unknown source)",
-    "EMP.updateMenu.customHint": "These effects will be ignored. To have Eskie Macros manage them, please remove them from Automated Animations and resubmit.",
+    "EMP.updateMenu.customHint": "These effects will be ignored. To have Eskie Macro Pack manage them, please remove them from Automated Animations and resubmit.",
     "EMP.updateMenu.updated": "(newer version available)",
-    "EMP.updateMenu.warning": "This will overwrite any existing animations from Eskie Macros with the same name. It will not touch any other animations.",
+    "EMP.updateMenu.warning": "This will overwrite any existing animations from Eskie Macro Pack with the same name. It will not touch any other animations.",
     "EMP.updateMenu.nothing": "All Eskie Macro animations are up to date!"
 }
