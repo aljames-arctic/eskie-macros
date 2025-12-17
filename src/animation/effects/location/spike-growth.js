@@ -4,7 +4,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
-import { autoanimation } from "../../../lib/integration/autoanimation.js";
+import { autoanimation, CONCENTRATING } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
     id: 'spikeGrowth',
@@ -178,4 +178,4 @@ export const spikeGrowth = {
 };
 
 autoanimation.register("Spike Growth", "template", "eskie.effect.spikeGrowth", DEFAULT_CONFIG);
-autoanimation.register("Concentrating: Spike Growth", "effect", "eskie.effect.spikeGrowth", DEFAULT_CONFIG);
+autoanimation.register(CONCENTRATING("Spike Growth"), "effect", "eskie.effect.spikeGrowth", DEFAULT_CONFIG);
