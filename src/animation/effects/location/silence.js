@@ -9,6 +9,7 @@ import { autoanimation, CONCENTRATING } from "../../../lib/integration/autoanima
 const DEFAULT_CONFIG = {
     id: 'silence',
     size: 9, // Default size for the silence effect
+    template: undefined,
 };
 
 /**
@@ -119,23 +120,16 @@ async function createSilence(token, position, config = {}) {
 async function playSilence(token, config = {}, options = {}) {
     if (options.type == "aefx") return;
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    let { id, size, position } = mergedConfig;
+    const { id, size, template } = mergedConfig;
 
-    if (!position) {
-        const crosshairConfig = {
-            size: size,
-            icon: 'icons/magic/control/fear-fright-white.webp',
-            label: 'Silence',
-            tag: 'silence',
-            t: 'circle',
-            drawIcon: true,
-            drawOutline: true,
-            interval: -1,
-            rememberControlled: true,
-        };
-        position = await Sequencer.Crosshair.show(crosshairConfig);
+    let position;
+    if (template) {
+        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
+    } else {
+        position = await Sequencer.Crosshair.show();
         if (position.cancelled) { return; }
     }
+    if (!position) { return; }
 
     const sequence = await createSilence(token, position, config);
     if (sequence) { return sequence.play(); }
