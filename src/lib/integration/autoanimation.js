@@ -121,3 +121,7 @@ export const autoanimation = {
     register,
     submit,
 };
+
+export function CONCENTRATING(name) {
+    return `Concentrating: ${name}`;
+}

@@ -4,6 +4,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimation, CONCENTRATING } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
     id: 'silence',
@@ -115,7 +116,8 @@ async function createSilence(token, position, config = {}) {
  * @param {object} config Configuration options for the animation.
  * @returns {Promise<Sequence>} A promise that resolves when the sequence starts playing.
  */
-async function playSilence(token, config = {}) {
+async function playSilence(token, config = {}, options = {}) {
+    if (options.type == "aefx") return;
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
     let { id, size, position } = mergedConfig;
 
@@ -154,3 +156,6 @@ export const silence = {
     play: playSilence,
     stop: stopSilence,
 };
+
+autoanimation.register("Silence", "template", "eskie.effect.silence", DEFAULT_CONFIG);
+autoanimation.register(CONCENTRATING("Silence"), "effect", "eskie.effect.silence", DEFAULT_CONFIG);
