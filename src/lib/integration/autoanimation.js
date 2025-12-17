@@ -1,5 +1,6 @@
 import { dependency } from "../dependency.js";
 import { defaultMenuSettings } from "./autoanimation/defaultMenuSettings.js";
+import { autorecUpdateFormApplication } from "./updateMenu.js";
 
 const EMP_AA_Menu = {
     melee: [],
@@ -68,6 +69,9 @@ function createAutorecEntry(label, trigger, animation, config) {
             args: JSONformatObject(config),
             playWhen: "2"
         },
+        metaData: {
+            name: "Eskie Macros"
+        }
     };
 
     return foundry.utils.mergeObject(defaultEntry, entry, { inplace: false });
@@ -103,8 +107,7 @@ async function register(name, trigger, animation, config) {
 // Submit all registered animations to AA
 async function submit() {
     if (!dependency.isActivated({ id: "autoanimations", min: "6.5.1" }, "EMP | Automated Animations integration skipped.")) { return; }
-    await AutomatedAnimations.AutorecManager.mergeMenus(EMP_AA_Menu, { submitAll: true });
-    console.log("EMP | New animations have been added to Automated Animations.");
+    new autorecUpdateFormApplication(EMP_AA_Menu).render(true);
 }
 
 export const autoanimation = {
