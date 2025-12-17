@@ -6,19 +6,12 @@
 ** */
 
 import { img } from '../../../lib/filemanager.js';
+import { autoanimation } from '../../../lib/integration/autoanimation.js';
 
 const DEFAULT_CONFIG = {
     id: `gate`,
-    destination: undefined,
-    crosshairs: {
-        size: 4,
-        icon: 'icons/magic/symbols/circled-gem-pink.webp',
-        label: 'Gate',
-        tag: 'Gate',
-        drawIcon: true,
-        drawOutline: true,
-        interval: 0
-    },
+    destination: "Menu Prompt",
+    template: undefined,
     destinationList: [
         { label: 'First World', value: 'First World' },
         { label: 'Astral Plane', value: 'Astral Plane' },
@@ -105,20 +98,31 @@ function _getPlaneConfig(destination) {
 async function create(token, config) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
     mergedConfig.id = `${token.id} - ${mergedConfig.id}`;
-    const { id, crosshairs, destination, destinationList } = mergedConfig;
+    const { id, destination, destinationList, template } = mergedConfig;
 
-    const position = await Sequencer.Crosshair.show(crosshairs);
+    let position;
+    if (template) {
+        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
+    } else {
+        position = await Sequencer.Crosshair.show();
+        if (position.cancelled) { return; }
+    }
     if (!position) { return; }
 
     let destPlane = destination;
-    if (!destination) destPlane = await _getDestination(destinationList);
-    if (!destPlane) { return; }
+    if (typeof destPlane !== "string" || destPlane === "Menu Prompt") {
+        destPlane = await _getDestination(destinationList);
+        if (!destPlane) { return; }
+    }
 
     const planeConfig = _getPlaneConfig(destPlane);
     if (!planeConfig) {
         ui.notifications.warn(`No configuration found for destination: ${destPlane}`);
         return;
     }
+
+    let portalSize = (template.distance) ? (template.distance / canvas.grid.distance) : 5;
+    const [width, height] = [portalSize, portalSize];
 
     const { portalColor, circleColor, castColor, planeImage, pulseColor, saturation, hue, weather, filter } = planeConfig;
 
@@ -138,7 +142,7 @@ async function create(token, config) {
         .file(img(`jb2a.magic_signs.circle.02.conjuration.loop.${circleColor}`))
         .atLocation(position)
         .opacity(0.35)
-        .size({ width: 5, height: 5 }, { gridUnits: true })
+        .size({ width: width, height: height }, { gridUnits: true })
         .fadeIn(5000, { ease: "easeInExpo" })
         .loopProperty("sprite", "rotation", { from: 0, to: 360, duration: 180000 })
         .filter("ColorMatrix", { saturate: saturation })
@@ -167,7 +171,7 @@ async function create(token, config) {
         .persist()
         .anchor({ x: 0.5, y: 0.57 })
         .rotateTowards(token)
-        .size({ width: 5, height: 5 }, { gridUnits: true })
+        .size({ width: width, height: height }, { gridUnits: true })
         .animateProperty("sprite", "scale.x", { from: 0, to: 5.25, duration: 750, delay: 100, ease: "easeOutExpo" })
         .animateProperty("sprite", "scale.y", { from: 6, to: 5.25, duration: 50, delay: 100, ease: "easeOutExpo" })
         .filter("ColorMatrix", { hue: hue, saturate: saturation })
@@ -181,7 +185,7 @@ async function create(token, config) {
         .persist()
         .anchor({ x: 0.5, y: 0.6 })
         .rotateTowards(token)
-        .size({ width: 5, height: 5 }, { gridUnits: true })
+        .size({ width: width, height: height }, { gridUnits: true })
         .animateProperty("sprite", "scale.x", { from: 0, to: 3, duration: 750, delay: 100, ease: "easeOutExpo" })
         .animateProperty("sprite", "scale.y", { from: 1.5, to: 0.87, duration: 50, delay: 100, ease: "easeOutExpo" })
         .filter("ColorMatrix", { hue: hue, saturate: saturation })
@@ -197,7 +201,7 @@ async function create(token, config) {
         .rotateTowards(token)
         .opacity(1)
         .delay(50)
-        .size({ width: 5, height: 5 }, { gridUnits: true })
+        .size({ width: width, height: height }, { gridUnits: true })
         .animateProperty("sprite", "scale.x", { from: 0, to: 1.8, duration: 750, delay: 200, ease: "easeOutExpo" })
         .animateProperty("sprite", "scale.y", { from: 1.5, to: 0.75, duration: 50, delay: 200, ease: "easeOutExpo" })
         .rotate(90)
@@ -206,7 +210,10 @@ async function create(token, config) {
     return seq;
 }
 
-async function play(token, config = {}) {
+async function play(token, config = {}, options = {}) {
+    /*       Don't parse for active effects        *
+     * We only care about removing when it expires */
+    if (options.type == "aefx") return;
     let seq = await create(token, config);
     if (seq) { await seq.play(); }
 }
@@ -226,3 +233,6 @@ export const gate = {
     play,
     stop,
 };
+
+autoanimation.register("Gate", "template", "eskie.effect.gate", DEFAULT_CONFIG);
+autoanimation.register("Concentrating: Gate", "effect", "eskie.effect.gate", DEFAULT_CONFIG);

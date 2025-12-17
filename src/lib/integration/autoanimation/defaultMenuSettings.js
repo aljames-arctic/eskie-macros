@@ -214,6 +214,15 @@ export const defaultMenuSettings = {
           "unbindVisibility": false,
           "zIndex": 1
         }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
+        }
       }
     }
   ],
@@ -408,6 +417,15 @@ export const defaultMenuSettings = {
           "unbindAlpha": false,
           "unbindVisibility": false,
           "zIndex": 1
+        }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
         }
       }
     }
@@ -613,6 +631,15 @@ export const defaultMenuSettings = {
           "unbindVisibility": false,
           "zIndex": 1
         }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
+        }
       }
     }
   ],
@@ -794,6 +821,15 @@ export const defaultMenuSettings = {
           "unbindAlpha": false,
           "unbindVisibility": false,
           "zIndex": 1
+        }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
         }
       }
     }
@@ -981,6 +1017,15 @@ export const defaultMenuSettings = {
           "unbindAlpha": false,
           "unbindVisibility": false,
           "zIndex": 1
+        }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
         }
       }
     }
@@ -1171,6 +1216,15 @@ export const defaultMenuSettings = {
           "unbindVisibility": false,
           "zIndex": 1
         }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
+        }
       }
     }
   ],
@@ -1311,6 +1365,15 @@ export const defaultMenuSettings = {
           "tint": false,
           "tintColor": "#FFFFFF",
           "zIndex": 1
+        }
+      },
+      "advanced": {
+        "exactMatch": true,
+        "excludedTerms": [],
+        "excludedType": {
+          "enabled": false,
+          "path": "",
+          "property": ""
         }
       }
     }
