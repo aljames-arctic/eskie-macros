@@ -20,6 +20,8 @@ function standardizeTrigger(trigger) {
         case "token": return "ontoken";
         case "template": return "templatefx";
         case "effect": return "aefx";
+        case "melee-target": return "melee";
+        case "ranged-target": return "range";
         default: return trigger;
     }
 }
@@ -39,8 +41,8 @@ function createAutorecEntry(label, trigger, animation, config) {
 
     let name = "UNSPECIFIED MACRO";
     switch(trigger) {
-        case "attack":
-        case "ranged":
+        case "melee":
+        case "range":
         case "ontoken":
             name = `${compendium}.AA | Target`;
             break;
