@@ -107,7 +107,22 @@ function JSONformatObject(obj, depth = 1) {
     return `{${ret.join(',')}\n}`;
 }
 
-// Register internally but do not submit to AA yet
+/**
+ * Registers an animation entry internally, without immediately submitting it to Automated Animations.
+ * These registered animations are stored and can be submitted later using the `submit` function.
+ * @param {string} name - The name of the animation.
+ * @param {string} trigger - The trigger type for the animation
+ *      Valid Triggers:
+ *          - "token" : Self targetting ability
+ *          - "template" : Template using ability (may require accompanying aefx CONCENTRATION)
+ *          - "effect" : Active effect applied
+ *          - "melee-target" : Source -> Target melee animation
+ *          - "ranged-target" : Source -> Target ranged animation
+ * @param {string} animation - The animation to be played.
+ * @param {object} config - Configuration object for the animation.
+ * @param {string} version - The version of the animation entry.
+ * @returns {void}
+ */
 async function register(name, trigger, animation, config, version) {
     trigger = standardizeTrigger(trigger);
     const entry = createAutorecEntry(name, trigger, animation, config, version);
@@ -115,7 +130,12 @@ async function register(name, trigger, animation, config, version) {
     EMP_AA_Menu[trigger].push(entry);
 }
 
-// Submit all registered animations to AA
+/**
+ * Submits all internally registered animations to Automated Animations.
+ * This function checks for the "autoanimations" dependency and then generates
+ * and displays an update form if there are missing, updated, or custom entries.
+ * @returns {Promise<void>}
+ */
 async function submit() {
     if (!dependency.isActivated({ id: "autoanimations", min: "6.5.1" }, "EMP | Automated Animations integration skipped.")) { return; }
     const { missingEntriesList, updatedEntriesList, customEntriesList } = await generateAutorecUpdate(EMP_AA_Menu, true);
