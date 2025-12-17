@@ -42,11 +42,6 @@ async function create(token, config = {}) {
     let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
     const facing = config.facing ?? defaultConfig.facing;
 
-    if (!effect[0].img) {
-        ui.notifications.error("Eskie Macros: Required module 'Eskie Effects' or 'Eskie Effects Free' is not installed or activated. Please install/activate the module to use the default images for this effect.");
-        return;
-    }
-
     const tokenWidth = token.document.width;
     const mirrorFace = facing === 'right';
     const facingFactor = mirrorFace ? -1 : 1;

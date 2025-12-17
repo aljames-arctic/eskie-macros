@@ -45,11 +45,6 @@ async function create(token, config = {}) {
     };
     let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
 
-    if (!effect[0].img || !effect[1].img) {
-        ui.notifications.error("Eskie Macros: Required module 'Eskie Effects' or 'Eskie Effects Free' is not installed or activated. Please install/activate the module to use the default images for this effect.");
-        return;
-    }
-
     const tokenWidth = token.document.width;
 
     let drunkEffect = new Sequence()
