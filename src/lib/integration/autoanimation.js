@@ -78,6 +78,8 @@ function createAutorecEntry(label, trigger, animation, config, version = "0.0.0"
             playWhen: "2"
         },
         metaData: {
+            label: label,
+            menu: trigger,
             name: "Eskie Macro Pack",
             version: version
         }
