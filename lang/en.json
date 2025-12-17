@@ -1,8 +1,12 @@
 {
-    "EMP.updateMenu.added": "(new)",
-    "EMP.updateMenu.custom": "(not updating - conflict with unknown source)",
-    "EMP.updateMenu.customHint": "These effects will be ignored. To have Eskie Macro Pack manage them, please remove them from Automated Animations and resubmit.",
-    "EMP.updateMenu.updated": "(newer version available)",
-    "EMP.updateMenu.warning": "This will overwrite any existing animations from Eskie Macro Pack with the same name. It will not touch any other animations.",
-    "EMP.updateMenu.nothing": "All Eskie Macro animations are up to date!"
+    "EMP": {
+        "updateMenu": {
+            "added": "The following new effects will be added to your Automated Animation Autorecognition settings.",
+            "custom": "The following effects will not be added due to them already existing from another source.",
+            "customHint": "These effects will be ignored. To have Eskie Macro Pack manage them, please remove them from Automated Animations and resubmit.",
+            "updated": "The following effects will be updated from a previous version of Eskie Macro Pack.",
+            "warning": "This will overwrite any existing animations from Eskie Macro Pack with the same name. It will not touch any other animations.",
+            "nothing": "All Eskie Macro animations are up to date!"
+        }
+    }
 }
