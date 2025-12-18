@@ -1,4 +1,4 @@
-import { cone } from "../templates/cone.js";
+import { cone } from "./cone.js";
 
 export const templates = {
     token: {
