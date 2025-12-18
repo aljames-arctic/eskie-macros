@@ -36,6 +36,7 @@ import { gate } from "./location/gate.js";
 import { guidingBolt } from "./target/guiding-bolt.js";
 import { healingWord } from "./target/healing-word.js";
 import { hex } from "./target/hex/_hex.js";
+import { hide } from "./token/hide.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
 import { incorporeal } from "./token/incorporeal/incorporeal.js";
 import { mistyStep } from "./token/misty-step.js";
@@ -102,6 +103,7 @@ export const effect = {
     guidingBolt,
     healingWord,
     hex,
+    hide,
     iaijutsuStrike,
     incorporeal,
     mistyStep,
