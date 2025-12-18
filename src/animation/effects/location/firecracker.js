@@ -4,32 +4,28 @@
  */
 
 import { img } from '../../../lib/filemanager.js';
+import { autoanimation } from '../../../lib/integration/autoanimation.js';
 
 const DEFAULT_CONFIG = {
     id: 'firecracker',
+    template: undefined,
+    deleteTemplate: true,
 };
 
-async function create(position, config = {}) {
+async function create(token, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const { id, template } = mergedConfig;
 
-    // Sequencer Crosshairs options
-    if (!position) {
-        const crosshairOptions = {
-            size: 1, // Original script uses 1
-            icon: 'icons/magic/fire/projectile-meteor-salvo-light-purple.webp',
-            label: 'Firecrackers',
-            drawIcon: true,
-            drawOutline: true,
-            interval: 0,
-            rememberControlled: true,
-        };
-        position = await Sequencer.Crosshair.show(crosshairOptions);
-        if (position.cancelled) return;
+    let position;
+    if (template) {
+        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
+    } else {
+        position = await Sequencer.Crosshair.show();
+        if (position.cancelled) { return; }
     }
+    if (!position) { return; }
 
     let seq = new Sequence();
-
     seq = seq
         .effect()
         .name(id)
@@ -85,3 +81,5 @@ export const firecracker = {
     create,
     play,
 };
+
+autoanimation.register("Firecracker", "template", "eskie.effect.firecracker", DEFAULT_CONFIG);

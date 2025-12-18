@@ -22,10 +22,18 @@ const DEFAULT_CONFIG = {
  */
 async function createSilence(token, position, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, size } = mergedConfig;
+    const { id, size, template } = mergedConfig;
+
+    let position;
+    if (template) {
+        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
+    } else {
+        position = await Sequencer.Crosshair.show();
+        if (position.cancelled) { return; }
+    }
+    if (!position) { return; }
 
     const sequence = new Sequence();
-
     sequence
         .effect()
         .file(img("jb2a.moonbeam.01.outro.yellow"))
@@ -119,18 +127,6 @@ async function createSilence(token, position, config = {}) {
  */
 async function playSilence(token, config = {}, options = {}) {
     if (options.type == "aefx") return;
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, size, template } = mergedConfig;
-
-    let position;
-    if (template) {
-        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
-    } else {
-        position = await Sequencer.Crosshair.show();
-        if (position.cancelled) { return; }
-    }
-    if (!position) { return; }
-
     const sequence = await createSilence(token, position, config);
     if (sequence) { return sequence.play(); }
 }

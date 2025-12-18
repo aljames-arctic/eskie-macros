@@ -130,7 +130,7 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
  * @param {object} config Configuration options for the animation.
  * @returns {Promise<void>} A promise that resolves when the effect is played or stopped.
  */
-async function playSpikeGrowth(token, config = {}, options = {}) {
+async function createSpikeGrowth(token, config = {}, options = {}) {
     if (options.type == "aefx") return;
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
     const { id, size, template } = mergedConfig;
@@ -156,7 +156,14 @@ async function playSpikeGrowth(token, config = {}, options = {}) {
     for (const spike of persistentSpikeSequences) {
         if (spike) { seq.addSequence(spike); }
     }
+    return seq;
+}
 
+async function playSpikeGrowth(token, config = {}, options = {}) {
+    /*       Don't parse for active effects        *
+     * We only care about removing when it expires */
+    if (options.type == "aefx") return;
+    let seq = await create(token, config);
     if (seq) { return seq.play(); }
 }
 
@@ -174,6 +181,7 @@ export const spikeGrowth = {
     createInitial: createInitialSpikeGrowth, // Exposed for more granular control if needed
     createPersistent: createPersistentSpikes, // Exposed for more granular control if needed
     play: playSpikeGrowth,
+    create: createSpikeGrowth,
     stop: stopSpikeGrowth,
 };
 
