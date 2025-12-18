@@ -1,5 +1,5 @@
-import { img } from "../../lib/filemanager.js";
-import { utils } from "../../lib/utils.js"
+import { img } from "../../../lib/filemanager.js";
+import { utils } from "../../../lib/utils.js"
 
 /* **
    Originally Published: 4/14/2023
@@ -8,12 +8,12 @@ import { utils } from "../../lib/utils.js"
 ** */
 
 /**
- * Creates a shout emote effect on a token.
+ * Creates a soulsucked emote effect on a token.
  *
  * @param {Token} token The token to play the effect on.
  * 
- * @param {object} [config={}] Configuration for the effect.
- * @param {string} [config.id='shout'] The id of the effect.
+ * @param {object} [config={}] Options for the effect.
+ * @param {string} [config.id='soulsucked'] The id of the effect.
  * @param {number} [config.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
  * @param {string} [config.facing='left'] The direction the token is facing. Can be 'left' or 'right'.
  * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
@@ -21,22 +21,20 @@ import { utils } from "../../lib/utils.js"
  * @param {number} [config.effect.x] The x offset of the effect in grid units.
  * @param {number} [config.effect.y] The y offset of the effect in grid units.
  * @param {number} [config.effect.scale] The scale of the effect.
- * @param {number} [config.effect.rotation] The rotation of the effect.
  * 
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
 async function create(token, config = {}) {
     const defaultConfig = {
-        id: 'shout',
+        id: 'soulsucked',
         duration: 0,
         facing: 'left',
         effect: [
             {
-                img: 'eskie.emote.shout.01',
-                x: 0.4,
-                y: -0.6,
-                scale: 0.9,
-                rotation: -15
+                img: 'eskie.emote.soul_sucked.01',
+                x: -0.45,
+                y: -0.25,
+                scale: 0.7
             }
         ]
     };
@@ -47,23 +45,22 @@ async function create(token, config = {}) {
     const mirrorFace = facing === 'right';
     const facingFactor = mirrorFace ? -1 : 1;
 
-    let shoutEffect = new Sequence()
+    let soulSuckedEffect = new Sequence()
         .effect()
         .name(id)
         .file(img(effect[0].img))
-        .atLocation(token, { offset: { x: (effect[0].x * tokenWidth) * facingFactor, y: (effect[0].y * tokenWidth) }, gridUnits: true, local: true })
-        .spriteRotation(effect[0].rotation * facingFactor)
-        .loopProperty("sprite", "rotation", { from: 0, to: -10 * facingFactor, duration: 250, ease: "easeOutCubic" })
-        .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-        .loopProperty("sprite", "position.x", { from: 0, to: -0.025 * facingFactor, duration: 250, gridUnits: true, pingPong: false })
+        .atLocation(token)
+        .scaleIn(0, 1000, { ease: "easeOutElastic" })
+        .scaleOut(0, 1000, { ease: "easeOutExpo" })
+        .spriteOffset({ x: (effect[0].x * tokenWidth) * facingFactor, y: (effect[0].y * tokenWidth) }, { gridUnits: true, local: true })
         .scaleToObject(effect[0].scale)
         .mirrorX(mirrorFace)
-        .attachTo(token, { bindAlpha: false } )
+        .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits: true, pingPong: true })
+        .attachTo(token, { bindAlpha: false })
+        .waitUntilFinished();
 
-        .waitUntilFinished(-200);
-
-    shoutEffect = (duration > 0) ? shoutEffect.duration(duration) : shoutEffect.persist();
-    return shoutEffect;
+    soulSuckedEffect = (duration > 0) ? soulSuckedEffect.duration(duration) : soulSuckedEffect.persist();
+    return soulSuckedEffect;
 }
 
 async function play(token, config = {}) {
@@ -71,11 +68,11 @@ async function play(token, config = {}) {
     if (seq) { await seq.play(); }
 }
 
-async function stop(token, {id = 'shout'} = {}) {
+async function stop(token, {id = 'soulsucked'} = {}) {
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
-export const shout = {
+export const soulsucked = {
     create,
     play,
     stop,

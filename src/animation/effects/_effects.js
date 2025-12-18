@@ -25,6 +25,7 @@ import { dreadLordAttack } from "./target/dreadLordAttack.js";
 import { dreadLordFear } from "./target/dreadLordFear.js";
 import { elementalBlast } from "./target/elementalBlast/_elementalBlast.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
+import { emote } from "./emote/_emotes.js";
 import { farStep } from "./token/far-step.js";
 import { faerieFire } from "./location/faerie-fire.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
@@ -91,6 +92,7 @@ export const effect = {
     dreadLordAttack,
     dreadLordFear,
     elementalBlast,
+    emote,
     eyesOfNight,
     farStep,
     faerieFire,
