@@ -5,29 +5,30 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimation } from "../../../lib/integration/autoanimation.js";
 
 const DEFAULT_CONFIG = {
     id: 'armsOfHadar',
+    excludeSelf: true,
+    targets: [],
 };
 
 /**
  * Creates an Arms of Hadar effect.
  *
  * @param {Token} token The token casting the spell.
- * @param {Token[]} targetTokens An array of target tokens.
  * @param {object} [config={}] Configuration for the effect.
  * @param {string} [config.id='armsOfHadar'] The id of the effect.
  * @param {number} [config.duration=0] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
  *
  * @returns {Promise<Sequence>} A promise that resolves with the Sequence object.
  */
-async function create(token, targetTokens, config = {}) {
-    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+async function create(token, config = {}) {
+    const { id, targets } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     let sequence = new Sequence();
-
     sequence.thenDo(function() {
-        targetTokens.forEach(target => {
+        targets.forEach(target => {
             new Sequence()
                 .effect()
                 .name(`${target.name} ${id}`)
@@ -128,7 +129,7 @@ async function create(token, targetTokens, config = {}) {
         .duration(2000)
 
         .thenDo(function() {
-            targetTokens.forEach(target => {
+            targets.forEach(target => {
                 let newX = target.center.x - (canvas.grid.size / 2.5 * Math.sign(token.center.x - target.center.x));
                 let newY = target.center.y - (canvas.grid.size / 2.5 * Math.sign(token.center.y - target.center.y));
 
@@ -185,13 +186,12 @@ async function create(token, targetTokens, config = {}) {
  * Plays the Arms of Hadar effect.
  *
  * @param {Token} token The token casting the spell.
- * @param {Token[]} targetTokens An array of target tokens.
  * @param {object} [config={}] Configuration for the effect.
  *
  * @returns {Promise<void>} A promise that resolves when the effect is finished.
  */
-async function play(token, targetTokens, config = {}) {
-    const seq = await create(token, targetTokens, config);
+async function play(token, config = {}) {
+    const seq = await create(token, config);
     if (seq) { await seq.play(); }
 }
 
@@ -204,10 +204,9 @@ async function play(token, targetTokens, config = {}) {
  *
  * @returns {Promise<boolean>} A promise that resolves to true if effects were ended, false otherwise.
  */
-async function stop(token, targets, { id = 'armsOfHadar' } = {}) {
+async function stop(token, { id = 'armsOfHadar' } = {}) {
     return Promise.all([
-        Sequencer.EffectManager.endEffects({ name: id, object: token }),
-        ...targets.map(target => Sequencer.EffectManager.endEffects({ name: `${target.name} ${id}`, object: target }))
+        Sequencer.EffectManager.endEffects({ name: id, object: token })
     ]);
 }
 
@@ -216,3 +215,5 @@ export const armsOfHadar = {
     play,
     stop,
 };
+
+autoanimation.register("Arms of Hadar", "template", "eskie.effect.armsOfHadar", DEFAULT_CONFIG);

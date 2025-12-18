@@ -8,8 +8,7 @@ import { autoanimation, CONCENTRATING } from "../../../lib/integration/autoanima
 
 const DEFAULT_CONFIG = {
     id: 'silence',
-    size: 9, // Default size for the silence effect
-    template: undefined,
+    size: 9,
 };
 
 /**
@@ -20,7 +19,7 @@ const DEFAULT_CONFIG = {
  * @param {object} config Configuration options for the animation.
  * @returns {Sequence} The created Sequence object.
  */
-async function createSilence(token, position, config = {}) {
+async function createSilence(token, config = {}) {
     const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
     const { id, size, template } = mergedConfig;
 
@@ -127,7 +126,7 @@ async function createSilence(token, position, config = {}) {
  */
 async function playSilence(token, config = {}, options = {}) {
     if (options.type == "aefx") return;
-    const sequence = await createSilence(token, position, config);
+    const sequence = await createSilence(token, config);
     if (sequence) { return sequence.play(); }
 }
 

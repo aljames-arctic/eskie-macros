@@ -67,9 +67,11 @@ import { stunningStrike } from "./target/stunning-strike.js";
 import { mirrorImage } from "./token/mirror-image.js";
 import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
+import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
 
 export const effect = {
     armorOfAgathys,
+    armsOfHadar,
     banishment,
     bless,
     channelElement,

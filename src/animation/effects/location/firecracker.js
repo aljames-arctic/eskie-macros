@@ -8,7 +8,6 @@ import { autoanimation } from '../../../lib/integration/autoanimation.js';
 
 const DEFAULT_CONFIG = {
     id: 'firecracker',
-    template: undefined,
     deleteTemplate: true,
 };
 

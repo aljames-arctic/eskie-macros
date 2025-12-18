@@ -11,7 +11,6 @@ import { autoanimation, CONCENTRATING } from '../../../lib/integration/autoanima
 const DEFAULT_CONFIG = {
     id: `gate`,
     destination: "Menu Prompt",
-    template: undefined,
     destinationList: [
         { label: 'First World', value: 'First World' },
         { label: 'Astral Plane', value: 'Astral Plane' },
