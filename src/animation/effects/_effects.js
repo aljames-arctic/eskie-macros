@@ -50,7 +50,7 @@ import { sanctuary } from "./target/sanctuary.js";
 import { shuffle } from "./multi-token/shuffle.js";
 import { skyRocket } from "./target/sky-rocket.js";
 import { sleep } from "./target/sleep.js";
-import { sneakAttack } from "./target/sneak-attack.js";
+import { sneakAttack } from "./target/sneakAttack.js";
 import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
