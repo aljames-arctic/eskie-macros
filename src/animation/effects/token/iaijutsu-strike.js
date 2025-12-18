@@ -1,8 +1,9 @@
 // Original Author: EskieMoh#2969
 // Modular Conversion: bakanabaka
 
-import { text as textUtil } from '../../misc/text.js';
 import { img } from '../../../lib/filemanager.js';
+import { text as textUtil } from '../../util/text.js';
+import { cinemaBars } from '../../util/cinemaBars.js';
 
 const DEFAULT_CONFIG = {
     id: 'IaijutsuStrike',
@@ -27,31 +28,6 @@ const DEFAULT_CONFIG = {
         verticalOffset: 0.75,
     }
 };
-
-function dimCanvas() {
-    let sequence = new Sequence();
-    
-    sequence.effect()
-        .name("CinemaBars")
-        .screenSpace()
-        .screenSpaceScale({fitX:true,fitY:true})
-        .file(img("eskie.screen_overlay.cinema_bars.02"))
-        .persist()
-
-    if (canvas.scene.background.src) {
-        sequence.effect()
-            .file(canvas.scene.background.src)
-            .name("CinemaBars")
-            .filter("ColorMatrix", { brightness: 0.3})
-            .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
-            .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
-            .duration(3000)
-            .fadeIn(500)
-            .fadeOut(500)
-            .belowTokens()
-    }
-    return sequence;
-}
 
 function dashEffect(source, target) {
     const deltaX = target.x - source.x;
@@ -155,7 +131,7 @@ async function create(source, target, config) {
     let sequence = new Sequence();
 
     if( cameraFocus.enable ){    
-        sequence.addSequence(dimCanvas());
+        sequence.addSequence(cinemaBars.create({dim: true}));
         sequence.canvasPan({duration: 250, x: target.center.x, y: target.center.y, scale: cameraFocus.scale})
     }    
 
@@ -192,7 +168,7 @@ async function create(source, target, config) {
     sequence.wait(500)
 
     if( cameraFocus.enable ){
-        sequence.thenDo(() => Sequencer.EffectManager.endEffects({ name: `CinemaBars` }))
+        sequence.thenDo(() => cinemaBars.stop())
     }
 
     return sequence;
@@ -207,7 +183,7 @@ async function clean(target, config) {
     return Promise.all([
         Sequencer.EffectManager.endEffects({ name: `IaijutsuStrike` }),
         Sequencer.EffectManager.endEffects({ name: `IaijutsuText` }),
-        Sequencer.EffectManager.endEffects({ name: `CinemaBars` }),
+        cinemaBars.stop(),
         Sequencer.EffectManager.endEffects({ name: `IaijutsuStrike ${target.name} *` }),
         new Sequence()
         .animation()
