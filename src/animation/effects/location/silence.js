@@ -4,7 +4,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
-import { autoanimation, CONCENTRATING } from "../../../lib/integration/autoanimation.js";
+import { autoanimations, CONCENTRATING } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'silence',
@@ -146,5 +146,5 @@ export const silence = {
     stop: stopSilence,
 };
 
-autoanimation.register("Silence", "template", "eskie.effect.silence", DEFAULT_CONFIG);
-autoanimation.register(CONCENTRATING("Silence"), "effect", "eskie.effect.silence", DEFAULT_CONFIG);
+autoanimations.register("Silence", "template", "eskie.effect.silence", DEFAULT_CONFIG);
+autoanimations.register(CONCENTRATING("Silence"), "effect", "eskie.effect.silence", DEFAULT_CONFIG);

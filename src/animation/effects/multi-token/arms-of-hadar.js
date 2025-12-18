@@ -5,7 +5,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
-import { autoanimation } from "../../../lib/integration/autoanimation.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'armsOfHadar',
@@ -216,4 +216,4 @@ export const armsOfHadar = {
     stop,
 };
 
-autoanimation.register("Arms of Hadar", "template", "eskie.effect.armsOfHadar", DEFAULT_CONFIG);
+autoanimations.register("Arms of Hadar", "template", "eskie.effect.armsOfHadar", DEFAULT_CONFIG);

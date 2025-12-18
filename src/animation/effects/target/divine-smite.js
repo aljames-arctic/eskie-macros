@@ -2,7 +2,7 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../lib/filemanager.js";
-import { autoanimation } from "../../../lib/integration/autoanimation.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: "divineSmite",
@@ -79,4 +79,4 @@ export const divineSmite = {
     play,
 };
 
-autoanimation.register("Divine Smite", "melee-target", "eskie.effect.divineSmite", DEFAULT_CONFIG);
+autoanimations.register("Divine Smite", "melee-target", "eskie.effect.divineSmite", DEFAULT_CONFIG);

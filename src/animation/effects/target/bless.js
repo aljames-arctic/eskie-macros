@@ -2,7 +2,7 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../lib/filemanager.js";
-import { autoanimation } from "../../../lib/integration/autoanimation.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'bless',
@@ -167,5 +167,5 @@ export const bless = {
     }
 };
 
-autoanimation.register("Bless", "token", "eskie.effect.bless.cast", DEFAULT_CONFIG);
-autoanimation.register("Bless", "effect", "eskie.effect.bless.effect", DEFAULT_CONFIG);
+autoanimations.register("Bless", "token", "eskie.effect.bless.cast", DEFAULT_CONFIG);
+autoanimations.register("Bless", "effect", "eskie.effect.bless.effect", DEFAULT_CONFIG);

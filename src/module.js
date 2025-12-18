@@ -3,7 +3,7 @@ import { animation } from './animation/_animation.js';
 import { filemanager } from './lib/filemanager.js';
 import { utils } from './lib/utils.js';
 import { templates } from './templates/templates.js';
-import { autoanimation } from './lib/integration/autoanimation.js';
+import { autoanimations } from './integration/autoanimations.js';
 // Import module settings to also run its initialization code
 import './settings.js';
 
@@ -33,7 +33,7 @@ function setupModule() {
 
 async function integration() {
     Hooks.once('aa.ready', async () => {
-        await autoanimation.submit();
+        await autoanimations.submit();
     });
 }
 

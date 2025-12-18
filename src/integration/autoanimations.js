@@ -1,6 +1,6 @@
-import { dependency } from "../dependency.js";
-import { defaultMenuSettings } from "./autoanimation/defaultMenuSettings.js";
-import { autorecUpdateFormApplication, generateAutorecUpdate } from "./updateMenu.js";
+import { dependency } from "../lib/dependency.js";
+import { defaultMenuSettings } from "./autoanimations/defaultMenuSettings.js";
+import { autorecUpdateFormApplication, generateAutorecUpdate } from "./autoanimations/updateMenu.js";
 
 const EMP_AA_Menu = {
     melee: [],
@@ -146,7 +146,7 @@ async function submit() {
     }
 }
 
-export const autoanimation = {
+export const autoanimations = {
     register,
     submit,
 };

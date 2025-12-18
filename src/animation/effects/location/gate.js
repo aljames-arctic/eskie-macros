@@ -6,7 +6,7 @@
 ** */
 
 import { img } from '../../../lib/filemanager.js';
-import { autoanimation, CONCENTRATING } from '../../../lib/integration/autoanimation.js';
+import { autoanimations, CONCENTRATING } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
     id: `gate`,
@@ -233,5 +233,5 @@ export const gate = {
     stop,
 };
 
-autoanimation.register("Gate", "template", "eskie.effect.gate", DEFAULT_CONFIG);
-autoanimation.register(CONCENTRATING("Gate"), "effect", "eskie.effect.gate", DEFAULT_CONFIG);
+autoanimations.register("Gate", "template", "eskie.effect.gate", DEFAULT_CONFIG);
+autoanimations.register(CONCENTRATING("Gate"), "effect", "eskie.effect.gate", DEFAULT_CONFIG);

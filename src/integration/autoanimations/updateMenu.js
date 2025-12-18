@@ -153,7 +153,7 @@ export class autorecUpdateFormApplication extends FormApplication {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["form"],
             popOut: true,
-            template: `modules/eskie-macros/src/templates/autorecUpdateMenu.html`,
+            template: `modules/eskie-macros/src/integration/autoanimations/autorecUpdateMenu.html`,
             id: "empAutorecUpdateMenu",
             title: "Eskie Macro Pack AA Update",
         });

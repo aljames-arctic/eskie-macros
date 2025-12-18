@@ -4,7 +4,7 @@
  */
 
 import { img } from '../../../lib/filemanager.js';
-import { autoanimation } from '../../../lib/integration/autoanimation.js';
+import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
     id: 'firecracker',
@@ -81,4 +81,4 @@ export const firecracker = {
     play,
 };
 
-autoanimation.register("Firecracker", "template", "eskie.effect.firecracker", DEFAULT_CONFIG);
+autoanimations.register("Firecracker", "template", "eskie.effect.firecracker", DEFAULT_CONFIG);
