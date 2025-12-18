@@ -3,7 +3,6 @@ async function create(token, position) {
         .animation()
         .on(token)
         .teleportTo(position)
-        .snapToGrid()
 }
 
 async function play(token, position) {
