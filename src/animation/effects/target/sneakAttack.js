@@ -6,8 +6,8 @@ import { img } from '../../../lib/filemanager.js';
 import { getNearestSquareCenter } from '../../../util/token-token.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
 
-const DEFAULT_CONFIG = {
-    id: "sneakAttack",
+const DEFAULT_CONFIG_MELEE = {
+    id: "sneakAttackMelee",
     color: {
         attack: "redblack",
         impact: "red",
@@ -17,8 +17,8 @@ const DEFAULT_CONFIG = {
     weight: "medium",
 }
 
-async function create(token, target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+async function createMelee(token, target, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_MELEE, config, {inplace:false});
     const { id, color, type, weight } = mergedConfig;
 
     //Determine Attack Size
@@ -74,14 +74,88 @@ async function create(token, target, config) {
     return seq;
 }
 
-async function play(token, target, config) {
-    const seq = await create(token, target, config);
+async function playMelee(token, target, config) {
+    const seq = await createMelee(token, target, config);
     if (seq) { return seq.play(); }
 }
 
-export const sneakAttack = {
-    create,
-    play,
+const melee = {
+    create: createMelee,
+    play: playMelee,
 }
 
+const DEFAULT_CONFIG_RANGED = {
+    id: "sneakAttackRanged",
+    color: {
+        attack: "red",
+        impact: "red",
+        damage: "red",
+    }
+};
+
+function createRanged(token, target, config) {
+    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_RANGED, config, {inplace:false});
+    const { id, color } = mergedConfig;
+
+    let seq = new Sequence()
+        .effect()
+            .file(img(`eskie.slice.01_ranged.black.${color.attack}`))
+            .atLocation(token)
+            .stretchTo(target)
+            .spriteOffset({ x: token.document.width / 2 }, { gridUnits: true })
+            .zIndex(1)
+
+        .effect()
+            .delay(150)
+            .file(img(`jb2a.impact.007.${color.impact}`))
+            .size(1.25 * token.document.width, { gridUnits: true })
+            .atLocation(target)
+            .randomRotation()
+            .playbackRate(0.9)
+            .zIndex(0.1)
+
+        .effect()
+            .delay(150)
+            .file(img(`jb2a.liquid.splash_side02.${color.damage}`))
+            .atLocation(target)
+            .size(1.5 * token.document.width, { gridUnits: true })
+            .rotateTowards(token)
+            .spriteOffset({ x: -1.15 * token.document.width }, { gridUnits: true })
+            .spriteRotation(180)
+            .zIndex(0)
+
+        .effect()
+            .delay(150)
+            .copySprite(target)
+            .attachTo(target)
+            .scaleToObject(1,{considerTokenScale:true})
+            .loopProperty("sprite", "position.x", { from: -0.05, to: 0.05, duration: 50, pingPong: true, gridUnits: true})
+            .opacity(0.25)
+            .duration(1000)
+            .fadeOut(750)
+            .tint("#FF0000");
+    return seq;
+}
+
+async function playRanged(token, target, config) {
+    const seq = await createRanged(token, target, config);
+    if (seq) { return seq.play(); }
+}
+
+const ranged = {
+    create: createRanged,
+    play: playRanged,
+}
+
+const DEFAULT_CONFIG = {
+    melee: DEFAULT_CONFIG_MELEE,
+    ranged: DEFAULT_CONFIG_RANGED,
+}
+
+export const sneakAttack = {
+    melee,
+    ranged,
+}
+
+autoanimations.register("Sneak Attack", "ranged-target", "eskie.effect.sneakAttack", DEFAULT_CONFIG);
 autoanimations.register("Sneak Attack", "melee-target", "eskie.effect.sneakAttack", DEFAULT_CONFIG);
