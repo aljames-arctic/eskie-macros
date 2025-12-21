@@ -104,12 +104,12 @@ jobs:
           zip                                    \
             --recurse-paths                      \
              ./module.zip                        \
-            module.json                          \
-            README.md                            \
-            LICENSE                              \
+            packs/                               \
             src/                                 \
+            styles/                              \
             lang/                                \
-            packs/                               \        
+            LICENSE                              \
+            module.json
 
       # Update the GitHub release with the manifest and module archive files.
       - name: Update Release With Files
