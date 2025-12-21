@@ -70,6 +70,7 @@ import { mirrorImage } from "./token/mirror-image.js";
 import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
 import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
+import { hitTheDirt } from "./location/hit-the-dirt.js";
 
 export const effect = {
     armorOfAgathys,
@@ -106,6 +107,7 @@ export const effect = {
     healingWord,
     hex,
     hide,
+    hitTheDirt,
     iaijutsuStrike,
     incorporeal,
     mistyStep,
