@@ -121,26 +121,28 @@ async function create(token, targets, config = {}) {
                 for (const target of targets) {
                     deathEffect.play(target);
                 }
-            })
+            });
+            
+        if (canvas.scene.background.src) {
+            seq.effect()
+                .delay(2100)
+                .name(`Casting ${token.name}`)
+                .file(img(canvas.scene.background.src))
+                .filter("ColorMatrix", {saturate: 1, brightness: 0.6})
+                .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
+                .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
+                .duration(250)
+                .filter("ColorMatrix", { brightness:0 })
+                .belowTiles()
+                .fadeOut(125)
+                .fadeIn(125)
+                .opacity(1)
+                .spriteOffset({x:-canvas.scene.background.offsetX,y:-canvas.scene.background.offsetY})
+                .playIf(impact);
+        }
 
-        .effect()
+        seq.effect()
             .delay(2100)
-            .name(`Casting ${token.name}`)
-            .file(img(canvas.scene.background.src))
-            .filter("ColorMatrix", {saturate: 1, brightness: 0.6})
-            .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
-            .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
-            .duration(250)
-            .filter("ColorMatrix", { brightness:0 })
-            .belowTiles()
-            .fadeOut(125)
-            .fadeIn(125)
-            .opacity(1)
-            .spriteOffset({x:-canvas.scene.background.offsetX,y:-canvas.scene.background.offsetY})
-            .playIf(impact)
-
-        .effect()
-            .delay( 2100)
             .file(img("eskie.environment.lighting.shine.01.rainbow"))
             .atLocation(token)
             .scaleToObject(4)
