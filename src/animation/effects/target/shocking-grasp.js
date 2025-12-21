@@ -32,7 +32,7 @@ async function createShockingGrasp(token, target, config = {}) {
         .scale(0.25)
         .endTime(4000)
         .playbackRate(3)
-        .animateProperty("sprite", "position.x", { from: -0.3, to: 0, duration: 750, gridUnits: true, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: -0.3, to: 0, duration: 750, gridUnits: true, ease: "easeInBack" })
         .waitUntilFinished(-300)
 
         .effect()

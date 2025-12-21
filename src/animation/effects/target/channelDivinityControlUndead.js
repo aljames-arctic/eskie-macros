@@ -41,7 +41,7 @@ async function create(token, target, config = {}) {
         .rotate(0)
         .scaleToObject(1)
         .scaleIn(0, 1500, { ease: "easeOutCubic" })
-        .animateProperty("sprite", "position.x", { from: -0.5, to: 0.05, duration: 1000, gridUnits: true, ease: "easeOutBack", delay: 0 })
+        .animateProperty("spriteContainer", "position.x", { from: -0.5, to: 0.05, duration: 1000, gridUnits: true, ease: "easeOutBack", delay: 0 })
         .animateProperty("sprite", "width", { from: 0.8, to: 0.25, duration: 500, gridUnits: true, ease: "easeOutBack", delay: 1500 })
         .animateProperty("sprite", "height", { from: 1, to: 0.25, duration: 500, gridUnits: true, ease: "easeOutBack", delay: 1500 })
         .filter("Glow", { color: 0x000000 })
@@ -58,7 +58,7 @@ async function create(token, target, config = {}) {
         .rotate(0)
         .scaleToObject(1)
         .scaleIn(0, 1500, { ease: "easeOutCubic" })
-        .animateProperty("sprite", "position.x", { from: -0.5, to: 0.05, duration: 1000, gridUnits: true, ease: "easeOutBack", delay: 0 })
+        .animateProperty("spriteContainer", "position.x", { from: -0.5, to: 0.05, duration: 1000, gridUnits: true, ease: "easeOutBack", delay: 0 })
         .tint("#e51e19")
         .zIndex(0);
 
@@ -117,7 +117,7 @@ async function create(token, target, config = {}) {
         .scaleIn(0, 1000, { ease: "easeOutCubic" })
         .animateProperty("sprite", "width", { from: 0, to: 0.25, duration: 500, gridUnits: true, ease: "easeOutBack" })
         .animateProperty("sprite", "height", { from: 0, to: 1.0, duration: 1000, gridUnits: true, ease: "easeOutBack" })
-        .animateProperty("sprite", "position.y", { from: -0, to: -0.6, duration: 1000, gridUnits: true })
+        .animateProperty("spriteContainer", "position.y", { from: -0, to: -0.6, duration: 1000, gridUnits: true })
         .tint("#e51e19")
         .filter("Blur", { blurX: 0, blurY: 5 })
         .opacity(0.8)

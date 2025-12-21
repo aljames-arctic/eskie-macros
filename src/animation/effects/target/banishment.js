@@ -34,8 +34,8 @@ async function createBanish(target, config = {}) {
         .scaleToObject(0.5)
         .delay(3750)
         .playbackRate(0.65)
-        .animateProperty("sprite", "position.x", { from: 0, to: -70, duration: 500, delay: 4000, ease: "easeInBack" })
-        .animateProperty("sprite", "position.y", { from: 0, to: -97, duration: 500, delay: 4000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: 0, to: -70, duration: 500, delay: 4000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -97, duration: 500, delay: 4000, ease: "easeInBack" })
         .duration(4500);
     sequence.effect()
         .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
@@ -43,8 +43,8 @@ async function createBanish(target, config = {}) {
         .scaleToObject(0.5)
         .delay(4250)
         .playbackRate(0.65)
-        .animateProperty("sprite", "position.x", { from: 0, to: -45, duration: 500, delay: 3500, ease: "easeInBack" })
-        .animateProperty("sprite", "position.y", { from: 0, to: -14, duration: 500, delay: 3500, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: 0, to: -45, duration: 500, delay: 3500, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -14, duration: 500, delay: 3500, ease: "easeInBack" })
         .duration(4000);
     sequence.effect()
         .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
@@ -52,8 +52,8 @@ async function createBanish(target, config = {}) {
         .scaleToObject(0.5)
         .delay(4750)
         .playbackRate(0.65)
-        .animateProperty("sprite", "position.x", { from: 0, to: 45, duration: 500, delay: 3000, ease: "easeInBack" })
-        .animateProperty("sprite", "position.y", { from: 0, to: -14, duration: 500, delay: 3000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: 0, to: 45, duration: 500, delay: 3000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -14, duration: 500, delay: 3000, ease: "easeInBack" })
         .zIndex(0.9)
         .duration(3500);
     sequence.effect()
@@ -62,8 +62,8 @@ async function createBanish(target, config = {}) {
         .scaleToObject(0.5)
         .delay(5250)
         .playbackRate(0.65)
-        .animateProperty("sprite", "position.x", { from: 0, to: 70, duration: 500, delay: 2500, ease: "easeInBack" })
-        .animateProperty("sprite", "position.y", { from: 0, to: -97, duration: 500, delay: 2500, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: 0, to: 70, duration: 500, delay: 2500, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -97, duration: 500, delay: 2500, ease: "easeInBack" })
         .zIndex(0.9)
         .duration(3000);
     sequence.effect()
@@ -72,8 +72,8 @@ async function createBanish(target, config = {}) {
         .scaleToObject(0.5)
         .delay(5750)
         .playbackRate(0.65)
-        .animateProperty("sprite", "position.x", { from: 0, to: 0, duration: 500, delay: 2000, ease: "easeInBack" })
-        .animateProperty("sprite", "position.y", { from: 0, to: -150, duration: 500, delay: 2000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.x", { from: 0, to: 0, duration: 500, delay: 2000, ease: "easeInBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -150, duration: 500, delay: 2000, ease: "easeInBack" })
         .zIndex(0.9)
         .duration(2500);
     sequence.effect()
@@ -128,12 +128,12 @@ async function createBanish(target, config = {}) {
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: 0, to: -15, duration: 250, ease: "easeInOutBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -15, duration: 250, ease: "easeInOutBack" })
         .waitUntilFinished(-100);
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: -15, to: 0, duration: 2000, ease: "easeInOutBack" })
+        .animateProperty("spriteContainer", "position.y", { from: -15, to: 0, duration: 2000, ease: "easeInOutBack" })
         .animateProperty("sprite", "rotation", { from: 0, to: 8, duration: 500, ease: "easeOutCubic" })
         .animateProperty("sprite", "rotation", { from: 0, to: -16, duration: 500, delay: 500, ease: "easeOutCubic" })
         .animateProperty("sprite", "rotation", { from: 0, to: 16, duration: 500, delay: 1000, ease: "easeOutCubic" })
@@ -142,12 +142,12 @@ async function createBanish(target, config = {}) {
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: 0, to: -40, duration: 500, ease: "easeInOutBack" })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -40, duration: 500, ease: "easeInOutBack" })
         .waitUntilFinished(-100);
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: -40, to: -15, duration: 2000, ease: "easeInOutBack" })
+        .animateProperty("spriteContainer", "position.y", { from: -40, to: -15, duration: 2000, ease: "easeInOutBack" })
         .animateProperty("sprite", "rotation", { from: 0, to: 8, duration: 500, ease: "easeOutCubic" })
         .animateProperty("sprite", "rotation", { from: 0, to: -16, duration: 500, delay: 500, ease: "easeOutCubic" })
         .animateProperty("sprite", "rotation", { from: 0, to: 16, duration: 500, delay: 1000, ease: "easeOutCubic" })
@@ -156,7 +156,7 @@ async function createBanish(target, config = {}) {
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: -15, to: -200, duration: 750, ease: "easeInOutBack" })
+        .animateProperty("spriteContainer", "position.y", { from: -15, to: -200, duration: 750, ease: "easeInOutBack" })
         .scaleOut(0, 750)
         .duration(375)
         .waitUntilFinished(-150);
@@ -187,7 +187,7 @@ async function createBanish(target, config = {}) {
         .duration(2000)
         .fadeIn(500)
         .fadeOut(750)
-        .animateProperty("sprite", "position.y", { from: 0, to: 75, duration: 3000 });
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: 75, duration: 3000 });
     return sequence;
 }
 
@@ -219,7 +219,7 @@ async function createReturn(target, config = {}) {
     sequence.effect()
         .copySprite(target)
         .atLocation(target)
-        .animateProperty("sprite", "position.y", { from: -75, to: 0, duration: 500, ease: "easeOutBounce" })
+        .animateProperty("spriteContainer", "position.y", { from: -75, to: 0, duration: 500, ease: "easeOutBounce" })
         .scaleIn(0.25, 500)
         .fadeIn(250)
         .waitUntilFinished(-150);

@@ -53,7 +53,7 @@ async function create(targets, config = {}) {
         .filter("ColorMatrix", { hue: hue})
         .animateProperty("sprite", "width", { from: 0, to: 0.5, duration: 2500, gridUnits:true, ease:"easeOutBack"})
         .animateProperty("sprite", "height", { from: 0, to: 1, duration: 2500, gridUnits:true, ease:"easeOutBack"})
-        .animateProperty("sprite", "position.y", { from: 0, to: -0.45, duration: 2500, gridUnits:true});
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -0.45, duration: 2500, gridUnits:true});
 
     sequence.effect()
         .file(img(`jb2a.sacred_flame.target.${color}`))
@@ -64,7 +64,7 @@ async function create(targets, config = {}) {
         .scaleIn(0, 1500, {ease: "easeOutCubic"})
         .animateProperty("sprite", "width", { from: 0, to: 0.5, duration: 2500, gridUnits:true, ease:"easeOutBack"})
         .animateProperty("sprite", "height", { from: 0, to: 0.5, duration: 2500, gridUnits:true, ease:"easeOutBack"})
-        .animateProperty("sprite", "position.y", { from: 0, to: -0.25, duration: 2500, gridUnits:true, ease: "easeOutBack"})
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -0.25, duration: 2500, gridUnits:true, ease: "easeOutBack"})
         .waitUntilFinished(-200);
 
     sequence.effect()

@@ -69,7 +69,7 @@ async function create(token, config) {
         .fadeIn(200)
         .fadeOut(3000)
         .loopProperty("sprite", "position.x", { from: -5, to: 5, duration: 50, pingPong: true })
-        .animateProperty("sprite", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
         .duration(8000);
 
     seq = seq
