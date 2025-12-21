@@ -1,10 +1,11 @@
+import { utils } from '../../lib/utils.js'
 import { img } from '../../lib/filemanager.js';
 import { deathEffect } from './sun-halo-dragon/death-effect.js';
 
 async function getPositions(token) {
     const pos1 = {x: token.x, y: token.y };
     const pos2 = adjustTeleport(await Sequencer.Crosshair.show());
-    return { pos1, dragon: midpoint(pos1, pos2), pos2 }
+    return { pos1, pos2 };
 }
 
 // (HACKY) This is annoying... Crosshair.show returns .center(.x, .y)
@@ -36,11 +37,16 @@ function ydelta(p1, p2) {
     return (p2.y - p1.y) / canvas.grid.size;
 }
 
-async function create(token, targets, config = {}) {
+async function create(token, targets = [], config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { impact, screen } = mConfig;
-    const { dragon, pos1, pos2 } = await getPositions(token);
+    const { pos1, pos2 } = await getPositions(token);
     const mirrorY = pos1.x > pos2.x;
+
+    if (token.document.rotation != 0) {
+        await token.document.update({ rotation: 0 });
+        await utils.wait(300);
+    }
 
     const seq = new Sequence()
         .animation()
@@ -53,7 +59,7 @@ async function create(token, targets, config = {}) {
             .atLocation(token)
             .animateProperty("sprite", "position.x", { from: 0, to: xdelta(pos1, pos2), duration: 500, gridUnits: true, ease: "easeOutQuint",delay: 2000+150 })
             .animateProperty("sprite", "position.y", { from: 0, to: ydelta(pos1, pos2), duration: 500, gridUnits: true, ease: "easeOutQuint",delay: 2000+150 })
-            .duration(10000)
+            .duration(3500)
 
         .effect()
             .copySprite(token)
@@ -183,8 +189,8 @@ async function create(token, targets, config = {}) {
             .scale(0.75)
             .belowTokens()
             .playbackRate(1.25)
-            .mirrorX();
-        if (mirrorY) seq.mirrorY();
+            .mirrorX(true)
+            .mirrorY(mirrorY)
 
         seq.effect()
             .delay(150)

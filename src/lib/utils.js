@@ -6,6 +6,11 @@ function mergeObject(defaultConfig, config) {
     return { id: userConfig.id, duration: userConfig.duration, effect: effectData };
 }
 
+async function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export const utils = {
     mergeObject,
+    wait,
 }
