@@ -94,8 +94,8 @@ async function create(token, config, options) {
             .scaleToObject(1, {considerTokenScale:true})
             .moveTowards(position, {delay: 100, rotate: false, ease: "easeOutQuint"})    // Horizontal Movement
             .duration(1300)
-            .animateProperty("sprite", "position.y", { from: 0, to: -0.8, duration: 350, delay: 100, gridUnits:true, ease:"easeOutQuint"})   // Vertical Up     -- start at 100ms, go to 450ms (350ms upward)
-            .animateProperty("sprite", "position.y", { from: 0, to: 0.8, duration: 850, delay: 500, gridUnits:true, ease:"easeOutQuad"})     // Vertical Down   -- start at 500ms, go to 850ms (350ms downward)
+            .animateProperty("sprite", "position.y", { from: 0, to: -0.8, duration: 550, delay: 100, gridUnits:true, ease:"easeOutQuint"})
+            .animateProperty("sprite", "position.y", { from: 0, to: 0.8, duration: 550, delay: 650, gridUnits:true, ease:"easeOutQuad"})
             .animateProperty("sprite", "rotation", { from: 0, to: 90, duration: 500,delay: 100,ease:"easeOutCubic"})
             .waitUntilFinished(-200)
 
