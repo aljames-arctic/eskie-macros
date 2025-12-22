@@ -46,6 +46,7 @@ import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { possession } from "./token/possession/possession.js";
 import { rage } from "./token/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
+import { colorSpray } from './location/color-spray.js'
 import { romanCandle } from "./target/roman-candle.js";
 import { sandevistan } from "./token/sandevistan.js";
 import { sanctuary } from "./target/sanctuary.js";
@@ -82,6 +83,7 @@ export const effect = {
     channelDivinityDreadAspect,
     charmPerson,
     cloudOfSand,
+    colorSpray,
     detect,
     dimensionDoor,
     disintegrate,
