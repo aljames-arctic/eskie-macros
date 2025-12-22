@@ -22,8 +22,8 @@ function getTintAndHue(color) {
 }
 
 async function create(targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { location, color, aoeDistance } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { location, color, aoeDistance } = mConfig;
     const { tintColor, hue } = getTintAndHue(color);
 
     const sequence = new Sequence();

@@ -28,8 +28,8 @@ const DEFAULT_CONFIG = {
 }
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return detectUtil.create(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return detectUtil.create(token, mConfig);
 }
 
 async function play(token, config) {

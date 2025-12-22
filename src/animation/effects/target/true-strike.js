@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createTrueStrikeCast(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     const sequence = new Sequence();
 
@@ -99,16 +99,16 @@ async function createTrueStrikeCast(token, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the sequence starts playing.
  */
 async function playTrueStrikeCast(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
 
     // Check if TrueStrike tag already exists, if so, remove it (toggle behavior)
     if (Tagger.hasTags(token, "TrueStrike")) {
-        await stopTrueStrike(token, mergedConfig);
+        await stopTrueStrike(token, mConfig);
         return;
     }
 
     Tagger.addTags(token, "TrueStrike");
-    const sequence = await createTrueStrikeCast(token, mergedConfig);
+    const sequence = await createTrueStrikeCast(token, mConfig);
     if (sequence) { return sequence.play(); }
 }
 
@@ -121,8 +121,8 @@ async function playTrueStrikeCast(token, config = {}) {
  * @returns {Sequence} The created Sequence object.
  */
 async function createTrueStrikeAttack(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    // const { id } = mergedConfig; // Not directly used in this animation for naming persistent effects
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    // const { id } = mConfig; // Not directly used in this animation for naming persistent effects
 
     const sequence = new Sequence();
 
@@ -248,8 +248,8 @@ async function createTrueStrikeAttack(token, target, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the sequence finishes playing.
  */
 async function playTrueStrikeAttack(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     if (!target) {
         console.warn("True Strike Attack: No target provided.");
@@ -261,9 +261,9 @@ async function playTrueStrikeAttack(token, target, config = {}) {
         return;
     }
 
-    await stopTrueStrike(token, mergedConfig); // End persistent cast effects and remove tag
+    await stopTrueStrike(token, mConfig); // End persistent cast effects and remove tag
 
-    const sequence = await createTrueStrikeAttack(token, target, mergedConfig);
+    const sequence = await createTrueStrikeAttack(token, target, mConfig);
     if (sequence) { return sequence.play(); }
 }
 
@@ -274,8 +274,8 @@ async function playTrueStrikeAttack(token, target, config = {}) {
  * @param {object} config Configuration options.
  */
 async function stopTrueStrike(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     if (Tagger.hasTags(token, "TrueStrike")) {
         await Tagger.removeTags(token, "TrueStrike");

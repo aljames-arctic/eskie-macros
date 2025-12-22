@@ -8,8 +8,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { darkMap } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mConfig;
 
     let sequence = new Sequence();
     sequence.effect()
@@ -184,8 +184,8 @@ async function play(token, target, config = {}) {
 }
 
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

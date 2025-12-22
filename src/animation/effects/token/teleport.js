@@ -15,9 +15,9 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
-    const position = await Sequencer.Crosshair.show(mergedConfig);
+    const position = await Sequencer.Crosshair.show(mConfig);
     if (!position.x || !position.y) {
         console.error('Invalid position given... aborting')
         return;

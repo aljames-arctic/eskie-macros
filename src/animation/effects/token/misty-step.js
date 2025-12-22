@@ -16,8 +16,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, size, icon, label, tag, drawIcon, drawOutline, interval, rememberControlled } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, size, icon, label, tag, drawIcon, drawOutline, interval, rememberControlled } = mConfig;
 
     const crosshairConfig = {
         size: token.document.width,

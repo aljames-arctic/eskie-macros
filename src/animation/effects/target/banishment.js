@@ -12,8 +12,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function createBanish(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color } = mConfig;
     const sequence = new Sequence();
     sequence.effect()
         .file(img(`jb2a.magic_signs.circle.02.conjuration.intro.${color}`))
@@ -197,8 +197,8 @@ async function playBanish(target, config = {}) {
 }
 
 async function createReturn(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color } = mConfig;
     const sequence = new Sequence();
     sequence.effect()
         .file(img(`jb2a.explosion.01.${color}`))

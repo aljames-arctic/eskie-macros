@@ -10,8 +10,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, position, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     let seq = new Sequence();
     seq = seq

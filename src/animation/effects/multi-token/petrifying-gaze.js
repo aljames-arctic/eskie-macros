@@ -20,8 +20,8 @@ const DEFAULT_CONFIG = {
  * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
  */
 async function create(token, targetTokens, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     let sequence = new Sequence();
     sequence

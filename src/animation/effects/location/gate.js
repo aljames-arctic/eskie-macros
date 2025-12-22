@@ -95,9 +95,9 @@ function _getPlaneConfig(destination) {
 
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    mergedConfig.id = `${token.id} - ${mergedConfig.id}`;
-    const { id, destination, destinationList, template } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    mConfig.id = `${token.id} - ${mConfig.id}`;
+    const { id, destination, destinationList, template } = mConfig;
 
     let position;
     if (template) {
@@ -218,9 +218,9 @@ async function play(token, config = {}, options = {}) {
 }
 
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
-    mergedConfig.id = `${token.id} - ${mergedConfig.id}`;
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config);
+    mConfig.id = `${token.id} - ${mConfig.id}`;
+    const { id } = mConfig;
     Sequencer.EffectManager.endEffects({ name: id });
     // This stops scene-wide filters, might need a more robust way to handle this
     // For now, assuming we want to clear all filters.

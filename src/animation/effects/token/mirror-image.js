@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createMirrorImage(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, imageNumber } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, imageNumber } = mConfig;
 
     const sequence = new Sequence();
 
@@ -142,8 +142,8 @@ async function createMirrorImage(token, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the sequence starts playing.
  */
 async function playMirrorImage(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, imageNumber } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, imageNumber } = mConfig;
 
     // First check if a Mirror Image effect is already active for this token
     // If it is, stop it (acting as a toggle)
@@ -151,12 +151,12 @@ async function playMirrorImage(token, config = {}) {
     const activeEffect = Sequencer.EffectManager.getEffects({ name: activeEffectName, object: token }).length > 0;
 
     if (activeEffect) {
-        await stopMirrorImage(token, mergedConfig);
+        await stopMirrorImage(token, mConfig);
         return;
     }
 
     // If not active, then play it
-    const sequence = await createMirrorImage(token, mergedConfig);
+    const sequence = await createMirrorImage(token, mConfig);
     if (sequence) {
         // Initial token opacity setup
         await new Sequence()
@@ -184,8 +184,8 @@ async function playMirrorImage(token, config = {}) {
  * @param {object} config Configuration options.
  */
 async function stopMirrorImage(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, imageNumber } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, imageNumber } = mConfig;
 
     Sequencer.EffectManager.endEffects({ name: `MirrorImage - Image1 - ${id} - ${token.uuid}` });
     Sequencer.EffectManager.endEffects({ name: `MirrorImage - Image2 - ${id} - ${token.uuid}` });

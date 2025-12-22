@@ -6,7 +6,7 @@ import { img } from "../../../lib/filemanager.js";
 const DEFAULT_CONFIG = {};
 
 async function create(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const sequence = new Sequence();
 
     sequence.effect()

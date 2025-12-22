@@ -10,8 +10,8 @@ const DEFAULT_CONFIG = {
 };
 
 function create(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     const label = `${id} - ${token.id} - ${target.id}`;
 
@@ -138,8 +138,8 @@ async function play(token, target, config = {}) {
 }
 
 async function stop(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     Sequencer.EffectManager.endEffects({ name: id });
 }
 

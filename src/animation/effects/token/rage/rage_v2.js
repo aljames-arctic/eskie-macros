@@ -15,8 +15,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color, effect } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color, effect } = mConfig;
 
     let seq = new Sequence();
     seq = seq
@@ -135,8 +135,8 @@ async function create(token, config) {
 }
 
 async function play(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { rageImg } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { rageImg } = mConfig;
 
     if ( rageImg ) {
         let originalImg = token.document.getFlag('eskie', 'rage_v2');   // Make sure we don't have an original yet...
@@ -149,8 +149,8 @@ async function play(token, config) {
 }
 
 async function stop(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { rageImg } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { rageImg } = mConfig;
 
     if ( rageImg ) {
         let originalImg = token.document.getFlag('eskie', 'rage_v2');
@@ -161,12 +161,12 @@ async function stop(token, config) {
             ]);
         }
     }
-    return util.stop(token, mergedConfig);
+    return util.stop(token, mConfig);
 }
 
 async function clean(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return util.clean(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return util.clean(token, mConfig);
 }
 
 export const rageV2 = {

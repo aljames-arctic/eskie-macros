@@ -6,7 +6,7 @@ import { img } from "../../../lib/filemanager.js";
 const DEFAULT_CONFIG = {};
 
 async function create(position, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let seq = new Sequence();
     seq = seq.effect()
         .file(img(`jb2a.firework.02.{{color}}`))

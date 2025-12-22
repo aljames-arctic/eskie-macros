@@ -9,8 +9,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     dependency.required({ id: "fxmaster" });
 
     const sequence = new Sequence();
@@ -82,15 +82,15 @@ async function create(token, config = {}) {
 }
 
 async function play(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     const sequence = await create(token);
     if (sequence) { return sequence.play(); }
 }
 
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     const endSequence = new Sequence();
     endSequence.effect()
         .atLocation(token)

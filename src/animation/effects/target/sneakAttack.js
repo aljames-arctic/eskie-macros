@@ -46,8 +46,8 @@ function getNearestSquareCenter(token, target) {
 }
 
 async function createMelee(token, target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_MELEE, config, {inplace:false});
-    const { id, color, type, weight } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_MELEE, config, {inplace:false});
+    const { id, color, type, weight } = mConfig;
 
     //Determine Attack Size
     const weightIndex = { light: 0, medium: 1, heavy: 2 }[weight];
@@ -122,8 +122,8 @@ const DEFAULT_CONFIG_RANGED = {
 };
 
 function createRanged(token, target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_RANGED, config, {inplace:false});
-    const { id, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG_RANGED, config, {inplace:false});
+    const { id, color } = mConfig;
 
     let seq = new Sequence()
         .effect()

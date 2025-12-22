@@ -52,8 +52,8 @@ function _createMetal(sequence, token, xOffset) {
 }
 
 async function create(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { effectName } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { effectName } = mConfig;
     const sequence = new Sequence();
 
     sequence.effect()
@@ -103,8 +103,8 @@ async function play(token, config = {}) {
 }
 
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { effectName } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { effectName } = mConfig;
     return Sequencer.EffectManager.endEffects({ name: effectName, object: token });
 }
 

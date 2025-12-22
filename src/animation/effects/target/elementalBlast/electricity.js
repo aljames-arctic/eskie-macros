@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence}
  */
 async function create(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let ranOffset = (Math.random() * (0.4 +0.4)  -0.4);
 
     const targetCenter = {
@@ -103,8 +103,8 @@ async function play(token, target, config = {}) {
 }
 
 function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 

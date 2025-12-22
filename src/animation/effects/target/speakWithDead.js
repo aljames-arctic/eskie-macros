@@ -21,8 +21,8 @@ const DEFAULT_CONFIG = {
 async function create(target, config) {
     if (!target) return new Sequence();
 
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, sound } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, sound } = mConfig;
     const uniqueId = `${id} ${target.id}`;
 
     let sequence = new Sequence();
@@ -271,8 +271,8 @@ async function play(target, config) {
 }
 
 async function preload(config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { sound } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { sound } = mConfig;
 
     let files = [
         img("jb2a.magic_signs.circle.02.necromancy.loop.blue"),
@@ -299,12 +299,12 @@ async function preload(config) {
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
 async function stop(target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let opacity = new Sequence().animation().on(target).opacity(1);
     return Promise.all([
         opacity.play(),
-        Sequencer.EffectManager.endEffects({ name: `${mergedConfig.id} ${target.id}`, object: target }),
-        Sequencer.EffectManager.endEffects({ name: `${mergedConfig.id} ${target.id}` })
+        Sequencer.EffectManager.endEffects({ name: `${mConfig.id} ${target.id}`, object: target }),
+        Sequencer.EffectManager.endEffects({ name: `${mConfig.id} ${target.id}` })
     ]);
 }
 

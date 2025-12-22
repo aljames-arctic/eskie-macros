@@ -12,8 +12,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, template } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, template } = mConfig;
 
     let position;
     if (template) {

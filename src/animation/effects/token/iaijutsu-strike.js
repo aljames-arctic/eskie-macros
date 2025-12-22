@@ -108,8 +108,8 @@ function deathAnimation(target) {
 }
 
 async function create(source, target, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const {targetDeath, teleport, cameraFocus, text} = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const {targetDeath, teleport, cameraFocus, text} = mConfig;
 
     let position;
 

@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object for the casting.
  */
 async function createViciousMockeryCast(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    // const { id } = mergedConfig; // Not directly used in this animation for naming persistent effects
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    // const { id } = mConfig; // Not directly used in this animation for naming persistent effects
 
     const sequence = new Sequence();
 
@@ -81,8 +81,8 @@ async function createViciousMockeryCast(token, config = {}) {
  * @returns {Sequence} The created Sequence object for the impact.
  */
 async function createViciousMockeryImpact(target, word, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    // const { id } = mergedConfig; // Not directly used in this animation for naming persistent effects
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    // const { id } = mConfig; // Not directly used in this animation for naming persistent effects
 
     const sequence = new Sequence();
 
@@ -195,15 +195,15 @@ async function createViciousMockeryImpact(target, word, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the effect sequences finish playing.
  */
 async function playViciousMockery(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { word } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { word } = mConfig;
 
     // Play casting animation
-    const castSequence = await createViciousMockeryCast(token, mergedConfig);
+    const castSequence = await createViciousMockeryCast(token, mConfig);
     if (castSequence) { await castSequence.play(); }
 
     // Play impact animation
-    const impactSequence = await createViciousMockeryImpact(target, word, mergedConfig);
+    const impactSequence = await createViciousMockeryImpact(target, word, mConfig);
     if (impactSequence) { await impactSequence.play(); }
 }
 

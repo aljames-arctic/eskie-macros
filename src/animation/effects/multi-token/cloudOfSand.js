@@ -52,8 +52,8 @@ function _createCloudEffect(position, file, { size, opacity, rotate, zIndex, rot
  * @returns {Sequence} The animation sequence.
  */
 async function create(position, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { persist, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { persist, color } = mConfig;
 
     if (!position) {
         let configWarpgate = {

@@ -11,8 +11,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, duration } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, duration } = mConfig;
 
     let seq = new Sequence()
         .effect()
@@ -79,8 +79,8 @@ async function play(target, config = {}) {
 }
 
 async function stop(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     Sequencer.EffectManager.endEffects({ name: id, object: target });
 }
 

@@ -6,7 +6,7 @@ import { img } from '../../../lib/filemanager.js';
 const DEFAULT_CONFIG = {};
 
 async function create(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let seq = new Sequence()
         .effect()
             .file(img("jb2a.extras.tmfx.inpulse.circle.01.normal"))

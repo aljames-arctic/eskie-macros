@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createEnlarge(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, scaleFactor } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, scaleFactor } = mConfig;
 
     const sequence = new Sequence();
 
@@ -142,8 +142,8 @@ async function playEnlarge(token, config = {}) {
  * @returns {Sequence} The created Sequence object.
  */
 async function createReduce(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, scaleFactor } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, scaleFactor } = mConfig;
 
     const sequence = new Sequence();
 

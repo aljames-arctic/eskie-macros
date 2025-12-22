@@ -11,9 +11,9 @@ const DEFAULT_CONFIG = {
 
 async function create(token, config = {}) {
     var items = Sequencer.Database.getPathsUnder('jb2a.bolt.fire');
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
-    let { shots, position } = mergedConfig;
+    let { shots, position } = mConfig;
     if (!position) {
         const crosshairConfig = {
             size: 2,

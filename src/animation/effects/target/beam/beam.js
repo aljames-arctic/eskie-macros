@@ -14,8 +14,8 @@ const DEFAULT_CONFIG = {
 };
 
 function create(token, target, config = {}) {
-    let mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    let { id, effects } = mergedConfig;
+    let mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    let { id, effects } = mConfig;
 
     let seq = new Sequence()
         .effect()
@@ -101,8 +101,8 @@ async function play(token, target, config = {}) {
 }
 
 async function stop(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     return Promise.all([
         Sequencer.EffectManager.endEffects({ name: id, object: token }),
         Sequencer.EffectManager.endEffects({ name: id, object: target })

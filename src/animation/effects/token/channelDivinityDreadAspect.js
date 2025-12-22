@@ -9,8 +9,8 @@ const DEFAULT_CONFIG = {
 }
 
 async function create(token, targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const {darkMap} = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const {darkMap} = mConfig;
 
     const sequence = new Sequence();
 

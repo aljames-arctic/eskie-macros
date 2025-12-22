@@ -12,8 +12,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color } = mConfig;
 
     let seq = new Sequence();
     seq = seq
@@ -69,7 +69,7 @@ async function create(token, config) {
         .fadeIn(200)
         .fadeOut(3000)
         .loopProperty("sprite", "position.x", { from: -5, to: 5, duration: 50, pingPong: true })
-        .animateProperty("sprite", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
+        .animateProperty("spriteContainer", "position.y", { from: 0, to: -100, duration: 6000, pingPong: true, delay: 2000 })
         .duration(8000);
 
     seq = seq
@@ -105,13 +105,13 @@ async function play(token, config) {
 }
 
 async function stop(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return util.stop(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return util.stop(token, mConfig);
 }
 
 async function clean(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return util.clean(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return util.clean(token, mConfig);
 }
 
 export const electric = {

@@ -21,8 +21,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object for the initial cast.
  */
 async function createInitialSpikeGrowth(position, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { size } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { size } = mConfig;
 
     const sequence = new Sequence();
 
@@ -64,8 +64,8 @@ async function createInitialSpikeGrowth(position, config = {}) {
  * @returns {Array<Sequence>} An array of Sequence objects for the persistent spikes.
  */
 async function createPersistentSpikes(token, centralPosition, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, tint } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, tint } = mConfig;
 
     const gridSize = canvas.grid.size;
     const locations = [
@@ -132,8 +132,8 @@ async function createPersistentSpikes(token, centralPosition, config = {}) {
  */
 async function createSpikeGrowth(token, config = {}, options = {}) {
     if (options.type == "aefx") return;
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, size, template } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, size, template } = mConfig;
 
     let position;
     if (template) {

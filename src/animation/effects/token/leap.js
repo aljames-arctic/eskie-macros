@@ -19,8 +19,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createLeap(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    let { id, position } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    let { id, position } = mConfig;
 
     // UI/Interaction Logic
     if (!position) {
@@ -104,8 +104,8 @@ async function createLeap(token, config = {}) {
  * @returns {Promise<Sequence>} A promise that resolves when the sequence starts playing.
  */
 async function playLeap(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    let { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    let { id } = mConfig;
 
     const sequence = await createLeap(token, config);
     if (sequence) { return sequence.play(); }

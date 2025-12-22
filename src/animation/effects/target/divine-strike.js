@@ -8,8 +8,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function createMelee(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { darkMap } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mConfig;
 
     const sequence = new Sequence();
     for (let i = 0; i < 4; i++) {
@@ -111,8 +111,8 @@ async function playMelee(token, target, config = {}) {
 }
 
 async function createRanged(token, target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { darkMap } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { darkMap } = mConfig;
 
     const sequence = new Sequence();
     const distance = {

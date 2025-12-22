@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let sequence = new Sequence();
 
     sequence = sequence.effect()
@@ -103,8 +103,8 @@ async function play(token, config = {}) {
 }
 
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     let sequence = new Sequence()
         .effect()
         .attachTo(token)

@@ -23,8 +23,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createWingsV2(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id, image, offset, hue, wingSize, speedMulti, swayMulti } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id, image, offset, hue, wingSize, speedMulti, swayMulti } = mConfig;
 
     const sequence = new Sequence();
 
@@ -99,8 +99,8 @@ async function playWingsV2(token, config = {}) {
  * @param {object} config Configuration options for the animation.
  */
 function stopWingsV2(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     Sequencer.EffectManager.endEffects({ name: `${id} - ${token.id}` });
 }

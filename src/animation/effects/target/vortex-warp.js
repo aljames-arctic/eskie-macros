@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let sequence = new Sequence();
 
     // Vortex out
@@ -68,8 +68,8 @@ async function create(target, config = {}) {
 }
 
 async function play(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { position } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { position } = mConfig;
     const crosshairConfig = {
         size: target.w / canvas.grid.size,
         icon: 'icons/magic/air/wind-vortex-swirl-blue.webp',
@@ -81,11 +81,11 @@ async function play(target, config = {}) {
     };
 
     if (!position) {
-        mergedConfig.position = await Sequencer.Crosshair.show(crosshairConfig);
-        if (!mergedConfig.position.x) return;
+        mConfig.position = await Sequencer.Crosshair.show(crosshairConfig);
+        if (!mConfig.position.x) return;
     }
 
-    const sequence = await create(target, mergedConfig);
+    const sequence = await create(target, mConfig);
     if (sequence) { return sequence.play(); }
 }
 

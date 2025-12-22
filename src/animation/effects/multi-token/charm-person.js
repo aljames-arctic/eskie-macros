@@ -68,8 +68,8 @@ function _createCharmEffects(target, id) {
 }
 
 async function create(token, targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     let masterSeq = new Sequence();
 
@@ -91,8 +91,8 @@ async function play(token, targets, config = {}) {
 }
 
 async function stop(targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     for (const target of targets) {
         Sequencer.EffectManager.endEffects({ name: `${id}-${target.id}`, object: target });

@@ -139,8 +139,8 @@ function getDissolveConfig() {
 }
 
 function dissolveCreate(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     let seq = new Sequence();
     const dissolveSections = getDissolveConfig();
@@ -173,8 +173,8 @@ async function dissolvePlay(target, config = {}) {
  * @returns {Sequence} A Sequencer sequence object representing the death animation.
  */
 function death(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, effect: { smoke: smokeEffect, spirit: spiritEffect } } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effect: { smoke: smokeEffect, spirit: spiritEffect } } = mConfig;
 
     let seq = new Sequence()
         // Add a smoke puff effect
@@ -211,8 +211,8 @@ function death(target, config = {}) {
 }
 
 function beam(token, target, config = {}) { 
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, effect: { beam: beamEffects } } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, effect: { beam: beamEffects } } = mConfig;
     return beamEffect.create(token, target, { id, effects: beamEffects });
 }
 
@@ -229,11 +229,11 @@ function beam(token, target, config = {}) {
  */
 async function create(token, target, config = {}) {
     // Merge user config with default config
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
-    let disintegrateEffect = beam(token, target, mergedConfig);
-    if (mergedConfig.targetDeath) // Chain the death animation if the target is dead
-        disintegrateEffect = disintegrateEffect.addSequence(death(target, mergedConfig));
+    let disintegrateEffect = beam(token, target, mConfig);
+    if (mConfig.targetDeath) // Chain the death animation if the target is dead
+        disintegrateEffect = disintegrateEffect.addSequence(death(target, mConfig));
 
     return disintegrateEffect;
 }
@@ -258,8 +258,8 @@ async function play(token, target, config = {}) {
  * @returns {Promise<void>}
  */
 async function stop(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
     return Sequencer.EffectManager.endEffects({ name: id, object: token });
 }
 
@@ -270,8 +270,8 @@ async function stop(token, config = {}) {
  * @returns {Sequence} A Sequencer sequence object.
  */
 function reformCreate(target, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, duration } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, duration } = mConfig;
     const reformSequence = new Sequence();
     const dissolveSections = getDissolveConfig();
     const shape = getDissolveShape();

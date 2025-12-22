@@ -12,8 +12,8 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, color } = mConfig;
 
     let seq = new Sequence();
     seq = seq
@@ -106,13 +106,13 @@ async function play(token, config) {
 }
 
 async function stop(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return util.stop(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return util.stop(token, mConfig);
 }
 
 async function clean(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return util.clean(token, mergedConfig);
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    return util.clean(token, mConfig);
 }
 
 export const superSaiyan = {

@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
  * @returns {Sequence} The created Sequence object.
  */
 async function createSurprised(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     const sequence = new Sequence();
 
@@ -63,14 +63,14 @@ async function createSurprised(token, config = {}) {
  * @returns {Promise<void>} A promise that resolves when the effect is played or stopped.
  */
 async function playSurprised(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     if (Tagger.hasTags(token, "Surprised")) {
-        await stopSurprised(token, mergedConfig);
+        await stopSurprised(token, mConfig);
     } else {
         Tagger.addTags(token, "Surprised");
-        const sequence = await createSurprised(token, mergedConfig);
+        const sequence = await createSurprised(token, mConfig);
         if (sequence) {
             sequence.play();
         }
@@ -84,8 +84,8 @@ async function playSurprised(token, config = {}) {
  * @param {object} config Configuration options.
  */
 async function stopSurprised(token, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const { id } = mConfig;
 
     if (Tagger.hasTags(token, "Surprised")) {
         await Tagger.removeTags(token, "Surprised");

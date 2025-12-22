@@ -88,19 +88,19 @@ async function _createDetectionEffects(target, config) {
  * @returns {Promise<Sequence>} A promise that resolves with the sequence.
  */
 async function create(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const targets = canvas.tokens.placeables.filter((t) => {
         if (t.id === token.id) return false;
         const targetDistance = canvas.grid.measurePath([token, t]).euclidean ?? 0;
-        return targetDistance <= mergedConfig.distance;
+        return targetDistance <= mConfig.distance;
     });
 
     let sequence = new Sequence();
     sequence
         .effect()
-        .file(img(mergedConfig.effect.pulse.img))
+        .file(img(mConfig.effect.pulse.img))
         .atLocation(token)
-        .size(mergedConfig.distance * 2, { gridUnits: true })
+        .size(mConfig.distance * 2, { gridUnits: true })
         .fadeOut(4000)
         .opacity(0.75)
         .belowTokens();
@@ -109,7 +109,7 @@ async function create(token, config) {
         const targetDistance = canvas.grid.measurePath([token, target]).euclidean ?? 0;
         const delay = (targetDistance / canvas.grid.size) * 125;
         let targetSequence = new Sequence().wait(delay);
-        targetSequence.addSequence(await _createDetectionEffects(target, mergedConfig));
+        targetSequence.addSequence(await _createDetectionEffects(target, mConfig));
         sequence.addSequence(targetSequence);
     }
 

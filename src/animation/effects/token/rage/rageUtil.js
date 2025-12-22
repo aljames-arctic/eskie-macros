@@ -3,8 +3,8 @@ const DEFAULT_CONFIG = {
 }
 
 async function stop(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     let opacity = new Sequence()
         .animation()
@@ -19,8 +19,8 @@ async function stop(token, config) {
 }
 
 async function clean(token, config) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
 
     return Promise.all([
         stop(token, config),

@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function create(targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const sequence = new Sequence();
 
     // AOE effects
@@ -62,8 +62,8 @@ async function create(targets, config = {}) {
 }
 
 async function play(targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { position } = mergedConfig;
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { position } = mConfig;
     const crosshairConfig = {
         size: 5,
         icon: 'icons/magic/control/hypnosis-mesmerism-pendulum.webp',
@@ -76,16 +76,16 @@ async function play(targets, config = {}) {
     };
 
     if (!position) {
-        mergedConfig.position = await Sequencer.Crosshair.show(crosshairConfig);
-        if (!mergedConfig.position.x) return;
+        mConfig.position = await Sequencer.Crosshair.show(crosshairConfig);
+        if (!mConfig.position.x) return;
     }
 
-    const sequence = await create(targets, mergedConfig);
+    const sequence = await create(targets, mConfig);
     if (sequence) { return sequence.play(); }
 }
 
 function stop(targets, config = {}) {
-    const mergedConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     targets.forEach(t => {
         Sequencer.EffectManager.endEffects({ name: `Sleep-${t.id}` });
     });
