@@ -1,7 +1,7 @@
 import { cinemaBars } from "./cinema-bars.js";
-import { drunkBlur } from "./drunk-blur.js";
+import { drunkenBlur } from "./drunken-blur.js";
 
 export const overlay = {
     cinemaBars,
-    drunkBlur,
+    drunkenBlur,
 };

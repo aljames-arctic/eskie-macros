@@ -2,7 +2,7 @@
 // Updates by: Bakana
 
 const DEFAULT_CONFIG = {
-    id: 'drunk-blur',
+    id: 'drunken-blur',
     opacity: 1,
     blur: 3,
     sway: 1,
@@ -59,7 +59,7 @@ async function stop(users, config = {}) {
     return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user.id}` })));
 }
 
-export const drunkBlur = { 
+export const drunkenBlur = { 
     create,
     play,
     stop,
