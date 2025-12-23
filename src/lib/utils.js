@@ -10,7 +10,17 @@ async function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function owner(token) {
+    if (!token) return [];
+    const ownership = token.actor.ownership;
+    
+    // Filter users: Level 3 is "Owner"
+    const owners = game.users.filter(user => { return ownership[user.id] === 3; });
+    return owners;
+};
+
 export const utils = {
     mergeObject,
+    owner,
     wait,
 }
