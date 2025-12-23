@@ -15,33 +15,41 @@ const DEFAULT_CONFIG = {
 
 function getVersion(config = {}) {
     const { version } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const versionMap = [ v1, v2, v3, v4 ];
-    if ( version > versionMap.length || version <= 0 ) return;
-    return versionMap[version - 1];
+
+    // Merge the DEFAULT_CONFIG with our possibly modified input config
+    const map = [ 
+        {fn: v1, cfg: foundry.utils.mergeObject(config_v1, config.config_v1 ?? {}, {inplace:false})},
+        {fn: v2, cfg: foundry.utils.mergeObject(config_v2, config.config_v2 ?? {}, {inplace:false})},
+        {fn: v3, cfg: foundry.utils.mergeObject(config_v3, config.config_v3 ?? {}, {inplace:false})},
+        {fn: v4, cfg: foundry.utils.mergeObject(config_v4, config.config_v4 ?? {}, {inplace:false})},
+    ];
+    
+    if ( version > map.length || version <= 0 ) return;
+    return map[version - 1];
 }
 
 function create(token, config = {}) {
     const version = getVersion(config);
     if (!version) return;
-    return version.create(token, config);
+    return version.fn.create(token, version.cfg);
 }
 
 async function play(token, config = {}) {
     const version = getVersion(config);
     if (!version) return;
-    return version.play(token, config);
+    return version.fn.play(token, version.cfg);
 }
 
 async function stop(token, config = {}) {
     const version = getVersion(config);
     if (!version) return;
-    return version.stop(token, config);
+    return version.fn.stop(token, version.cfg);
 }
 
 async function clean(token, config = {}) {
     const version = getVersion(config);
     if (!version) return;
-    return version.clean(token, config);
+    return version.fn.clean(token, version.cfg);
 }
 
 export const rage = {
@@ -49,6 +57,7 @@ export const rage = {
     play,
     stop,
     clean,
+
     v1,
     v2,
     v3,
