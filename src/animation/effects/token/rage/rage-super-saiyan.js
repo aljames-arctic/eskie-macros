@@ -101,7 +101,7 @@ function create(token, config = {}) {
 }
 
 async function play(token, config) {
-    let seq = await (token, config);
+    let seq = await create(token, config);
     if (seq) { await seq.play(); }
 }
 
