@@ -49,9 +49,9 @@ async function play(users, config = {}) {
 }
 
 async function severe(users) {
-    await play(users);
-    await play(users, {opacity: 0.67, sway: -1, durationX: 11000, durationY: 7000});
-    await play(users, {opacity: 0.47, sway: 0.8, durationX: 13000, durationY: 17000});
+    await play(users, {opacity: 1.00, sway: 1.0, durationX: 6500, durationY: 11000});
+    await play(users, {opacity: 0.57, sway: -0.9, durationX: 16500, durationY: 7000});
+    await play(users, {opacity: 0.47, sway: 1.1, durationX: 13000, durationY: 10500});
 }
 
 async function stop(users, config = {}) {
@@ -63,5 +63,8 @@ export const drunkenBlur = {
     create,
     play,
     stop,
-    severe,
+    severe : {
+        play: severe,
+        stop: stop,
+    },
 };
