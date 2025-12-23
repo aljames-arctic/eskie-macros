@@ -16,7 +16,7 @@ function create(user, config = {}){
 
     const x = canvas.scene.dimensions.width / 2;
     const y = canvas.scene.dimensions.height / 2;
-    const drift = (canvas.grid.size / 4) * sway;
+    const drift = (canvas.grid.size / 8) * sway;
 
     const seq = new Sequence()
         .effect()
