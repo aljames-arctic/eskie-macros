@@ -3,7 +3,7 @@
 
 import { img } from '../../../lib/filemanager.js';
 import { text as textUtil } from '../../util/text.js';
-import { cinemaBars } from '../../util/cinemaBars.js';
+import { cinemaBars } from '../../scene-overlays/cinema-bars.js';
 
 const DEFAULT_CONFIG = {
     id: 'IaijutsuStrike',
