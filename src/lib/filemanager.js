@@ -98,6 +98,14 @@ export function img(path) {
         case 'animated-spell-effects-cartoon':
             dependency.required({ id: modulePrefix, ref: "Jack Kerouac's Animated Spell Effects - Cartoon" });
             break;
+        case 'blfx':
+            dependency.someRequired([{id: 'boss-loot-assets-premium', ref: 'Boss Loot Assets Premium'}, {id: 'boss-loot-assets-free', ref: 'Boss Loot Assets Free'}]);
+            isPatreonUser = dependency.isActivated({ id: 'boss-loot-assets-premium' });
+            isFreeUser = dependency.isActivated({ id: 'boss-loot-assets-free' });
+            if (isPatreonUser && isFreeUser) 
+                ui.notifications.warn('Both Boss Loot Assets Premium and Free are activated, both modules use the path `blfx.` to prefix files. This will cause conflicts! Recommend disabling / uninstalling the free version.');
+            modulePrefix = `blfx`;
+            break;
     }
 
     return closestPath(modulePrefix, ...categories);

@@ -72,6 +72,9 @@ import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
 import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
 import { hitTheDirt } from "./location/hit-the-dirt.js";
+import { fightingSpirit } from "./token/fighting-spirit.js";
+import { strengthBeforeDeath } from "./token/strength-before-death.js";
+import { rapidStrike } from "./target/rapid-strike.js";
 
 export const effect = {
     armorOfAgathys,
@@ -148,4 +151,7 @@ export const effect = {
     grease,
     haloOfSpores,
     lightningBolt,
+    rapidStrike,
+    fightingSpirit,
+    strengthBeforeDeath,
 };
