@@ -63,8 +63,5 @@ export const drunkenBlur = {
     create,
     play,
     stop,
-    severe : {
-        play: severe,
-        stop: stop,
-    },
+    severe,
 };
