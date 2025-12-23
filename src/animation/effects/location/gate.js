@@ -5,6 +5,7 @@
     Updated: bakanabaka
 ** */
 
+import { utils } from '../../../lib/utils.js';
 import { img } from '../../../lib/filemanager.js';
 import { autoanimations, CONCENTRATING } from '../../../integration/autoanimations.js';
 
@@ -99,13 +100,12 @@ async function create(token, config) {
     mConfig.id = `${token.id} - ${mConfig.id}`;
     const { id, destination, destinationList, template } = mConfig;
 
-    let position;
-    if (template) {
-        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
-    } else {
-        position = await Sequencer.Crosshair.show();
-        if (position.cancelled) { return; }
-    }
+    const cfg = { 
+        width: 20, 
+        icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
+        label: 'Gate'
+    };
+    let position = await utils.getPosition(template, cfg);
     if (!position) { return; }
 
     let destPlane = destination;

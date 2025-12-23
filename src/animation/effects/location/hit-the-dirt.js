@@ -1,3 +1,4 @@
+import { utils } from '../../../lib/utils.js';
 import { img } from '../../../lib/filemanager.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
 
@@ -12,31 +13,14 @@ const DEFAULT_CONFIG = {
 
 async function create(token, config, options) {
     if (options.type == 'aefx') return;
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, template } = mConfig;
+    const { id, template } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
-    let position;
-    if (template) {
-        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
-    } else {
-        let crosshair = {
-            width: 1,
-            gridHighlight: true,
-            icon: {
-                texture: 'icons/magic/control/silhouette-fall-slip-prone.webp',
-                borderVisible: true,
-            },
-            snap: {
-                position: CONST.GRID_SNAPPING_MODES.VERTEX | CONST.GRID_SNAPPING_MODES.CENTER,
-                resolution: 2
-            },
-            distanceMin: null,
-            distanceMax: null,
-            label: { text: "Hit The Dirt!"},
-        };
-        position = await Sequencer.Crosshair.show(crosshair);
-        if (position.cancelled) { return; }
-    }
+    const cfg = { 
+        width: 1, 
+        icon: 'icons/magic/control/silhouette-fall-slip-prone.webp', 
+        label: 'Hit The Dirt!'
+    };
+    let position = await utils.getPosition(template, cfg);
     if (!position) { return; }
 
     let seq = new Sequence()

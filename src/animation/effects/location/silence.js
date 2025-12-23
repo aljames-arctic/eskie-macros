@@ -3,6 +3,7 @@
    Update Author: bakanabaka
 ** */
 
+import { utils } from '../../../lib/utils.js';
 import { img } from "../../../lib/filemanager.js";
 import { autoanimations, CONCENTRATING } from "../../../integration/autoanimations.js";
 
@@ -23,13 +24,12 @@ async function createSilence(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
     const { id, size, template } = mConfig;
 
-    let position;
-    if (template) {
-        position = { x: template.x, y: template.y };    // Decouple from the template so when it is deleted we don't crash
-    } else {
-        position = await Sequencer.Crosshair.show();
-        if (position.cancelled) { return; }
-    }
+    const cfg = { 
+        width: 10, 
+        icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
+        label: 'Silence'
+    };
+    let position = await utils.getPosition(template, cfg);
     if (!position) { return; }
 
     const sequence = new Sequence();

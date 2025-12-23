@@ -102,6 +102,7 @@ async function create(token, config) {
         const farpoint = template._object.ray.B;        // Get the furthest point on the cone
         position = { x: farpoint.x, y: farpoint.y };    // Decouple from the template so when it is deleted we don't crash
     } else {
+        // TODO - better sequencer crosshairs for cones
         position = await Sequencer.Crosshair.show();
         if (position.cancelled) { return; }
     }

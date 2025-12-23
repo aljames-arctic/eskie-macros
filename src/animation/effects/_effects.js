@@ -14,7 +14,7 @@ import { channelElement } from "./token/channelElement/_channelElement.js";
 import { charmPerson } from "./multi-token/charm-person.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
 import { detect } from "./token/detect/_detect.js";
-import { dimensionDoor } from "./token/dimension-door.js";
+import { dimensionDoor } from "./location/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { divineSmite } from "./target/divine-smite.js";
 import { divineStrike } from "./target/divine-strike.js";
