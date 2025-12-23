@@ -6,7 +6,7 @@
 import { img } from '../../../../lib/filemanager.js';
 import { util } from './rageUtil.js';
 
-const DEFAULT_CONFIG = {
+export const DEFAULT_CONFIG = {
     id: 'RageV2',
     color: 'red',
     effect: {
@@ -14,7 +14,7 @@ const DEFAULT_CONFIG = {
     }
 };
 
-async function create(token, config) {
+function create(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, color, effect } = mConfig;
 
@@ -144,7 +144,7 @@ async function play(token, config) {
         await token.document.update({ texture: { src: rageImg } }, { animate: true });
     }
 
-    let seq = await create(token, config);
+    let seq = create(token, config);
     if (seq) { await seq.play(); }
 }
 

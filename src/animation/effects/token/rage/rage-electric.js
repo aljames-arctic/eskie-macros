@@ -6,12 +6,12 @@
 import { img } from '../../../../lib/filemanager.js';
 import { util } from './rageUtil.js';
 
-const DEFAULT_CONFIG = {
+export const DEFAULT_CONFIG = {
     id: 'ElectricRage',
     color: 'purple',
 };
 
-async function create(token, config) {
+function create(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id, color } = mConfig;
 
@@ -100,7 +100,7 @@ async function create(token, config) {
 }
 
 async function play(token, config) {
-    let seq = await create(token, config);
+    let seq = create(token, config);
     if (seq) { await seq.play(); }
 }
 
