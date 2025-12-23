@@ -16,6 +16,7 @@ function create(user, config = {}){
 
     const x = canvas.scene.dimensions.width / 2;
     const y = canvas.scene.dimensions.height / 2;
+    const drift = (canvas.grid.size / 4) * sway;
 
     const seq = new Sequence()
         .effect()
@@ -30,14 +31,10 @@ function create(user, config = {}){
             .belowTiles()
             .filter("Blur", { blurX: blur, blurY: blur })
             .opacity(opacity)
-            .persist()
-            .loopProperty("spriteContainer", "position.y", {
-                from: -25 * sway, to: 25 * sway, duration: durationY, pingPong: true
-            })
-            .loopProperty("spriteContainer", "position.x", {
-                from: -25 * sway, to: 25 * sway, duration: durationX, pingPong: true
-            })
+            .loopProperty("spriteContainer", "position.x", { from: -drift, to: drift, duration: durationX, pingPong: true })
+            .loopProperty("spriteContainer", "position.y", { from: -drift, to: drift, duration: durationY, pingPong: true })
             .forUsers(user)
+            .persist()
     return seq;
 }
 
@@ -49,9 +46,9 @@ async function play(users, config = {}) {
 }
 
 async function severe(users) {
-    await play(users, {opacity: 1.00, sway: 1.0, durationX: 6500, durationY: 11000});
-    await play(users, {opacity: 0.57, sway: -0.9, durationX: 16500, durationY: 7000});
-    await play(users, {opacity: 0.47, sway: 1.1, durationX: 13000, durationY: 10500});
+    await play(users, {opacity: 1.00, sway:  1.0, durationX:  6500, durationY: 11000});
+    await play(users, {opacity: 0.57, sway: -0.9, durationX: 16500, durationY:  7000});
+    await play(users, {opacity: 0.47, sway:  1.1, durationX: 13000, durationY: 10500});
 }
 
 async function stop(users, config = {}) {
