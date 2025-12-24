@@ -6,8 +6,8 @@ import { grease } from "./token/grease.js";
 import { haloOfSpores } from "./token/halo-of-spores.js";
 import { lightningBolt } from "./token/lightning-bolt.js";
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
-import { banishment } from "./target/banishment.js";
-import { bless } from "./target/bless.js";
+import { banishment } from "./active-effect/banishment.js";
+import { bless } from "./active-effect/bless.js";
 import { channelDivinityControlUndead } from "./target/channelDivinityControlUndead.js";
 import { channelDivinityDreadAspect } from "./token/channelDivinityDreadAspect.js";
 import { channelElement } from "./token/channelElement/_channelElement.js";
@@ -37,14 +37,14 @@ import { gate } from "./template/gate.js";
 import { guidingBolt } from "./target/guiding-bolt.js";
 import { healingWord } from "./target/healing-word.js";
 import { hex } from "./target/hex/_hex.js";
-import { hide } from "./token/hide.js";
+import { hide } from "./active-effect/hide.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
 import { incorporeal } from "./token/incorporeal/incorporeal.js";
 import { mistyStep } from "./token/misty-step.js";
 import { petrified } from "./target/petrified.js";
 import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { possession } from "./token/possession/possession.js";
-import { rage } from "./token/rage/_rage.js";
+import { rage } from "./active-effect/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
 import { colorSpray } from './template/color-spray.js'
 import { romanCandle } from "./target/roman-candle.js";
@@ -72,8 +72,8 @@ import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
 import { armsOfHadar } from "./multi-token/arms-of-hadar.js";
 import { hitTheDirt } from "./template/hit-the-dirt.js";
-import { fightingSpirit } from "./token/fighting-spirit.js";
-import { strengthBeforeDeath } from "./token/strength-before-death.js";
+import { fightingSpirit } from "./active-effect/fighting-spirit.js";
+import { strengthBeforeDeath } from "./active-effect/strength-before-death.js";
 import { rapidStrike } from "./target/rapid-strike.js";
 
 export const effect = {
