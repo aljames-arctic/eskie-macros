@@ -2,9 +2,9 @@
 //Author: .eskie
 //Update: bakanabaka
 
+import { utils } from '../../../lib/utils.js';
 import { img } from '../../../lib/filemanager.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
-import { utils } from '../utils/utils.js';
 
 const DEFAULT_CONFIG_MELEE = {
     id: "sneakAttackMelee",
