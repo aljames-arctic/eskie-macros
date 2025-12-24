@@ -1,6 +1,6 @@
 import { cone } from "./cone.js";
 
-export const templates = {
+export const crosshair = {
     token: {
         cone,
     },
