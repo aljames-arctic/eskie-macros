@@ -41,12 +41,12 @@ await eskie.effect.banishment.stop(target);
 await eskie.effect.banishment.play(target, {color: 'purple'});
 await eskie.effect.banishment.stop(target, {color: 'red'});
 
-// Make your players wonder if they are seeing double!
-let users = game.users.map(u => u.id);
-await eskie.overlay.drunkBlur.stop(users);
+// Make everyone wonder if they are seeing double!
+let users = game.users.map(u => u.name);
+await eskie.overlay.blur.drunk.play(users);
 
 // Sober them up!
-await eskie.overlay.drunkBlur.stop(users);
+await eskie.overlay.blur.drunk.stop(users);
 ```
 
 ## Want to Contribute?
