@@ -16,7 +16,7 @@ import { cloudOfSand } from "./uncategorized/multi-token/cloudOfSand.js";
 import { detect } from "./uncategorized/token/detect/_detect.js";
 import { dimensionDoor } from "./template/dimension-door.js";
 import { disintegrate } from "./uncategorized/target/disintegrate.js";
-import { divineSmite } from "./uncategorized/target/divine-smite.js";
+import { divineSmite } from "./on-target/divine-smite.js";
 import { divineStrike } from "./uncategorized/target/divine-strike.js";
 import { drainingKiss } from "./uncategorized/target/draining-kiss.js";
 import { drainingTouch } from "./uncategorized/target/drainingTouch.js";
@@ -53,7 +53,7 @@ import { sanctuary } from "./uncategorized/target/sanctuary.js";
 import { shuffle } from "./uncategorized/multi-token/shuffle.js";
 import { skyRocket } from "./uncategorized/target/sky-rocket.js";
 import { sleep } from "./uncategorized/target/sleep.js";
-import { sneakAttack } from "./uncategorized/target/sneakAttack.js";
+import { sneakAttack } from "./on-target/sneak-attack.js";
 import { speakWithDead } from "./uncategorized/target/speakWithDead.js";
 import { teleport } from "./uncategorized/token/teleport.js";
 import { vortexWarp } from "./uncategorized/target/vortex-warp.js";
@@ -70,11 +70,11 @@ import { stunningStrike } from "./uncategorized/target/stunning-strike.js";
 import { mirrorImage } from "./uncategorized/token/mirror-image.js";
 import { trueStrike } from "./uncategorized/target/true-strike.js";
 import { viciousMockery } from "./uncategorized/target/vicious-mockery.js";
-import { armsOfHadar } from "./uncategorized/multi-token/arms-of-hadar.js";
+import { armsOfHadar } from "./template/arms-of-hadar.js";
 import { hitTheDirt } from "./template/hit-the-dirt.js";
 import { fightingSpirit } from "./active-effect/fighting-spirit.js";
 import { strengthBeforeDeath } from "./active-effect/strength-before-death.js";
-import { rapidStrike } from "./uncategorized/target/rapid-strike.js";
+import { rapidStrike } from "./on-target/rapid-strike.js";
 
 export const effect = {
     armorOfAgathys,
