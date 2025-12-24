@@ -2,7 +2,7 @@
 // Modular Conversion: bakanabaka
 
 import { img } from '../../../lib/filemanager.js';
-import { text as textUtil } from '../../util/text.js';
+import { text as textUtil } from '../../utils/text.js';
 import { cinemaBars } from '../../scene-overlays/cinema-bars.js';
 
 const DEFAULT_CONFIG = {

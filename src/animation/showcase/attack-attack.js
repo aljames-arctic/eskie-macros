@@ -1,5 +1,5 @@
 import { img } from '../../lib/filemanager.js';
-import { teleport } from '../util/teleport.js';
+import { teleport } from '../utils/teleport.js';
 
 const DEFAULT_CONFIG = {
     zoom: 1.8,
