@@ -137,6 +137,7 @@ async function register(name, trigger, animation, config, version) {
  * @returns {Promise<void>}
  */
 async function submit() {
+    if (!game.user.isGM) return;
     if (!dependency.isActivated({ id: "autoanimations", min: "6.5.1" }, "EMP | Automated Animations integration skipped.")) { return; }
     const { missingEntriesList, updatedEntriesList, customEntriesList } = await generateAutorecUpdate(EMP_AA_Menu, true);
     if (missingEntriesList.length || updatedEntriesList.length || customEntriesList.length) {
