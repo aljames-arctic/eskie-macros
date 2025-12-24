@@ -1,7 +1,7 @@
 // Original Author: Unknown (from Discord animations)
 // Modular Conversion: bakanabaka
 
-import { utils } from '../../../lib/utils.js';
+import { utils } from '../../utils/utils.js';
 import { img } from '../../../lib/filemanager.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
 

@@ -1,5 +1,5 @@
 import { img } from "../../lib/filemanager.js";
-import { utils } from "../../lib/utils.js"
+import { utils } from "../utils/utils.js"
 
 const DEFAULT_CONFIG = {
     id: 'cinema-bars',

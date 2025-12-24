@@ -1,7 +1,6 @@
 import { dependency } from './lib/dependency.js';
 import { animation } from './animation/_animation.js';
 import { filemanager } from './lib/filemanager.js';
-import { utils } from './lib/utils.js';
 import { crosshair } from './animation/crosshair/_crosshairs.js';
 import { autoanimations } from './integration/autoanimations.js';
 // Import module settings to also run its initialization code
@@ -26,7 +25,6 @@ function setupModule() {
     // Setup dependency API
     setupApiCalls( animation );
     setupApiCalls( filemanager );
-    setupApiCalls( utils );
     setupApiCalls({ dependency });
     setupApiCalls({ crosshair });
 }

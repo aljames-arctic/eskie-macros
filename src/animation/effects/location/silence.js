@@ -3,7 +3,7 @@
    Update Author: bakanabaka
 ** */
 
-import { utils } from '../../../lib/utils.js';
+import { utils } from '../../utils/utils.js';
 import { img } from "../../../lib/filemanager.js";
 import { autoanimations, CONCENTRATING } from "../../../integration/autoanimations.js";
 
