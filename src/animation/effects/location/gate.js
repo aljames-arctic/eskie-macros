@@ -101,7 +101,8 @@ async function create(token, config) {
     const { id, destination, destinationList, template } = mConfig;
 
     const cfg = { 
-        width: 20, 
+        radius: 10,
+        max: 60,
         icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
         label: 'Gate'
     };
@@ -120,7 +121,8 @@ async function create(token, config) {
         return;
     }
 
-    let portalSize = (template.distance) ? (template.distance / canvas.grid.distance) : 5;
+    const diameter = (template?.distance) ? (template.distance / canvas.grid.distance) : 20;
+    const portalSize = diameter / canvas.grid.distance;
     const [width, height] = [portalSize, portalSize];
 
     const { portalColor, circleColor, castColor, planeImage, pulseColor, saturation, hue, weather, filter } = planeConfig;
@@ -170,7 +172,7 @@ async function create(token, config) {
         .persist()
         .anchor({ x: 0.5, y: 0.57 })
         .rotateTowards(token)
-        .size({ width: width, height: height }, { gridUnits: true })
+        .size({ width: width - 1, height: height - 1 }, { gridUnits: true })
         .animateProperty("sprite", "scale.x", { from: 0, to: 5.25, duration: 750, delay: 100, ease: "easeOutExpo" })
         .animateProperty("sprite", "scale.y", { from: 6, to: 5.25, duration: 50, delay: 100, ease: "easeOutExpo" })
         .filter("ColorMatrix", { hue: hue, saturate: saturation })

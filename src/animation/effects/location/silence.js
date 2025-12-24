@@ -25,7 +25,8 @@ async function createSilence(token, config = {}) {
     const { id, size, template } = mConfig;
 
     const cfg = { 
-        width: 10, 
+        radius: 20,
+        max: 120,
         icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
         label: 'Silence'
     };

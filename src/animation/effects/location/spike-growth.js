@@ -137,18 +137,13 @@ async function createSpikeGrowth(token, config = {}, options = {}) {
     const { id, size, template } = mConfig;
 
     const cfg = { 
-        width: 10, 
+        radius: 20,
+        max: 150,
         icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
         label: 'Spike Growth'
     };
     let position = await utils.getPosition(template, cfg);
     if (!position) { return; }
-
-    // Effect is not active, so play it
-    if (!position) {
-        position = await Sequencer.Crosshair.show(crosshairConfig);
-        if (position.cancelled) { return; }
-    }
 
     const initialSequence = await createInitialSpikeGrowth(position, config);
     const persistentSpikeSequences = await createPersistentSpikes(token, position, config);

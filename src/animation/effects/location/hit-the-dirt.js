@@ -16,7 +16,7 @@ async function create(token, config, options) {
     const { id, template } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     const cfg = { 
-        width: 1, 
+        radius: 1, 
         icon: 'icons/magic/control/silhouette-fall-slip-prone.webp', 
         label: 'Hit The Dirt!'
     };

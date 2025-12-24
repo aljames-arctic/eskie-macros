@@ -13,7 +13,8 @@ async function create(token, config = {}) {
     const { id, template } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     const cfg = { 
-        width: 1, 
+        radius: 1,
+        max: 500,
         icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
         label: 'Dimension Door'
     };

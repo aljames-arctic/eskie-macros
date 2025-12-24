@@ -21,28 +21,70 @@ function owner(token) {
 
 
 function getCrosshairCfg(config) {
-    const DEFAULT_CONFIG = {
-        width: 1,
-        icon: '',
-        label: '',
-    };
-    const { width, icon, label } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-
-    return {
-        width: width,
-        gridHighlight: true,
+    const { CENTER, CORNER,  VERTEX, EDGE_MIDPOINT, SIDE_MIDPOINT } = CONST.GRID_SNAPPING_MODES;
+    const DEFAULT_CROSSHAIR = {
+        t: 'circle',
+        distance: canvas.grid.size / 2, // Radius for circles
+        width: canvas.grid.size,        // Ray witdth
+        borderAlpha: 0.75,              // Determines the transparency of the template border (0-1, default 0.75)
+        borderColor: "#000000",       // Determines the color of the template border
+        texture: '',                    // The texture to show within the template
+        textureAlpha: 0.5,              // The transparency of the chosen texture (0-1, default .5)
+        textureScale: 1,                // The texture scale relative to the template size (default 1)
+        angle: 0,                       // The starting angle for the template
+        direction: 0,                   // The starting direction for the template
+        gridHighlight: true,            // Toggles whether this crosshair should highlight the grid
         icon: {
-            texture: icon,
-            borderVisible: true,
+            texture: '',                // Optional texture to use for the icon of the crosshair
+            borderVisible: true         // Whether this icon should have a border
         },
         snap: {
-            position: CONST.GRID_SNAPPING_MODES.VERTEX | CONST.GRID_SNAPPING_MODES.CENTER,
-            resolution: 2
+            position: CENTER | CORNER | EDGE_MIDPOINT,           // See CONST.GRID_SNAPPING_MODES
+            resolution: 2,              // How many sub-squares the snapping should consider (default: 1)
+            //size: number, // See CONST.GRID_SNAPPING_MODES
+            //direction: mumber // How many degrees the direction of this crosshair should snap at
         },
-        distanceMin: null,
-        distanceMax: null,
-        label: { text: label},
+        //lockDrag: boolean,
+        //distanceMin: null | number, // How small or short the crosshair can be at its smallest 
+        //distanceMax: null | number, // How big or how far the crosshair can go at its biggest
+        label: {
+            text: '',
+            //dx: null | number,
+            //dy: null | number,
+        },
+        location: {
+            obj: null,                  // The optional object to tie the crosshair to
+            //limitMinRange: null | number, // Causes the crosshair to not be able to be placed within this number of grid units
+            //limitMaxRange: null | number, // Causes the crosshair to not be able to be placed beyond this number of grid units of the location 
+            showRange: true, // Displays the distance between the crosshair and the location in grid units under the crosshair
+            lockToEdge: false, // Whether to lock the crosshair to the edge of the target (mostly used with tokens)
+            lockToEdgeDirection: false, // Causes the crosshair to be locked along the normal of the token's edge (and corner, in the case of square tokens)
+            offset: {
+                x: null,
+                y: null
+            }, // Causes the location to be offset by this many pixels
+            wallBehavior: true, // Causes the crosshair to be unable to be placed based on this configuration, eg only within sight, or no walls at all between crosshair and location, or anywhere. See Sequencer.Crosshair.PLACEMENT_RESTRICTIONS,
+            displayRangePoly: true, // Causes a polygon to be rendered below the object that shows the limit based on the limitMaxRange set above - this requires both that, and obj to have a position
+            //rangePolyFillColor: null | number, // The fill color of the range polygon
+            //rangePolyLineColor: null | number, // The line color of the range polygon
+            //rangePolyFillAlpha: null | number, // The fill alpha of the range polygon
+            //rangePolyLineAlpha: null | number, // The line alpha of the range polygon
+        },
+        lockManualRotation: false // Whether to prevent the user from rotating this crosshair's direction
     };
+
+    let mergeObject = {
+        t: config.type ?? 'circle',
+        distance: config.radius ?? config.distance ?? canvas.grid.size / 2, // Radius for circles
+        width: config.width ?? canvas.grid.size,        // Ray witdth
+        distanceMin: config.min ?? null,
+        distanceMax: config.max ?? null,
+        label: {
+            text: config.label ?? '',
+        }
+    }
+
+    return foundry.utils.mergeObject(DEFAULT_CROSSHAIR, mergeObject, {inplace:false});
 }
 
 async function getPosition(template, config) {
