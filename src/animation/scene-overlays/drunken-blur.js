@@ -38,20 +38,35 @@ function create(user, config = {}){
     return seq;
 }
 
-async function play(users, config = {}) {
+async function play(users = [], config = {}) {
     for (const user of users) {
         const seq = create(user, config);
         if (seq) { seq.play(); }
     }
 }
 
-async function severe(users) {
-    await play(users, {opacity: 1.00, sway:  1.0, durationX:  6500, durationY: 11000});
-    await play(users, {opacity: 0.57, sway: -0.9, durationX: 16500, durationY:  7000});
-    await play(users, {opacity: 0.47, sway:  1.1, durationX: 13000, durationY: 10500});
+async function multiPlay(users = [], configs = []) {
+    const sequences = [];
+    for (const user of users) {
+        const seq = new Sequence();
+        for (const config of configs) {
+            seq.addSequence(create(user, config));
+        }
+        sequences.push(seq);
+    }
+    return Promise.all(sequences.map(seq => seq.play()));
 }
 
-async function stop(users, config = {}) {
+async function severe(users = []) {
+    const configs = [
+        {opacity: 1.00, sway:  1.0, durationX:  6500, durationY: 11000},
+        {opacity: 0.57, sway: -0.9, durationX: 16500, durationY:  7000},
+        {opacity: 0.47, sway:  1.1, durationX: 13000, durationY: 10500},
+    ];
+    await multiPlay(users, configs);
+}
+
+async function stop(users = [], config = {}) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user.id}` })));
 }
@@ -59,6 +74,7 @@ async function stop(users, config = {}) {
 export const drunkenBlur = { 
     create,
     play,
+    multiPlay,
     stop,
     severe,
 };
