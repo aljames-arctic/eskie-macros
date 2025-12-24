@@ -10,17 +10,27 @@ const DEFAULT_CONFIG = {
     durationY: 11000,
 }
 
-function create(user, config = {}){
-    const { id, opacity, blur, sway, durationX, durationY } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+function create(users, config = {}){
     if (!canvas?.scene?.background?.src) return;
+
+    // Catch the case where we pass in an array of users
+    // Preference of this create function is single users
+    const seq = new Sequence();
+    if (Array.isArray(users)) {
+        for (const user of users) {
+            seq.addSequence(create(user, config));
+        }
+        return seq;
+    }
+
+    const { id, opacity, blur, sway, durationX, durationY } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     const x = canvas.scene.dimensions.width / 2;
     const y = canvas.scene.dimensions.height / 2;
     const drift = (canvas.grid.size / 8) * sway;
 
-    const seq = new Sequence()
-        .effect()
-            .name(`${id} - ${user.id}`)
+    seq.effect()
+            .name(`${id} - ${users}`)
             .file(canvas.scene.background.src)
             .atLocation({ x, y })
             .size({
@@ -33,7 +43,7 @@ function create(user, config = {}){
             .opacity(opacity)
             .loopProperty("spriteContainer", "position.x", { from: -drift, to: drift, duration: durationX, pingPong: true })
             .loopProperty("spriteContainer", "position.y", { from: -drift, to: drift, duration: durationY, pingPong: true })
-            .forUsers(user)
+            .forUsers(users)
             .persist()
     return seq;
 }
@@ -45,36 +55,34 @@ async function play(users = [], config = {}) {
     }
 }
 
-async function multiPlay(users = [], configs = []) {
-    const sequences = [];
-    for (const user of users) {
-        const seq = new Sequence();
-        for (const config of configs) {
-            seq.addSequence(create(user, config));
-        }
-        sequences.push(seq);
-    }
-    return Promise.all(sequences.map(seq => seq.play()));
+function createDrunkBlur(users = []) {
+    const seq = new Sequence();
+    seq.addSequence(create(users, {opacity: 1.00, sway:  1.0, durationX:  6500, durationY: 11000}));
+    seq.addSequence(create(users, {opacity: 0.57, sway: -0.9, durationX: 16500, durationY:  7000}));
+    seq.addSequence(create(users, {opacity: 0.47, sway:  1.1, durationX: 13000, durationY: 10500}));
+    return seq;
 }
 
-async function severe(users = []) {
-    const configs = [
-        {opacity: 1.00, sway:  1.0, durationX:  6500, durationY: 11000},
-        {opacity: 0.57, sway: -0.9, durationX: 16500, durationY:  7000},
-        {opacity: 0.47, sway:  1.1, durationX: 13000, durationY: 10500},
-    ];
-    await multiPlay(users, configs);
+async function playDrunkBlur(users = []) {
+    const seq = createDrunkBlur(users);
+    if (seq) { seq.play(); }
 }
 
 async function stop(users = [], config = {}) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user.id}` })));
+    if (Array.isArray(users))
+        return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user}` })));
+    else
+        return Sequencer.EffectManager.endEffects({ name: `${id} - ${users}` });
 }
 
-export const drunkenBlur = { 
+export const blur = { 
     create,
     play,
-    multiPlay,
     stop,
-    severe,
+    drunk: {
+        create: createDrunkBlur,
+        play: playDrunkBlur,
+        stop,
+    },
 };

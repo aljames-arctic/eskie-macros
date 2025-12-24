@@ -2,12 +2,14 @@ async function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function owner(token) {
+function owners(token, config = {}) {
     if (!token) return [];
     const ownership = token.actor.ownership;
     
     // Filter users: Level 3 is "Owner"
-    const owners = game.users.filter(user => { return ownership[user.id] === 3; });
+    let owners = game.users.filter(user => { return ownership[user.id] === 3; });
+    if (!config.applyPC) owners = owners.filter(user => { return user.isGM === true; });
+    if (!config.applyGM) owners = owners.filter(user => { return user.isGM === false; });
     return owners;
 };
 
@@ -125,7 +127,7 @@ function getNearestSquareCenter(token, target) {
 }
 
 export const utils = {
-    owner,
+    owners,
     wait,
     getPosition,
     getNearestSquareCenter,

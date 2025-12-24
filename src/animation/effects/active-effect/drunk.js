@@ -1,5 +1,7 @@
 import { img } from "../../../lib/filemanager.js";
 import { utils } from "../../utils/utils.js"
+import { blur } from "../../scene-overlays/status-blur.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 /* **
    Originally Published: 4/14/2023
@@ -7,56 +9,29 @@ import { utils } from "../../utils/utils.js"
    Update Author: bakanabaka
 ** */
 
-/**
- * Creates a drunk emote effect on a token.
- *
- * @param {Token} token The token to play the effect on.
- * 
- * @param {object} [config={}] Configuration for the effect.
- * @param {string} [config.id='drunk'] The id of the effect.
- * @param {number} [config.duration=7000] The duration of the effect in milliseconds. A duration of 0 will make the effect persist.
- * @param {object[]} [config.effect] An array of effect objects to display. Partial objects will be merged with default values.
- * @param {string} [config.effect.img] The image file to use for the effect.
- * @param {number} [config.effect.x] The x offset of the effect in grid units.
- * @param {number} [config.effect.y] The y offset of the effect in grid units.
- * @param {number} [config.effect.scale] The scale of the effect.
- * 
- * @returns {Promise<void>} A promise that resolves when the effect is finished.
- */
-async function create(token, config = {}) {
-    const defaultConfig = {
-        id: 'drunk',
-        duration: 7000,
-        effect: [
-            { // bubbles
-                img: 'eskie.emote.drunk_bubbles.01',
-                x: -0.2,
-                y: -0.3,
-                scale: 0.7
-            },
-            { // blush
-                img: 'eskie.emote.blush.01',
-                x: -0.15,
-                y: 0.15,
-                scale: 0.5
-            },
-            {} // sway
-        ]
-    };
-    let { id, duration, effect } = utils.mergeObject(defaultConfig, config);
+const DEFAULT_CONFIG = {
+    id: 'drunk',
+    duration: -1,
+    overlay: {
+        applyPC: true,
+        applyGM: false,
+    }
+}
 
+async function create(token, config = {}) {
+    const { id, duration } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace: false});
     const tokenWidth = token.document.width;
 
     let drunkEffect = new Sequence()
         // Drunk bubbles effect
         .effect()
-        .file(img(effect[0].img))
+        .file(img('eskie.emote.drunk_bubbles.01'))
         .name(id)
         .delay(0, 500)
-        .atLocation(token, { offset: { x: effect[0].x * tokenWidth, y: effect[0].y * tokenWidth }, gridUnits: true });
+        .atLocation(token, { offset: { x: -0.2 * tokenWidth, y: -0.3 * tokenWidth }, gridUnits: true });
     drunkEffect = (duration > 0) ? drunkEffect.duration(duration) : drunkEffect.persist();
     drunkEffect = drunkEffect
-        .scaleToObject(effect[0].scale)
+        .scaleToObject(0.7)
         .zeroSpriteRotation()
         .loopProperty("sprite", "position.x", { from: 0, to: -0.02, duration: 2000, pingPong: true, gridUnits: true, ease: "linear" })
         .loopProperty("sprite", "position.y", { from: 0.15, to: -0.15, duration: 6000, pingPong: false, gridUnits: true, ease: "easeOutSine" })
@@ -72,18 +47,18 @@ async function create(token, config = {}) {
 
         // Blush effect attached to token with bobbing motion
         .effect()
-        .file(img(effect[1].img))
+        .file(img('eskie.emote.blush.01'))
         .zIndex(0)
         .name(id)
         .opacity(0.85)
-        .scaleToObject(effect[1].scale)
+        .scaleToObject(0.5)
         .loopProperty("spriteContainer", "position.x", { from: -20, to: 20, duration: 2500, pingPong: true, ease: "easeInOutSine" })
         .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
         .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true, ease: "easeInOutSine" });
     drunkEffect = (duration > 0) ? drunkEffect.duration(duration) : drunkEffect.persist();
     drunkEffect = drunkEffect
         .atLocation(token)
-        .spriteOffset({ x: effect[1].x * tokenWidth, y: effect[1].y * tokenWidth }, { gridUnits: true, local: true })
+        .spriteOffset({ x: -0.15 * tokenWidth, y: 0.15 * tokenWidth }, { gridUnits: true, local: true })
         .attachTo(token, { bindAlpha: false, bindRotation: true })
         .private()
 
@@ -98,22 +73,36 @@ async function create(token, config = {}) {
     drunkEffect = (duration > 0) ? drunkEffect.duration(duration) : drunkEffect.persist();
     drunkEffect = drunkEffect
         .attachTo(token, { bindAlpha: false })
-        .waitUntilFinished()
-
-        .animation()
-        .on(token)
-        .opacity(1);
 
     return drunkEffect;
 }
 
 async function play(token, config = {}) {
+    const { overlay } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace: false});
+
     const seq = await create(token, config);
     if (seq) { await seq.play(); }
+
+    if (overlay.applyPC || overlay.applyGM) {
+        const owners = utils.owners(token, { applyPC: overlay.applyPC, applyGM: overlay.applyGM });
+        blur.drunk.play(owners.map(u => u.name));
+    }
 }
 
-async function stop(token, {id = 'drunk'} = {}) {
-    return Sequencer.EffectManager.endEffects({ name: id, object: token });
+async function stop(token, config = {}) {
+    const { id, overlay } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace: false})
+    if (overlay.applyPC || overlay.applyGM) {
+        const owners = utils.owners(token, { applyPC: overlay.applyPC, applyGM: overlay.applyGM });
+        blur.drunk.stop(owners.map(u => u.name))
+    }
+    
+    Sequencer.EffectManager.endEffects({ name: id, object: token });
+
+    new Sequence()
+        .animation()
+        .on(token)
+        .opacity(1)
+        .play();
 }
 
 export const drunk = {
@@ -121,3 +110,5 @@ export const drunk = {
     play,
     stop,
 };
+
+autoanimations.register("Drunk", "effect", "eskie.effect.drunk", DEFAULT_CONFIG);
