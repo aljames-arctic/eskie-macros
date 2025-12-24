@@ -1,5 +1,5 @@
-import { img } from "../../../../lib/filemanager.js";
-import { utils } from "../../../utils/utils.js"
+import { img } from "../../../lib/filemanager.js";
+import { utils } from "../../utils/utils.js"
 
 /* **
    Originally Published: 4/14/2023

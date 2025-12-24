@@ -3,7 +3,7 @@
  * Update Author: bakanabaka
  */
 
-import { img } from '../../../../lib/filemanager.js';
+import { img } from '../../../lib/filemanager.js';
 
 const DEFAULT_CONFIG = {
     id: 'draining-kiss',

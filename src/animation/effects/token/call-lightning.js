@@ -1,7 +1,7 @@
 // Original Author: .eskie
 // Modular Conversion: bakanabaka
 
-import { img } from '../../../../lib/filemanager.js';
+import { img } from '../../../lib/filemanager.js';
 
 const AVAILABLE_SIZES = [10, 20, 30, 60];
 

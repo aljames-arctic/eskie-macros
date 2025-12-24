@@ -1,9 +1,9 @@
 //Last Updated: 12/22/2025
 //Author: .eskie
 
-import { utils } from '../../../utils/utils.js';
-import { img } from '../../../../lib/filemanager.js';
-import { autoanimations } from '../../../../integration/autoanimations.js';
+import { utils } from '../../utils/utils.js';
+import { img } from '../../../lib/filemanager.js';
+import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
     id: "Rapid Strike",
