@@ -21,12 +21,14 @@ const DEFAULT_CONFIG = {
 async function create(token, config = {}) {
     const { id, duration } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace: false});
     const tokenWidth = token.document.width;
+    const label = `${id} - ${token.id}`;
 
     let drunkEffect = new Sequence()
         // Drunk bubbles effect
         .effect()
         .file(img('eskie.emote.drunk_bubbles.01'))
-        .name(id)
+        .zIndex(0)
+        .name(label)
         .delay(0, 500)
         .atLocation(token, { offset: { x: -0.2 * tokenWidth, y: -0.3 * tokenWidth }, gridUnits: true });
     drunkEffect = (duration > 0) ? drunkEffect.duration(duration) : drunkEffect.persist();
@@ -49,7 +51,7 @@ async function create(token, config = {}) {
         .effect()
         .file(img('eskie.emote.blush.01'))
         .zIndex(0)
-        .name(id)
+        .name(label)
         .opacity(0.85)
         .scaleToObject(0.5)
         .loopProperty("spriteContainer", "position.x", { from: -20, to: 20, duration: 2500, pingPong: true, ease: "easeInOutSine" })
@@ -65,7 +67,7 @@ async function create(token, config = {}) {
         // Sway effect attached to token
         .effect()
         .copySprite(token)
-        .name(id)
+        .name(label)
         .atLocation(token)
         .loopProperty("spriteContainer", "position.x", { from: -20, to: 20, duration: 2500, pingPong: true, ease: "easeInOutSine" })
         .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
@@ -96,7 +98,8 @@ async function stop(token, config = {}) {
         blur.drunk.stop(owners.map(u => u.name))
     }
     
-    Sequencer.EffectManager.endEffects({ name: id, object: token });
+    const label = `${id} - ${token.id}`;
+    Sequencer.EffectManager.endEffects({ name: label, object: token });
 
     new Sequence()
         .animation()
