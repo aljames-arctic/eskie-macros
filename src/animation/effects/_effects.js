@@ -36,7 +36,7 @@ import { flurryOfBlows } from "./token/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
 import { gate } from "./template/gate.js";
 import { guidingBolt } from "./target/guiding-bolt.js";
-import { healingWord } from "./target/healing-word.js";
+import { healingWord } from "./on-target/healing-word.js";
 import { hex } from "./on-target/hex/_hex.js";
 import { hide } from "./active-effect/hide.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";

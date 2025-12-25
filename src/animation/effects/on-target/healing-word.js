@@ -4,6 +4,7 @@
  */
 
 import { img } from '../../../lib/filemanager.js';
+import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
     id: 'healing-word',
@@ -88,7 +89,7 @@ async function create(token, target, config = {}) {
 
         .effect()
         .name(id)
-        .atLocation(token, { offset: { x: 0, y: 0 }, gridUnits: true })
+        .atLocation(token, { offset: { x: 0, y: -0.6 * token.document.width }, gridUnits: true })
         .text(word, style)
         .duration(2000)
         .fadeOut(250)
@@ -96,7 +97,6 @@ async function create(token, target, config = {}) {
         .animateProperty("sprite", "scale.x", { from: 0, to: 0.5, duration: 1000, delay: 500 })
         .animateProperty("sprite", "scale.y", { from: 0, to: 0.5, duration: 1000, delay: 500 })
         .filter("ColorMatrix", { brightness: 0 })
-        .filter("Blur", { blurX: 5, blurY: 10 })
         .opacity(0.75)
         .scaleIn(0, 500, { ease: "easeOutBack" })
         .waitUntilFinished(-750)
@@ -140,3 +140,5 @@ export const healingWord = {
     play,
     stop,
 };
+
+autoanimations.register("Healing Word", "ranged-target", "eskie.effect.healingWord", DEFAULT_CONFIG);
