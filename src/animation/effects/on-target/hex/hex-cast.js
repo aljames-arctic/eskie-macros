@@ -4,6 +4,7 @@
  */
 
 import { img } from '../../../../lib/filemanager.js';
+import { autoanimations } from '../../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
     id: 'hex',
@@ -89,3 +90,5 @@ export const hexCast = {
     play,
     stop,
 };
+
+autoanimations.register("Hexed", "effect", "eskie.effect.hex.cast", DEFAULT_CONFIG);
