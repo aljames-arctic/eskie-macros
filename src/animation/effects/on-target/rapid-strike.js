@@ -47,7 +47,7 @@ function create(token, target, config = {}) {
 
             .effect()
                 .delay(150)
-                .file(img("jb2a.impact.003.dark_red"))
+                .file(img("jb2a.impact.003.yellow"))
                 .size(1.75 * token.document.width, { gridUnits: true })
                 .atLocation(targetSquare)
                 .randomRotation()
@@ -58,7 +58,7 @@ function create(token, target, config = {}) {
 
             .effect()
                 .delay(150)
-                .file(img("jb2a.impact.008.red"))
+                .file(img(`jb2a.impact.008.${color}`))
                 .size(0.75 * token.document.width, { gridUnits: true })
                 .atLocation(targetSquare)
                 .randomRotation()
@@ -67,7 +67,7 @@ function create(token, target, config = {}) {
 
             .effect()
                 .delay(150)
-                .file(img("eskie.slice.01.color.red"))
+                .file(img(`eskie.slice.01.color.${color}`))
                 .size(1.25 * token.document.width, { gridUnits: true })
                 .atLocation(targetSquare)
                 .randomRotation()
@@ -92,6 +92,7 @@ function create(token, target, config = {}) {
                 .copySprite(target)
                 .attachTo(target)
                 .scaleToObject(1,{considerTokenScale:true})
+                .spriteRotation(-target.document.rotation)
                 .loopProperty("sprite", "position.x", { from: -0.05, to: 0.05, duration: 50, pingPong: true, gridUnits: true})
                 .opacity(0.25)
                 .duration(1000)
