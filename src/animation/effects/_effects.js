@@ -18,7 +18,7 @@ import { dimensionDoor } from "./template/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
 import { divineSmite } from "./on-target/divine-smite.js";
 import { divineStrike } from "./target/divine-strike.js";
-import { drainingKiss } from "./target/draining-kiss.js";
+import { drainingKiss } from "./on-target/draining-kiss.js";
 import { drainingTouch } from "./target/drainingTouch.js";
 import { dreadLord } from "./token/dreadLord.js";
 import { dreadLordAttack } from "./target/dreadLordAttack.js";
