@@ -2,7 +2,7 @@
 //Author: .eskie
 
 import { utils } from '../../utils/utils.js';
-import { img } from '../../../lib/filemanager.js';
+import { img, sound as snd } from '../../../lib/filemanager.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
@@ -10,12 +10,16 @@ const DEFAULT_CONFIG = {
     type: "slashing",   //Set Attack type (slashing, piercing, bludgeoning)
     weight: "heavy",    //Set Attack Weight (light,medium, or heavy)
     color: "red",   //Set Attack Color
-    attacks: 12     //Set Attack Number
+    attacks: 12,     //Set Attack Number
+    sound: {
+        enabled: true,
+        volume: 0.5
+    }
 }
 
 function create(token, target, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { type, weight, color, attacks } = mConfig;
+    const { type, weight, color, attacks, sound } = mConfig;
 
     //Determine Attack Size
     const weightIndex = { light: 0, medium: 1, heavy: 2 }[weight];
@@ -24,8 +28,14 @@ function create(token, target, config = {}) {
     let targetSquare = utils.getNearestSquareCenter(token, target);
 
     function attackAnimation(token, target, config) {
-        return new Sequence()
-            .effect()
+        const seq = new Sequence();
+            if ( sound.enabled ) {
+                seq.sound()
+                    .file(snd(`psfx.impacts.${type}`))
+                    .volume(sound.volume);
+            }
+
+            seq.effect()
                 .file(img(`eskie.attack.melee.generic.01.${type}.${weight}.${color}.slow`))
                 .atLocation(token)
                 .rotateTowards(targetSquare,{randomOffset:0.25})
@@ -89,6 +99,8 @@ function create(token, target, config = {}) {
                 .tint("#FF0000")
 
             .wait(150);
+
+        return seq;
     }
 
     const seq = new Sequence();
