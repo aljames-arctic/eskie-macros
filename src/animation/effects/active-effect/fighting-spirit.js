@@ -11,10 +11,11 @@ const DEFAULT_CONFIG = {
 function create(token, config) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mConfig;
+    const label = `${id} - ${token.name}`;
 
     const seq =  new Sequence()
         .effect()
-            .name(`${id} ${token.name}`)
+            .name(label)
             .copySprite(token)
             .attachTo(token)
             .scaleToObject(1,{considerTokenScale:true})
@@ -58,7 +59,7 @@ function create(token, config) {
             .animateProperty("sprite", "position.y", {from: 0, to:-0.5,  duration: 1000, gridUnits: true, ease:"easeOutCubic"})
 
         .effect()
-            .name(`${id} ${token.name}`)
+            .name(label)
             .file(img("eskie.nature.flower.particle.01.red"))
             .attachTo(token, {offset:{y:0.25},gridUnits:true})
             .scaleToObject(1.5)
@@ -70,7 +71,7 @@ function create(token, config) {
             .persist()
 
         .effect()
-            .name(`${id} ${token.name}`)
+            .name(label)
             .file(img("eskie.nature.flower.particle.01.red"))
             .attachTo(token, {offset:{y:0.25},gridUnits:true})
             .scaleToObject(1.5)
@@ -82,7 +83,7 @@ function create(token, config) {
             .zIndex(0)
 
         .effect()
-            .name(`${id} ${token.name}`)
+            .name(label)
             .file(img("eskie.fire.02.orange"))
             .attachTo(token,{offset:{y:-0.05}, gridUnits:true})
             .scaleToObject(0.35)
@@ -111,7 +112,8 @@ async function play(token, config) {
 
 async function stop(token, config) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    Sequencer.EffectManager.endEffects({ name: `${id} ${token.name}`, object: token }); 
+    const label = `${id} ${token.name}`;
+    Sequencer.EffectManager.endEffects({ name: label, object: token }); 
 }
 
 export const fightingSpirit = { 
