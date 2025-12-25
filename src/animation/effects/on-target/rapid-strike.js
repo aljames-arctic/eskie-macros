@@ -53,7 +53,6 @@ function create(token, target, config = {}) {
                 .randomRotation()
                 .playbackRate(1)
                 .spriteScale({x:1, y:1}, {gridUnits:true})
-                .belowTokens()
                 .zIndex(0.1)
 
             .effect()
