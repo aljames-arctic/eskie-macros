@@ -18,12 +18,21 @@ const EMP_AA_Menu = {
 function standardizeTrigger(trigger) {
     trigger = trigger.toLowerCase();
     switch(trigger) {
+        case "ontoken":
         case "token": return "ontoken";
+
+        case "templatefx":
         case "template": return "templatefx";
+
+        case "aefx":
         case "effect": return "aefx";
+
+        case "melee":
         case "melee-target": return "melee";
+
+        case "range":
         case "ranged-target": return "range";
-        default: return trigger;
+        default: throw (`EMP + AA | Unknown trigger type "${trigger}"`);
     }
 }
 
