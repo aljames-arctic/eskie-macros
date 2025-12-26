@@ -114,4 +114,4 @@ export const drunk = {
     stop,
 };
 
-autoanimations.register("Drunk", "effect", "eskie.effect.drunk", DEFAULT_CONFIG);
+autoanimations.register("Drunk", "effect", "eskie.effect.emote.drunk", DEFAULT_CONFIG);

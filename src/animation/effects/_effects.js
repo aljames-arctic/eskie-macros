@@ -23,7 +23,6 @@ import { drainingTouch } from "./target/drainingTouch.js";
 import { dreadLord } from "./token/dreadLord.js";
 import { dreadLordAttack } from "./target/dreadLordAttack.js";
 import { dreadLordFear } from "./target/dreadLordFear.js";
-import { drunk } from './active-effect/drunk.js'
 import { elementalBlast } from "./target/elementalBlast/_elementalBlast.js";
 import { eyesOfNight } from "./target/eyesOfNight.js";
 import { emote } from "./emote/_emotes.js";
@@ -99,7 +98,6 @@ export const effect = {
     dreadLord,
     dreadLordAttack,
     dreadLordFear,
-    drunk,
     elementalBlast,
     emote,
     eyesOfNight,
