@@ -2,7 +2,7 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../../lib/filemanager.js";
-import { util } from './rageUtil.js';
+import { util } from './rage-util.js';
 
 export const DEFAULT_CONFIG = {
     id: 'RageV1',

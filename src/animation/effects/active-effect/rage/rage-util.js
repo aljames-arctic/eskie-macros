@@ -1,5 +1,5 @@
 const DEFAULT_CONFIG = {
-    id : 'rageUtil',
+    id : 'rage util',
 }
 
 async function stop(token, config) {
@@ -13,7 +13,7 @@ async function stop(token, config) {
     
     // End all effects associated with this rage
     return Promise.all([
-        Sequencer.EffectManager.endEffects({ name: `${id} - ${token.uuid}`, object: token }),
+        Sequencer.EffectManager.endEffects({ name: `${id} - ${token.id}`, object: token }),
         opacity.play()
     ]);
 }
@@ -24,7 +24,7 @@ async function clean(token, config) {
 
     return Promise.all([
         stop(token, config),
-        Sequencer.EffectManager.endEffects({ name: `${id} - ground-crack - ${token.uuid}` })
+        Sequencer.EffectManager.endEffects({ name: `${id} - ground-crack - ${token.id}` })
     ]);
 }
 
