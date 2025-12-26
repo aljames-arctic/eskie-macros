@@ -45,6 +45,7 @@ import { mistyStep } from "./token/misty-step.js";
 import { petrified } from "./target/petrified.js";
 import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { possession } from "./token/possession/possession.js";
+import { psychicTeleportation } from "./template/psychic-teleportation.js";
 import { rage } from "./active-effect/rage/_rage.js";
 import { revivify } from "./target/revivify.js";
 import { colorSpray } from './template/color-spray.js'
@@ -121,6 +122,7 @@ export const effect = {
     petrified,
     petrifyingGaze,
     possession,
+    psychicTeleportation,
     rage,
     revivify,
     romanCandle,
