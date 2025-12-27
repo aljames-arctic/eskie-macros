@@ -76,6 +76,7 @@ import { hitTheDirt } from "./template/hit-the-dirt.js";
 import { fightingSpirit } from "./active-effect/fighting-spirit.js";
 import { strengthBeforeDeath } from "./active-effect/strength-before-death.js";
 import { rapidStrike } from "./on-target/rapid-strike.js";
+import { starwardSword } from "./template/starward-sword.js";
 
 export const effect = {
     armorOfAgathys,
@@ -156,4 +157,5 @@ export const effect = {
     rapidStrike,
     fightingSpirit,
     strengthBeforeDeath,
+    starwardSword,
 };
