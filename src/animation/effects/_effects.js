@@ -41,7 +41,7 @@ import { hide } from "./active-effect/hide.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
 import { incorporeal } from "./token/incorporeal/incorporeal.js";
 import { mistyStep } from "./token/misty-step.js";
-import { petrified } from "./target/petrified.js";
+import { petrified } from "./active-effect/petrified.js";
 import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
 import { possession } from "./token/possession/possession.js";
 import { psychicTeleportation } from "./template/psychic-teleportation.js";
