@@ -59,7 +59,7 @@ import { speakWithDead } from "./target/speakWithDead.js";
 import { teleport } from "./token/teleport.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 import { animateDead } from "./target/animate-dead.js";
-import { enlargeReduce } from "./token/enlarge-reduce.js";
+import { enlargeReduce } from "./active-effect/enlarge-reduce.js";
 import { leap } from "./token/leap.js";
 import { silence } from "./template/silence.js";
 import { shockingGrasp } from "./target/shocking-grasp.js";

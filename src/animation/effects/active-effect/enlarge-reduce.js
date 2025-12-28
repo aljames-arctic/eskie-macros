@@ -4,6 +4,7 @@
 ** */
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'enlargeReduce',
@@ -52,7 +53,7 @@ async function createEnlarge(token, config = {}) {
         .effect()
         .copySprite(token)
         .atLocation(token)
-        .loopProperty("sprite", "position.x", { from: -40, to: 40, duration: 75, pingPong: true, delay: 200 })
+        .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 75, pingPong: true, delay: 200 })
         .duration(2000)
         .waitUntilFinished(-200)
         .zIndex(0)
@@ -269,3 +270,6 @@ export const enlargeReduce = {
         stop: playEnlarge,
     },
 };
+
+autoanimations.register("Enlarged", "effect", "eskie.effect.enlargeReduce.enlarge", DEFAULT_CONFIG);
+autoanimations.register("Reduced", "effect", "eskie.effect.enlargeReduce.reduce", DEFAULT_CONFIG);
