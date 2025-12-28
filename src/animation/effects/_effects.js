@@ -3,7 +3,7 @@ import { chainLightning } from "./token/chain-lightning.js";
 import { dash } from "./token/dash.js";
 import { frightfulMoan } from "./token/frightful-moan.js";
 import { grease } from "./token/grease.js";
-import { haloOfSpores } from "./token/halo-of-spores.js";
+import { haloOfSpores } from "./aura/halo-of-spores.js";
 import { lightningBolt } from "./token/lightning-bolt.js";
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { banishment } from "./active-effect/banishment.js";

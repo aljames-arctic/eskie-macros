@@ -24,6 +24,8 @@ function standardizeTrigger(trigger) {
         case "templatefx":
         case "template": return "templatefx";
 
+        case "aura": return "aura";
+
         case "aefx":
         case "effect": return "aefx";
 
@@ -60,11 +62,11 @@ function createAutorecEntry(label, trigger, animation, config, version = "0.0.0"
             /* play(token, target, config) */
             name = `${compendium}.AA | Target`;
             break;
-        case "aura":
         case "aefx":
             /* play(token, config) */
             name = `${compendium}.AA | Effect`;
             break;
+        case "aura":
         case "templatefx":
             /* play(token, config) */
             name = `${compendium}.AA | Template`;
