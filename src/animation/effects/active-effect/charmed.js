@@ -4,103 +4,86 @@
  */
 
 import { img } from '../../../lib/filemanager.js';
+import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
-    id: 'charm-person',
+    id: 'charmed',
 };
 
-function _createCharmEffects(target, id) {
-    let seq = new Sequence();
+function create(token, config = {}) {
+    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id } = mConfig;
+    const label = `${id}-${token.id}`;
 
+    let seq = new Sequence();
     seq.effect()
-        .name(id)
         .file(img("jb2a.template_circle.symbol.out_flow.heart.pink"))
         .scaleIn(0, 1000, { ease: "easeOutQuint" })
         .fadeOut(2000)
-        .atLocation(target)
+        .atLocation(token)
         .belowTokens()
         .duration(3000)
         .scaleToObject(3);
 
     seq.effect()
-        .name(id)
         .file(img("jb2a.icon.heart.pink"))
-        .atLocation(target)
+        .atLocation(token)
         .scaleIn(0, 500, { ease: "easeOutQuint" })
         .fadeOut(1000)
         .scaleToObject(1)
         .duration(2000)
-        .attachTo(target)
+        .attachTo(token)
         .playbackRate(1);
 
     seq.effect()
-        .name(id)
         .file(img("jb2a.icon.heart.pink"))
-        .atLocation(target)
+        .atLocation(token)
         .scaleToObject(3)
         .anchor({ y: 0.45 })
         .scaleIn(0, 500, { ease: "easeOutQuint" })
         .fadeOut(1000)
         .duration(1000)
-        .attachTo(target)
+        .attachTo(token)
         .playbackRate(1)
         .opacity(0.5);
 
     seq.effect()
-        .name(id)
         .file(img("jb2a.extras.tmfx.border.circle.outpulse.01.fast"))
-        .atLocation(target)
+        .atLocation(token)
         .scaleToObject(2);
 
     seq.effect()
-        .name(id)
+        .name(label)
         .file(img("jb2a.markers.heart.pink.03"))
-        .atLocation(target)
+        .atLocation(token)
         .scaleToObject(2)
         .delay(500)
         .center()
         .fadeIn(1000)
         .playbackRate(1)
-        .attachTo(target)
+        .attachTo(token)
         .persist();
 
     return seq;
 }
 
-async function create(token, targets, config = {}) {
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mConfig;
-
-    let masterSeq = new Sequence();
-
-    for (const target of targets) {
-        let charmSeq = _createCharmEffects(target, `${id}-${target.id}`);
-        masterSeq.addSequence(charmSeq);
-    }
-
-    return masterSeq;
-}
-
-async function play(token, targets, config = {}) {
-    if (!targets || targets.length === 0) {
-        ui.notifications.warn("Charm Person: No targets selected!");
-        return;
-    }
-    let seq = await create(token, targets, config);
+async function play(token, config = {}) {
+    let seq = await create(token, config);
     if (seq) { await seq.play(); }
 }
 
-async function stop(targets, config = {}) {
+async function stop(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     const { id } = mConfig;
+    const label = `${id}-${token.id}`;
 
-    for (const target of targets) {
-        Sequencer.EffectManager.endEffects({ name: `${id}-${target.id}`, object: target });
-    }
+    Sequencer.EffectManager.endEffects({ name: label, object: token });
 }
 
-export const charmPerson = {
+export const charmed = {
     create,
     play,
     stop,
 };
+
+autoanimations.register("Charmed", "effect", "eskie.effect.charmed", DEFAULT_CONFIG);

@@ -11,7 +11,7 @@ import { bless } from "./active-effect/bless.js";
 import { channelDivinityControlUndead } from "./target/channelDivinityControlUndead.js";
 import { channelDivinityDreadAspect } from "./token/channelDivinityDreadAspect.js";
 import { channelElement } from "./token/channelElement/_channelElement.js";
-import { charmPerson } from "./multi-token/charm-person.js";
+import { charmed } from "./active-effect/charmed.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
 import { detect } from "./token/detect/_detect.js";
 import { dimensionDoor } from "./template/dimension-door.js";
@@ -86,7 +86,7 @@ export const effect = {
     channelElement,
     channelDivinityControlUndead,
     channelDivinityDreadAspect,
-    charmPerson,
+    charmed,
     cloudOfSand,
     colorSpray,
     detect,
