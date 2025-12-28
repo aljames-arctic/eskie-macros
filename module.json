@@ -56,11 +56,6 @@
         "compatibility": {}
       },
       {
-        "id": "animated-spell-effects",
-        "type": "module",
-        "compatibility": {}
-      },
-      {
         "id": "animated-spell-effects-cartoon",
         "type": "module",
         "compatibility": {}
