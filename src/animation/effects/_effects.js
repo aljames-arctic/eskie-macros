@@ -50,7 +50,7 @@ import { lightningBolt } from "./token/lightning-bolt.js";
 import { mirrorImage } from "./active-effect/mirror-image.js";
 import { mistyStep } from "./token/misty-step.js";
 import { petrified } from "./active-effect/petrified.js";
-import { petrifyingGaze } from "./multi-token/petrifying-gaze.js";
+import { petrifyingGaze } from "./template/petrifying-gaze.js";
 import { possession } from "./token/possession/possession.js";
 import { psychicTeleportation } from "./template/psychic-teleportation.js";
 import { rage } from "./active-effect/rage/_rage.js";

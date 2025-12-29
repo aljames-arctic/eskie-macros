@@ -5,23 +5,17 @@
 ** */
 
 import { img } from '../../../lib/filemanager.js';
+import { autoanimations } from '../../../integration/autoanimations.js'
 
 const DEFAULT_CONFIG = {
-    id: 'PetrifyingGaze',
+    id: 'Petrifying Gaze',
+    targets: [],
+    duration: 5000,
 };
 
-/**
- * Creates a Petrifying Gaze effect sequence from a source token to multiple target tokens.
- *
- * @param {Token} token The token initiating the effect.
- * @param {Array<Token>} targetTokens An array of target tokens.
- * @param {object} [config={}] Configuration for the effect.
- * @param {string} [config.id='PetrifyingGaze'] The id of the effect.
- * @returns {Promise<Sequence>} A promise that resolves with the complete effect sequence.
- */
-async function create(token, targetTokens, config = {}) {
+async function create(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mConfig;
+    const { id, targets, duration } = mConfig;
 
     let sequence = new Sequence();
     sequence
@@ -30,9 +24,9 @@ async function create(token, targetTokens, config = {}) {
         .atLocation(token)
         .size(0.9, { gridUnits: true })
         .anchor({ x: 0.5, y: 0.5 })
-        .duration(6000)
-        .fadeIn(200)
-        .fadeOut(500)
+        .fadeIn(duration/10)
+        .fadeOut(duration/10)
+        .duration(duration)
 
         .effect()
         .file(img("animated-spell-effects-cartoon.misc.fiery eyes.04"))
@@ -42,18 +36,18 @@ async function create(token, targetTokens, config = {}) {
         .filter("Blur", { blurX: 5, blurY: 10 })
         .opacity(1)
         .filter("ColorMatrix", { saturate: -1, brightness: 2 })
-        .duration(6000)
-        .fadeIn(200)
-        .fadeOut(500)
+        .fadeIn(duration/10)
+        .fadeOut(duration/10)
+        .duration(duration)
 
         .effect()
         .copySprite(token)
         .atLocation(token)
         .filter("Blur", { blurX: 5, blurY: 20 })
-        .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: 75, pingPong: true })
+        .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: duration/70, pingPong: true })
         .opacity(0.4)
-        .duration(5000)
-        .fadeOut(500)
+        .fadeOut(duration/10)
+        .duration(duration)
 
         .effect()
         .file(img("jb2a.extras.tmfx.outflow.circle.02"))
@@ -61,12 +55,12 @@ async function create(token, targetTokens, config = {}) {
         .belowTokens()
         .opacity(0.25)
         .size(3, { gridUnits: true })
-        .duration(5000)
-        .fadeIn(1000)
-        .fadeOut(500);
+        .fadeIn(duration/10)
+        .fadeOut(duration/10)
+        .duration(duration);
 
     // Effects for each target
-    for (const target of targetTokens) {
+    for (const target of targets) {
         sequence
             .effect()
             .file(img("animated-spell-effects-cartoon.misc.fiery eyes.04"))
@@ -77,9 +71,9 @@ async function create(token, targetTokens, config = {}) {
             .rotate(90)
             .rotateTowards(target)
             .belowTokens()
-            .duration(5000)
-            .fadeIn(500)
-            .fadeOut(500)
+            .duration(duration)
+            .fadeIn(duration/10)
+            .fadeOut(duration/10)
 
             .effect()
             .file(img("animated-spell-effects-cartoon.misc.fiery eyes.04"))
@@ -90,41 +84,34 @@ async function create(token, targetTokens, config = {}) {
             .filter("ColorMatrix", { saturate: -1, brightness: 2 })
             .rotate(90)
             .rotateTowards(target)
-            .duration(5000)
-            .fadeIn(500)
-            .fadeOut(500)
+            .duration(duration)
+            .fadeIn(duration/10)
+            .fadeOut(duration/10)
 
             .effect()
             .file(img("jb2a.wind_stream.white"))
             .atLocation(token)
             .stretchTo(target, { onlyX: false })
             .filter("Blur", { blurX: 10, blurY: 20 })
-            .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: 100, pingPong: true })
+            .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: duration/50, pingPong: true })
             .opacity(0.3)
 
             .effect()
             .copySprite(target)
             .atLocation(target)
             .filter("Blur", { blurX: 5, blurY: 20 })
-            .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: 100, pingPong: true })
+            .loopProperty("sprite", "position.y", { from: -10, to: 10, duration: duration/50, pingPong: true })
             .opacity(0.8)
-            .duration(5000)
-            .fadeIn(1000)
-            .fadeOut(500);
+            .fadeIn(duration/10)
+            .fadeOut(duration/10)
+            .duration(duration);
     }
 
     return sequence;
 }
 
-/**
- * Creates and plays the Petrifying Gaze effect.
- * @param {Token} token The token initiating the effect.
- * @param {Array<Token>} targetTokens An array of target tokens.
- * @param {object} [config={}] Configuration for the effect.
- * @returns {Promise<void>} A promise that resolves when the effect is finished.
- */
-async function play(token, targetTokens, config = {}) {
-    let seq = await create(token, targetTokens, config);
+async function play(token, config = {}) {
+    let seq = await create(token, config);
     if (seq) { await seq.play(); }
 }
 
@@ -132,3 +119,5 @@ export const petrifyingGaze = {
     create,
     play,
 };
+
+autoanimations.register('Petrifying Gaze', 'ranged', 'eskie.effect.petrifyingGaze', DEFAULT_CONFIG);
