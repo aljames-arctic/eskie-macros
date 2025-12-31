@@ -4,6 +4,7 @@
 ** */
 
 import { img, snd } from "../../../lib/filemanager.js";
+import { settingsOverride } from "../../../lib/settings.js";
 import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
@@ -16,6 +17,7 @@ const DEFAULT_CONFIG = {
 };
 
 async function createBanish(target, config = {}) {
+    config = settingsOverride(config);
     const { color, sound } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
 
     const RUNE_DATA = {
@@ -215,6 +217,7 @@ async function playBanish(target, config = {}) {
 }
 
 async function createReturn(target, config = {}) {
+    config = settingsOverride(config);
     const { color, sound } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
 
     const sequence = new Sequence();

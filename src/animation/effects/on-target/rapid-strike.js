@@ -3,6 +3,7 @@
 
 import { utils } from '../../utils/utils.js';
 import { img, snd } from '../../../lib/filemanager.js';
+import { settingsOverride } from "../../../lib/settings.js";
 import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {
@@ -112,6 +113,7 @@ function create(token, target, config = {}) {
 }
 
 async function play(token, target, config = {}) {
+    config = settingsOverride(config);
     const seq = await create(token, target, config);
     if (seq) { return seq.play(); }
 }

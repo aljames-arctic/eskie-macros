@@ -1,5 +1,11 @@
 {
     "EMP": {
+        "settings": {
+            "enableSounds": {
+                "name": "Enable Macro Sounds",
+                "hint": "If enabled, macros will play sounds. This setting can be enabled/disabled per player."
+            }
+        },
         "updateMenu": {
             "added": "The following new effects will be added to your Automated Animation Autorecognition settings.",
             "custom": "The following effects will not be added due to them already existing from another source.",

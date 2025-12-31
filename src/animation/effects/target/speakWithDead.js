@@ -1,6 +1,7 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
 import { img, snd } from "../../../lib/filemanager.js";
+import { settingsOverride } from "../../../lib/settings.js";
 
 const DEFAULT_CONFIG = { 
     id: "speakWithDead",
@@ -265,6 +266,7 @@ function _addCornerFlameEffects(target, id, xOffset, yOffset, smokeZIndex) {
  * @param {string} config.id - A unique ID for the effect to manage persistence.
  */
 async function play(target, config) {
+    config = settingsOverride(config);
     const sequence = await create(target, config);
     await preload(config);
     return sequence.play();
