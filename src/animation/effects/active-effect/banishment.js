@@ -21,7 +21,6 @@ async function createBanish(target, config = {}) {
     const { color, sound } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
 
     const RUNE_DATA = {
-        duration: 4500,
         animDuration: 300,
         rotationDuration: 200,
         merge: { x: 0, y: -75 },
@@ -77,7 +76,7 @@ async function createBanish(target, config = {}) {
             .animateProperty("spriteContainer", "rotation", { from: rune.rotation, to: 720 + rune.rotation, duration: RUNE_DATA.rotationDuration, delay: animationDelay, ease: "easeInBack" })
             .animateProperty("spriteContainer", "position.x", { from: 0, to: RUNE_DATA.merge.x - rune.offset.x, duration: RUNE_DATA.animDuration, delay: animationDelay + RUNE_DATA.rotationDuration, ease: "easeInBack" })
             .animateProperty("spriteContainer", "position.y", { from: 0, to: RUNE_DATA.merge.y - rune.offset.y, duration: RUNE_DATA.animDuration, delay: animationDelay + RUNE_DATA.rotationDuration, ease: "easeInBack" })
-            .duration(RUNE_DATA.animDuration + animationDelay)
+            .duration(RUNE_DATA.animDuration + animationDelay - 800)
             .zIndex(0.1);
         runeDelay += RUNE_DATA.animDuration;
         animationDelay -= RUNE_DATA.animDuration;
@@ -94,6 +93,7 @@ async function createBanish(target, config = {}) {
     sequence.effect()
         .file(img(`jb2a.explosion.01.${color}`))
         .atLocation(target, { offset: { x: 5, y: -75 } })
+        .delay(500)
         .scaleToObject(1.5)
         .zIndex(1);
 
@@ -107,6 +107,7 @@ async function createBanish(target, config = {}) {
         .fadeOut(250)
         .zIndex(0.7)
         .belowTokens()
+        .delay(500)
         .waitUntilFinished(-5750);
 
     sequence.effect()
