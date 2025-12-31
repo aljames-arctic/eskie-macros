@@ -38,7 +38,7 @@ function closestPath(modulePrefix, ...categories) {
     return currentPath;
 }
 
-export function sound(path) {
+export function snd(path) {
     // Support http:// and https:// addresses
     if (path.includes('/')) return path;
 
@@ -113,5 +113,5 @@ export function img(path) {
 
 export const filemanager = {
     img,
-    sound,
+    snd,
 }

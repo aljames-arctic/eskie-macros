@@ -2,7 +2,7 @@
 //Author: .eskie
 
 import { utils } from '../../utils/utils.js';
-import { img, sound as snd } from '../../../lib/filemanager.js';
+import { img, snd } from '../../../lib/filemanager.js';
 import { autoanimations } from '../../../integration/autoanimations.js';
 
 const DEFAULT_CONFIG = {

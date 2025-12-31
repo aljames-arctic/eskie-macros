@@ -1,6 +1,6 @@
 // Original Author: EskieMoh#2969
 // Updater: @bakanabaka
-import { img, sound as snd } from "../../../lib/filemanager.js";
+import { img, snd } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = { 
     id: "speakWithDead",
