@@ -22,14 +22,15 @@ async function createBanish(target, config = {}) {
 
     const RUNE_DATA = {
         duration: 4500,
-        animDuration: 500,
+        animDuration: 300,
+        rotationDuration: 200,
         merge: { x: 0, y: -75 },
         runes: [
-            { offset: { x: 70,  y:  22 }, delay: 3750, animDelay: 4000 },
-            { offset: { x: 45,  y: -61 }, delay: 4250, animDelay: 3500 },
-            { offset: { x: -45, y: -61 }, delay: 4750, animDelay: 3000 },
-            { offset: { x: -70, y:  22 }, delay: 5250, animDelay: 2500 },
-            { offset: { x: 0,   y:  75 }, delay: 5750, animDelay: 2000 },
+            { offset: { x: -45, y: -61 }, rotation: 3 * 360 / 5 },
+            { offset: { x: 0,   y:  75 }, rotation: 5 * 360 / 5 },
+            { offset: { x: 45,  y: -61 }, rotation: 2 * 360 / 5 },
+            { offset: { x: -70, y:  22 }, rotation: 4 * 360 / 5 },
+            { offset: { x: 70,  y:  22 }, rotation: 1 * 360 / 5 },
         ]
     }
 
@@ -44,48 +45,56 @@ async function createBanish(target, config = {}) {
         .atLocation(target)
         .scaleToObject(2)
         .belowTokens();
-
+    
+    sequence.wait(3000);
     sequence.effect()
         .file(img(`jb2a.magic_signs.circle.02.conjuration.loop.${color}`))
         .atLocation(target)
         .scaleToObject(2)
         .belowTokens()
-        .delay(3000)
         .duration(13000)
         .fadeOut(1000);
 
+    sequence.wait(3750);
+    let runeDelay = 0;
+    let animationDelay = 4000;
     const runeSoundFile = snd('psfx.casting.generic.001');
+    const runeImageFile = img(`jb2a.magic_signs.rune.conjuration.complete.${color}`);
     for (const rune of RUNE_DATA.runes) {
         if (sound.enabled) {
             sequence.sound()
                 .file(runeSoundFile)
                 .volume(sound.volume)
-                .delay(rune.delay + 1000);
+                .delay(runeDelay + 750);
         }
         sequence.effect()
-            .file(img(`jb2a.magic_signs.rune.conjuration.complete.${color}`))
+            .file(runeImageFile)
             .atLocation(target, { offset: rune.offset })
             .scaleToObject(0.5)
-            .delay(rune.delay)
+            .delay(runeDelay)
             .playbackRate(0.65)
-            .animateProperty("spriteContainer", "position.x", { from: 0, to: RUNE_DATA.merge.x - rune.offset.x, duration: RUNE_DATA.animDuration, delay: rune.animDelay, ease: "easeInBack" })
-            .animateProperty("spriteContainer", "position.y", { from: 0, to: RUNE_DATA.merge.y - rune.offset.y, duration: RUNE_DATA.animDuration, delay: rune.animDelay, ease: "easeInBack" })
-            .duration(rune.animDelay + RUNE_DATA.animDuration)
+            .rotate(rune.rotation)
+            .animateProperty("spriteContainer", "rotation", { from: rune.rotation, to: 720 + rune.rotation, duration: RUNE_DATA.rotationDuration, delay: animationDelay, ease: "easeInBack" })
+            .animateProperty("spriteContainer", "position.x", { from: 0, to: RUNE_DATA.merge.x - rune.offset.x, duration: RUNE_DATA.animDuration, delay: animationDelay + RUNE_DATA.rotationDuration, ease: "easeInBack" })
+            .animateProperty("spriteContainer", "position.y", { from: 0, to: RUNE_DATA.merge.y - rune.offset.y, duration: RUNE_DATA.animDuration, delay: animationDelay + RUNE_DATA.rotationDuration, ease: "easeInBack" })
+            .duration(RUNE_DATA.animDuration + animationDelay)
             .zIndex(0.1);
+        runeDelay += RUNE_DATA.animDuration;
+        animationDelay -= RUNE_DATA.animDuration;
     }
     
+    sequence.wait(3000);
     if (sound.enabled) {
         sequence.sound()
             .file(snd('psfx.2nd-level-spells.moonbeam.intro'))
-            .volume(sound.volume)
-            .delay(6800);
+            .volume(sound.volume);
     }
 
+    sequence.wait(1500);
     sequence.effect()
         .file(img(`jb2a.explosion.01.${color}`))
         .atLocation(target, { offset: { x: 5, y: -75 } })
         .scaleToObject(1.5)
-        .delay(8250)
         .zIndex(1);
 
     sequence.effect()
@@ -96,7 +105,6 @@ async function createBanish(target, config = {}) {
         .scaleIn({ x: 0, y: 0.8 }, 500)
         .scaleOut({ x: 0, y: 0.4 }, 500, { ease: "easeInBack" })
         .fadeOut(250)
-        .delay(8250)
         .zIndex(0.7)
         .belowTokens()
         .waitUntilFinished(-5750);
