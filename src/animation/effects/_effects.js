@@ -9,6 +9,7 @@ import { channelDivinityControlUndead } from "./target/channelDivinityControlUnd
 import { channelDivinityDreadAspect } from "./token/channelDivinityDreadAspect.js";
 import { channelElement } from "./token/channelElement/_channelElement.js";
 import { charmed } from "./active-effect/charmed.js";
+import { cunningAction } from "./active-effect/cunning-action.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
 import { colorSpray } from "./template/color-spray.js";
 import { dash } from "./token/dash.js";
@@ -90,6 +91,7 @@ export const effect = {
     channelDivinityDreadAspect,
     channelElement,
     charmed,
+    cunningAction,
     cloudOfSand,
     colorSpray,
     dash,

@@ -163,6 +163,9 @@ function someRequired(dependencyList) {
     throw errorMsg;
 }
 
+/**
+ * Dependencies of the form { id: MODULE_ID, ref: MODULE_NAME }
+ */
 export const dependency = {
     isActivated,
     isInstalled,

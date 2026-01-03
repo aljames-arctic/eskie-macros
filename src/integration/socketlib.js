@@ -1,4 +1,4 @@
-import { tileSockets } from './socketlib/tile.js';
+import { tile, tileSockets } from './socketlib/tile.js';
 
 async function register() {
     const socket = socketlib.registerModule('eskie-macros');
@@ -12,3 +12,7 @@ async function register() {
 export const socket = {
     register,
 };
+
+export const socketlib = {
+    tile
+}
