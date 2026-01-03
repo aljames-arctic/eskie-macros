@@ -33,6 +33,13 @@ export async function edit(id, updates = {}) {
 
 export async function create(updates = {}) {
     if (game.user.isGM) return createTile(data);
+
+    const DEFAULT_TILE_UPDATES = {
+        width: 1,
+        height: 1
+    };
+    updates = foundry.utils.mergeObject(DEFAULT_TILE_UPDATES, updates, { inplace: false });
+
     const socket = game.modules.get('eskie-macros').socketlib;
     if (!initialized(socket)) return;
     return socket.executeAsGM("createTile", updates);
