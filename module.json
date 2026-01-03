@@ -42,6 +42,11 @@
         "id": "sequencer",
         "type": "module",
         "compatibility": {}
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "compatibility": {}
       }
     ],
     "recommends": [
@@ -84,5 +89,6 @@
       }
     }
   ],
-  "flags": {}
+  "flags": {},
+  "socket": true
 }
