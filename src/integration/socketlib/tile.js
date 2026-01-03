@@ -42,7 +42,7 @@ export async function destroy(id) {
     if (game.user.isGM) return destroyTile(data);
     const socket = game.modules.get('eskie-macros').socketlib;
     if (!initialized(socket)) return;
-    return socket.executeAsGM("deleteTile", id);
+    return socket.executeAsGM("destroyTile", id);
 }
 
 export const tile = {
