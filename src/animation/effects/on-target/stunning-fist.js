@@ -1,8 +1,8 @@
 // Author: .eskie
-// Modular Conversion: Gemini
+// Modular Conversion: bakanabaka
 
-import { autoanimations } from "../../../integration/autoanimations.js";
 import { img } from "../../../lib/filemanager.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'stunningFist',

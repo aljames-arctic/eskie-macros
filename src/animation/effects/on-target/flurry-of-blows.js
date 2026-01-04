@@ -1,5 +1,5 @@
 // Author: .eskie
-// Modular Conversion: Gemini
+// Modular Conversion: bakanabaka
 
 import { img, snd } from "../../../lib/filemanager.js";
 import { settingsOverride } from "../../../lib/settings.js";

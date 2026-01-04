@@ -1,5 +1,5 @@
 // Author: .eskie
-// Modular Conversion: Gemini
+// Modular Conversion: bakanabaka
 
 import { utils } from '../../utils/utils.js';
 import { img } from "../../../lib/filemanager.js";

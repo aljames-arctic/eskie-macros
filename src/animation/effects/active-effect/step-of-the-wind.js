@@ -1,9 +1,10 @@
 // Author: .eskie
-// Modular Conversion: Gemini
-import { autoanimations } from '../../../integration/autoanimations.js';
-import { socket } from '../../../integration/socketlib.js';
-import { dependency } from '../../../lib/dependency.js';
+// Modular Conversion: bakanabaka
+
 import { img, snd } from '../../../lib/filemanager.js'
+import { dependency } from '../../../lib/dependency.js';
+import { socket } from '../../../integration/socketlib.js';
+import { autoanimations } from '../../../integration/autoanimations.js';
 
 export const DEFAULT_CONFIG = {
     id: 'Step of the Wind'
