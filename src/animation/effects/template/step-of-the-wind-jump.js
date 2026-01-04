@@ -1,101 +1,32 @@
 // Author: .eskie
 // Modular Conversion: Gemini
 
-import { autoanimations } from "../../../integration/autoanimations.js";
+import { utils } from '../../utils/utils.js';
 import { img } from "../../../lib/filemanager.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'step-of-the-wind-jump',
-    position: undefined,
+    template: undefined,
 };
 
 async function create(token, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
-    let { id, position } = mConfig;
+    let { id, template } = mConfig;
 
     //Determine Jump Timings
     let jumpTime = 750;
     let upTime = jumpTime*0.5;
     let downTime = jumpTime*0.4;
 
-    if (!position) {
-        position = await Sequencer.Crosshair.show(
-            {
-                t: "circle",
-                distance: (token.document.width*token.document.texture.scaleX)*2.5,
-                snap: {position:(token.document.width % 2 === 0 ? 240 : 1)},
-                gridHighlight: false,
-                borderAlpha: 0,  
-            },
-            {
-                [Sequencer.Crosshair.CALLBACKS.SHOW]: (crosshair) => {
-                
-                new Sequence()
-            
-                    .wait(50)
-                    
-                    .effect()
-                    .name(`${token.document.name} Step of the Wind Crosshair`)
-                    .copySprite(token)
-                    .attachTo(crosshair)
-                    .scaleToObject(1)
-                    .opacity(0.5)
-                    .filter("ColorMatrix", { saturate:-1})
-                    .locally()
-                    .persist()
-            
-                    .wait(50)
-        
-                    .effect()
-                    .delay(50)
-                    .name(`${token.document.name} Step of the Wind Crosshair`)
-                    .file(img(`eskie.crosshair.line.generic_01.white`))
-                    .attachTo(token)
-                    .stretchTo(crosshair, {attachTo:true})
-                    .opacity(0.8)
-                    .locally()
-                    .persist()
-                    .waitUntilFinished()
-                    
-                    .thenDo(function(){
-            
-                        Sequencer.EffectManager.endEffects({
-                            name: `${token.document.name} Step of the Wind Crosshair`,
-                        });
-                    })
-                    
-                    .play();
-                },
-            },
-            {
-                [Sequencer.Crosshair.CALLBACKS.PLACED]: (crosshair) => {
-            
-                    Sequencer.EffectManager.endEffects({
-                        name: `${token.document.name} Step of the Wind Crosshair`,
-                    });
-                },
-            },
-            {
-                [Sequencer.Crosshair.CALLBACKS.CANCEL]: (crosshair) => {
-            
-                    Sequencer.EffectManager.endEffects({
-                        name: `${token.document.name} Step of the Wind Crosshair`,
-                    });
-                    return;
-                },
-            },
-        )
-    }
-
-    if (position.cancelled) { return; }
-
-    const middlePoint = {
-        x: (token.center.x + position.x) / 2,
-        y: ((token.center.y + position.y) / 2)- canvas.grid.size*1.5,
+    const cfg = { 
+        radius: 1,
+        max: 500,
+        icon: 'modules/jb2a_patreon/Library/Generic/Portals/Portal_Bright_Purple_V_400x250.webm', 
+        label: 'Step of the Wind'
     };
-
-    const distance1 = Math.sqrt((middlePoint.x - token.center.x ) ** 2 + (middlePoint.y - token.center.y ) ** 2); 
-    const distance2 = Math.sqrt((position.x - middlePoint.x ) ** 2 + (position.y - middlePoint.y ) ** 2);  
+    let position = await utils.getPosition(template, cfg);
+    if (!position || position.cancelled ) { return; }
 
     // Determine Trail Direction
     let dx = position.x - token.center.x;
@@ -107,27 +38,27 @@ async function create(token, config = {}) {
     let mirrorTrail  = false;
 
     if (dx > 0) {
-    //Trail Right (Default)  
-    trailOffset = { x: -0.75, y: 0 };
-    trailRotFrom = -45;
-    trailRotTo   = 45;
-    mirrorTrail = false;
+        //Trail Right (Default)  
+        trailOffset = { x: -0.75, y: 0 };
+        trailRotFrom = -45;
+        trailRotTo   = 45;
+        mirrorTrail = false;
     } else if (dx < 0) {
-    //Trail Left
-    trailOffset = { x: 0.75, y: 0 };
-    trailRotFrom = 45;
-    trailRotTo   = -45;
-    mirrorTrail = true;
+        //Trail Left
+        trailOffset = { x: 0.75, y: 0 };
+        trailRotFrom = 45;
+        trailRotTo   = -45;
+        mirrorTrail = true;
     } else {
-    if (dy > 0) {
-    //Trail Down
-        trailRotFrom = 90;
-        trailRotTo   = 90;
-    } else if (dy < 0) {
-    //Trail Up
-        trailRotFrom = -90;
-        trailRotTo   = -90;
-    }
+        if (dy > 0) {
+            //Trail Down
+            trailRotFrom = 90;
+            trailRotTo   = 90;
+        } else if (dy < 0) {
+            //Trail Up
+            trailRotFrom = -90;
+            trailRotTo   = -90;
+        }
     }
 
     let seq = new Sequence();
