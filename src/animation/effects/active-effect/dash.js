@@ -1,5 +1,7 @@
+import { autoanimations } from '../../../integration/autoanimations.js';
 import { socketlib } from '../../../integration/socketlib.js';
 import { dependency } from '../../../lib/dependency.js';
+import { img, snd } from '../../../lib/filemanager.js'
 
 export const DEFAULT_CONFIG = {
     id: 'Cunning Action'
@@ -10,12 +12,12 @@ async function wait(ms) {
 }
 
 function create(token, config = {}) {
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const effectName = getEffectName(token);
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const label = `${id} - ${token.id}`;
 
     const sequenceOn = new Sequence()
         .effect()
-            .name(effectName)
+            .name(label)
             .file(img("eskie.smoke.03.black"))
             .attachTo(token)
             .scaleToObject(2)
@@ -23,7 +25,7 @@ function create(token, config = {}) {
             .opacity(0.5)
             .tint("#696969")
         .effect()
-            .name(effectName)
+            .name(label)
             .file(img("eskie.buff.one_shot.simple.blue"))
             .attachTo(token)
             .scaleToObject(1)
@@ -31,7 +33,7 @@ function create(token, config = {}) {
             .opacity(1)
         .wait(200)
         .effect()
-            .name(effectName)
+            .name(label)
             .file(img("jb2a.wind_stream.200.white"))
             .attachTo(token)
             .scaleToObject(1.15, { considerTokenScale: true })
@@ -47,24 +49,15 @@ function create(token, config = {}) {
     return sequenceOn;
 }
 
-async function play(token, config={}) {
+async function play(token, config = {}) {
     dependency.required({id: 'tagger', ref: "Tagger"});
     dependency.required({id: 'token-attacher', ref: "Token Attacher"});
     dependency.required({id: 'monks-active-tiles', ref: "Monk's Active Tile Triggers"});
 
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const label = `${id} ${token.id}`;
+    const label = `${id} - ${token.id}`;
 
-    const MATTtriggers = ["exit"];
-    const MATTactions = [
-        {
-            action: "script",
-            data: `eskie.effect.cunningAction.macro.movement`,
-            runasgm: "gm",
-        },
-    ];
-
-    const tileUpdates = {
+    const initialData = {
         "texture.src": "icons/svg/d6-grey.svg",
         "alpha": 0.1,
         "hidden": true,
@@ -72,48 +65,50 @@ async function play(token, config={}) {
         "y": token.y,
         "width": canvas.grid.size * token.document.width,
         "height": canvas.grid.size * token.document.width,
-        "flags.tagger.tags": [label],
+    };
+    
+    const [tile] = await socketlib.tile.create(initialData);
+    await wait(100);
+
+    const MATTtriggers = ["exit", "manual"];
+    const MATTactions = [{
+        action: 'runcode',
+        data: {
+            code: 'eskie.effect.dash.macro.movement(token.object)'
+        },
+    }];
+    const updateData = {
         "flags.monks-active-tiles.active": true,
         "flags.monks-active-tiles.trigger": MATTtriggers,
         "flags.monks-active-tiles.actions": MATTactions,
+        "flags.monks-active-tiles.controlled": "gm",
     };
-    
-    await socket.tile.create(tileUpdates);
-    await wait(100);
-
-    const tile = Tagger.getByTag(label)[0];
-    if (!tile) {
-        console.error("Eskie-Macros | Cunning Action: Failed to create tile.");
-        return;
-    }
+    await socketlib.tile.edit(tile.id, updateData);
+    await Tagger.addTags(tile, label);
 
     await tokenAttacher.attachElementToToken(tile, token, true);
     const sequence = create(token, config);
     return sequence?.play();
 }
 
-async function stop(token, config={}) {
+async function stop(token, config = {}) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const label = `${id} ${token.id}`
+    const label = `${id} - ${token.id}`;
+    const tiles = Tagger.getByTag(label);
 
-    const tile = Tagger.getByTag(label)[0];
-    if (tile) { await socketlib.tile.delete(tile.id); }
-
+    tiles.forEach(async (tile) => { await socketlib.tile.destroy(tile.id); });
     Sequencer.EffectManager.endEffects({ name: label, object: token });
 }
 
-async function movement(tile) {
-    if (!game.user.isGM || !tile) return;
-    
-    const tileTag = tile.document.flags?.tagger?.tags?.[0];
-    if (!tileTag || !tileTag.startsWith(TILE_TAG_PREFIX)) return;
-    
-    const tokenId = tileTag.substring(TILE_TAG_PREFIX.length).trim();
-    const token = canvas.tokens.get(tokenId)?.object;
-    if (!token) return;
+async function movement(token, config = {}) {
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, { inplace: false });
+    const label = `${id} - ${token.id}`;
+    const tile = Tagger.getByTag(label)[0];
 
-    let tokenPosition = ({x: token.center.x, y: token.center.y});
-    let tilePosition =({x: tile.x+tile.width/2, y: tile.y+tile.height/2});
+    if (!game.user.isGM || !tile) return;
+
+    let tokenPosition = {x: token.center.x, y: token.center.y};
+    let tilePosition = {x: tile.x + tile.width/2, y: tile.y + tile.height/2};
     let deltaX = tokenPosition.x - tilePosition.x;
     let deltaY = tokenPosition.y - tilePosition.y;
     let angleRadians = Math.atan2(deltaY, deltaX);
@@ -123,8 +118,8 @@ async function movement(tile) {
     let rotation = angleRadians * (180 / Math.PI);
     const travelTime = (distance / speed);
   
-    const trailEffectName = `Cunning Action Trail ${token.document.name}`;
-    let activeTrailEffect = Sequencer.EffectManager.getEffects({ name: trailEffectName, object: token }).length > 0;
+    const trailLabel = `${label} - Trail`;
+    let activeTrailEffect = Sequencer.EffectManager.getEffects({ name: trailLabel, object: token }).length > 0;
    
     const sequenceMATT = new Sequence()
         .effect()
@@ -144,7 +139,7 @@ async function movement(tile) {
             .playbackRate(1.5)
             .zIndex(1)
         .effect()
-            .name(trailEffectName)
+            .name(trailLabel)
             .file(img("eskie.trail.token.generic.02.black"))
             .attachTo(token)
             .rotateTowards(tile,{attachTo: false})
@@ -167,14 +162,14 @@ async function movement(tile) {
             .playIf(travelTime < 500)   
         .wait(Math.max(travelTime-250,250))
         .thenDo(async () => {
-            Sequencer.EffectManager.endEffects({ name: trailEffectName });
+            Sequencer.EffectManager.endEffects({ name: trailLabel });
         });
   
    await sequenceMATT.play();
 }
 
 
-export const cunningAction = {
+export const dash = {
     create,
     play,
     stop,
@@ -182,3 +177,5 @@ export const cunningAction = {
         movement
     },
 };
+
+autoanimations.register("Dash", "effect", "eskie.effect.dash", DEFAULT_CONFIG);

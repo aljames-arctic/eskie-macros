@@ -74,6 +74,11 @@
         "id": "boss-loot-assets-free",
         "type": "module",
         "compatibility": {}
+      },
+      {
+        "id": "token-attacher",
+        "type": "module",
+        "compatibility": {}
       }
     ]
   },
@@ -89,6 +94,6 @@
       }
     }
   ],
-  "flags": {},
-  "socket": true
+  "socket": true,
+  "flags": {}
 }
