@@ -32,7 +32,8 @@ import { fightingSpirit } from "./active-effect/fighting-spirit.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { firecracker } from "./template/firecracker.js";
 import { fireShield } from "./token/fire-shield.js";
-import { flurryOfBlows } from "./token/flurry-of-blows.js";
+import { flurryOfBlows as fobv1 } from "./token/flurry-of-blows.js";
+import { flurryOfBlows as fobv2 } from "./on-target/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
 import { frightfulMoan } from "./token/frightful-moan.js";
 import { gate } from "./template/gate.js";
@@ -69,6 +70,7 @@ import { speakWithDead } from "./target/speakWithDead.js";
 import { spikeGrowth } from "./template/spike-growth.js";
 import { starwardSword } from "./template/starward-sword.js";
 import { strengthBeforeDeath } from "./active-effect/strength-before-death.js";
+import { stunningFist } from "./on-target/stunning-fist.js";
 import { stunningStrike } from "./target/stunning-strike.js";
 import { suggestion } from "./target/suggestion.js";
 import { surprised } from "./token/surprised.js";
@@ -77,6 +79,8 @@ import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
 import { vortexWarp } from "./target/vortex-warp.js";
 import { wingsV2 } from "./token/wings-v2.js";
+import { stepOfTheWindMove } from "./active-effect/step-of-the-wind.js";
+import { stepOfTheWindJump } from "./template/step-of-the-wind-jump.js";
 
 export const effect = {
     animateDead,
@@ -113,7 +117,10 @@ export const effect = {
     fingerOfDeath,
     firecracker,
     fireShield,
-    flurryOfBlows,
+    flurryOfBlows: {
+        v1: fobv1,
+        v2: fobv2,
+    },
     fly,
     frightfulMoan,
     gate,
@@ -149,7 +156,12 @@ export const effect = {
     speakWithDead,
     spikeGrowth,
     starwardSword,
+    stepOfTheWind: {
+        jump: stepOfTheWindJump,
+        move: stepOfTheWindMove
+    },
     strengthBeforeDeath,
+    stunningFist,
     stunningStrike,
     suggestion,
     surprised,
