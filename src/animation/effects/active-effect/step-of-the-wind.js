@@ -91,7 +91,7 @@ async function play(token, config = {}) {
     const MATTactions = [{
         action: 'runcode',
         data: {
-            code: `eskie.effect.stepOfTheWind.macro.movement(token.object)`
+            code: `eskie.effect.stepOfTheWind.move.macro.movement(token.object)`
         },
     }];
     const updateData = {
