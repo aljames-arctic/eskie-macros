@@ -32,8 +32,7 @@ import { fightingSpirit } from "./active-effect/fighting-spirit.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { firecracker } from "./template/firecracker.js";
 import { fireShield } from "./token/fire-shield.js";
-import { flurryOfBlows as fobv1 } from "./token/flurry-of-blows.js";
-import { flurryOfBlows as fobv2 } from "./on-target/flurry-of-blows.js";
+import { flurryOfBlows } from "./on-target/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
 import { frightfulMoan } from "./token/frightful-moan.js";
 import { gate } from "./template/gate.js";
@@ -117,10 +116,7 @@ export const effect = {
     fingerOfDeath,
     firecracker,
     fireShield,
-    flurryOfBlows: {
-        v1: fobv1,
-        v2: fobv2,
-    },
+    flurryOfBlows,
     fly,
     frightfulMoan,
     gate,

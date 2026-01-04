@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
 
 async function create(token, target, config = {}) {
     const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mConfig;
+    const { id, color } = mConfig;
 
     let seq = new Sequence({}, {
         id
