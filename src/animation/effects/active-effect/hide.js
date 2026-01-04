@@ -79,4 +79,4 @@ export const hide = {
     stop,
 };
 
-autoanimations.register("Hiding", "effect", "eskie.effect.hide", DEFAULT_CONFIG);
+autoanimations.register("Hide", "effect", "eskie.effect.hide", DEFAULT_CONFIG);
