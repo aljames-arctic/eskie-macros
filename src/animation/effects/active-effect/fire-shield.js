@@ -2,15 +2,17 @@
 // Modular Conversion: bakanabaka
 
 import { img } from "../../../lib/filemanager.js";
+import { autoanimations } from "../../../integration/autoanimations.js";
 
 const DEFAULT_CONFIG = {
     id: 'FireShield',
 };
 
 async function create(token, config = {}) {
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const sequence = new Sequence();
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const label = `${id} - ${token.id}`;
 
+    const sequence = new Sequence();
     sequence.effect()
         .file(img("jb2a.impact.ground_crack.orange.01"))
         .atLocation(token)
@@ -27,7 +29,7 @@ async function create(token, config = {}) {
         .scaleToObject(2.75)
         .playbackRate(1)
         .zIndex(2)
-        .name(`FireShield-Particles-${token.id}`);
+        .name(label);
 
     sequence.effect()
         .file(img("jb2a.energy_strands.in.yellow.01.2"))
@@ -39,7 +41,7 @@ async function create(token, config = {}) {
         .scaleToObject(2.75)
         .playbackRate(1)
         .zIndex(1)
-        .name(`FireShield-Strands-${token.id}`);
+        .name(label);
 
     sequence.effect()
         .file(img("jb2a.token_border.circle.spinning.orange.004"))
@@ -48,7 +50,7 @@ async function create(token, config = {}) {
         .playbackRate(1)
         .attachTo(token)
         .persist()
-        .name(`FireShield-Border-${token.id}`);
+        .name(label);
 
     sequence.effect()
         .file(img("jb2a.shield_themed.below.fire.03.orange"))
@@ -61,7 +63,7 @@ async function create(token, config = {}) {
         .belowTokens()
         .scaleToObject(1.7)
         .playbackRate(1)
-        .name(`FireShield-Below-${token.id}`);
+        .name(label);
 
     sequence.effect()
         .file(img("jb2a.shield_themed.above.fire.03.orange"))
@@ -73,7 +75,7 @@ async function create(token, config = {}) {
         .scaleToObject(1.7)
         .zIndex(0)
         .playbackRate(1)
-        .name(`FireShield-Above-${token.id}`);
+        .name(label);
 
     return sequence;
 }
@@ -86,13 +88,9 @@ async function play(token, config = {}) {
 }
 
 function stop(token, config = {}) {
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id } = mConfig;
-    Sequencer.EffectManager.endEffects({ name: `${id}-Particles-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-Strands-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-Border-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-Below-${token.id}`, object: token });
-    Sequencer.EffectManager.endEffects({ name: `${id}-Above-${token.id}`, object: token });
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const label = `${id} - ${token.id}`;
+    Sequencer.EffectManager.endEffects({ name: label, object: token });
 }
 
 export const fireShield = {
@@ -100,3 +98,5 @@ export const fireShield = {
     play,
     stop,
 };
+
+autoanimations.register("Fire Shield", "effect", "eskie.effect.fireShield", DEFAULT_CONFIG);

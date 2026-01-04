@@ -31,7 +31,7 @@ import { farStep } from "./token/far-step.js";
 import { fightingSpirit } from "./active-effect/fighting-spirit.js";
 import { fingerOfDeath } from "./target/fingerOfDeath.js";
 import { firecracker } from "./template/firecracker.js";
-import { fireShield } from "./token/fire-shield.js";
+import { fireShield } from "./active-effect/fire-shield.js";
 import { flurryOfBlows } from "./on-target/flurry-of-blows.js";
 import { fly } from "./token/fly.js";
 import { frightfulMoan } from "./token/frightful-moan.js";
