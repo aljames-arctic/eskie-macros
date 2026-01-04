@@ -1,22 +1,31 @@
 // Author: .eskie
 // Modular Conversion: Gemini
 
+import { img, snd } from "../../../lib/filemanager.js";
+import { settingsOverride } from "../../../lib/settings.js";
 import { autoanimations } from "../../../integration/autoanimations.js";
-import { img } from "../../../lib/filemanager.js";
 
 const DEFAULT_CONFIG = {
     id: 'Flurry Of Blows',
     color: "yellow",
+    sound: {
+        enabled: true,
+        volume: 0.5
+    }
 };
 
 async function create(token, target, config = {}) {
-    const mConfig = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const { id, color } = mConfig;
+    config = settingsOverride(config);
+    const { color, sound } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    let seq = new Sequence();
 
-    let seq = new Sequence({}, {
-        id
-    });
-
+    if (sound.enabled) {
+        seq = seq.sound()
+            .file(snd(`psfx.impacts.bludgeoning`))
+            .volume(sound.volume)
+            .delay(125)
+            .repeats(7,250,250)
+    }
     seq = seq.effect()
         .delay(125)
         .file(img(`jb2a.melee_generic.creature_attack.fist.001.${color}`))
@@ -28,6 +37,13 @@ async function create(token, target, config = {}) {
         .repeats(7,250,250)
         .zIndex(1);
 
+    if (sound.enabled) {
+        seq = seq.sound()
+            .file(snd(`psfx.impacts.bludgeoning`))
+            .volume(sound.volume)
+            .delay(250)
+            .repeats(7,250,250)
+    }
     seq = seq.effect()
         .delay(250)
         .file(img(`jb2a.melee_generic.creature_attack.fist.001.${color}`))

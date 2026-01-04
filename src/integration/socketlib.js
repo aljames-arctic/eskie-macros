@@ -9,10 +9,10 @@ async function register() {
     game.modules.get('eskie-macros').socketlib = socket;
 }
 
-export const socket = {
+export const socketlibapi = {
     register,
 };
 
-export const socketlib = {
+export const socket = {
     tile
 }

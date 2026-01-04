@@ -3,7 +3,7 @@ import { animation } from './animation/_animation.js';
 import { filemanager } from './lib/filemanager.js';
 import { crosshair } from './crosshair/_crosshairs.js';
 import { autoanimations } from './integration/autoanimations.js';
-import { socket } from './integration/socketlib.js';
+import { socketlibapi } from './integration/socketlib.js';
 import { tile } from './integration/socketlib/tile.js'
 // Import module settings to also run its initialization code
 import './settings.js';
@@ -38,4 +38,4 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('aa.ready', async () => { await autoanimations.submit(); });
-Hooks.once('socketlib.ready', async () => { await socket.register(); });
+Hooks.once('socketlib.ready', async () => { await socketlibapi.register(); });

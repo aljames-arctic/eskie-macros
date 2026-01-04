@@ -1,7 +1,7 @@
 // Author: .eskie
 // Modular Conversion: Gemini
 import { autoanimations } from '../../../integration/autoanimations.js';
-import { socketlib } from '../../../integration/socketlib.js';
+import { socket } from '../../../integration/socketlib.js';
 import { dependency } from '../../../lib/dependency.js';
 import { img, snd } from '../../../lib/filemanager.js'
 
@@ -84,7 +84,7 @@ async function play(token, config = {}) {
         "height": canvas.grid.size*token.document.width,
     };
     
-    const [tile] = await socketlib.tile.create(initialData);
+    const [tile] = await socket.tile.create(initialData);
     await wait(100);
 
     const MATTtriggers = ["exit", "manual"];
@@ -100,7 +100,7 @@ async function play(token, config = {}) {
         "flags.monks-active-tiles.actions": MATTactions,
         "flags.monks-active-tiles.controlled": "gm",
     };
-    await socketlib.tile.edit(tile.id, updateData);
+    await socket.tile.edit(tile.id, updateData);
     await Tagger.addTags(tile, label);
 
     await tokenAttacher.attachElementToToken(tile, token, true);
@@ -113,7 +113,7 @@ async function stop(token, config = {}) {
     const label = `${id} - ${token.id}`;
     const tiles = Tagger.getByTag(label);
 
-    tiles.forEach(async (tile) => { await socketlib.tile.destroy(tile.id); });
+    tiles.forEach(async (tile) => { await socket.tile.destroy(tile.id); });
     Sequencer.EffectManager.endEffects({ name: label, object: token });
 }
 
