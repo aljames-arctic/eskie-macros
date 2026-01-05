@@ -87,7 +87,7 @@ async function play(token, config = {}) {
 
     if (overlay.applyPC || overlay.applyGM) {
         const owners = utils.owners(token, { applyPC: overlay.applyPC, applyGM: overlay.applyGM });
-        blur.drunk.play(owners.map(u => u.name));
+        blur.drunk.play(owners);
     }
 }
 
@@ -95,7 +95,7 @@ async function stop(token, config = {}) {
     const { id, overlay } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace: false})
     if (overlay.applyPC || overlay.applyGM) {
         const owners = utils.owners(token, { applyPC: overlay.applyPC, applyGM: overlay.applyGM });
-        blur.drunk.stop(owners.map(u => u.name))
+        blur.drunk.stop(owners)
     }
     
     const label = `${id} - ${token.id}`;

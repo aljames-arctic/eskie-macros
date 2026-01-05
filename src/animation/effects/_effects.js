@@ -12,6 +12,7 @@ import { charmed } from "./active-effect/charmed.js";
 import { cloudOfSand } from "./multi-token/cloudOfSand.js";
 import { colorSpray } from "./template/color-spray.js";
 import { dash } from "./active-effect/dash.js";
+import { drunk } from "./active-effect/drunk.js"
 import { detect } from "./token/detect/_detect.js";
 import { dimensionDoor } from "./template/dimension-door.js";
 import { disintegrate } from "./target/disintegrate.js";
@@ -106,6 +107,7 @@ export const effect = {
     dreadLord,
     dreadLordAttack,
     dreadLordFear,
+    drunk,
     elementalBlast,
     emote,
     enlargeReduce,

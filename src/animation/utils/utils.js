@@ -5,7 +5,7 @@ async function wait(ms) {
 function owners(token, config = {}) {
     if (!token) return [];
     const ownership = token.actor.ownership;
-    
+
     // Filter users: Level 3 is "Owner"
     let owners = game.users.filter(user => { return ownership[user.id] === 3; });
     if (!config.applyPC) owners = owners.filter(user => { return user.isGM === true; });

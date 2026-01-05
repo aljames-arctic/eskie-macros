@@ -10,16 +10,14 @@ const DEFAULT_CONFIG = {
     durationY: 11000,
 }
 
-function create(users, config = {}){
+function create(users = [], config = {}){
     if (!canvas?.scene?.background?.src) return;
 
     // Catch the case where we pass in an array of users
     // Preference of this create function is single users
     const seq = new Sequence();
     if (Array.isArray(users)) {
-        for (const user of users) {
-            seq.addSequence(create(user, config));
-        }
+        users.forEach( u => { seq.addSequence(create(u, config)); });
         return seq;
     }
 
@@ -30,7 +28,7 @@ function create(users, config = {}){
     const drift = (canvas.grid.size / 8) * sway;
 
     seq.effect()
-            .name(`${id} - ${users}`)
+            .name(`${id} - ${users.name}`)
             .file(canvas.scene.background.src)
             .atLocation({ x, y })
             .size({
@@ -43,16 +41,14 @@ function create(users, config = {}){
             .opacity(opacity)
             .loopProperty("spriteContainer", "position.x", { from: -drift, to: drift, duration: durationX, pingPong: true })
             .loopProperty("spriteContainer", "position.y", { from: -drift, to: drift, duration: durationY, pingPong: true })
-            .forUsers(users)
+            .forUsers(users.id)
             .persist()
     return seq;
 }
 
 async function play(users = [], config = {}) {
-    for (const user of users) {
-        const seq = create(user, config);
-        if (seq) { seq.play(); }
-    }
+    const seq = create(users, config);
+    if (seq) { seq.play(); }
 }
 
 function createDrunkBlur(users = []) {
@@ -71,9 +67,9 @@ async function playDrunkBlur(users = []) {
 async function stop(users = [], config = {}) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     if (Array.isArray(users))
-        return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user}` })));
+        return Promise.all(users.map(user => Sequencer.EffectManager.endEffects({ name: `${id} - ${user.name}` })));
     else
-        return Sequencer.EffectManager.endEffects({ name: `${id} - ${users}` });
+        return Sequencer.EffectManager.endEffects({ name: `${id} - ${users.name}` });
 }
 
 export const blur = { 
