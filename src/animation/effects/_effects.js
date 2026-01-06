@@ -47,7 +47,7 @@ import { hitTheDirt } from "./template/hit-the-dirt.js";
 import { iaijutsuStrike } from "./token/iaijutsu-strike.js";
 import { incorporeal } from "./token/incorporeal/incorporeal.js";
 import { leap } from "./token/leap.js";
-import { lightningBolt } from "./token/lightning-bolt.js";
+import { lightningBolt } from "./template/lightning-bolt.js";
 import { mirrorImage } from "./active-effect/mirror-image.js";
 import { mistyStep } from "./token/misty-step.js";
 import { petrified } from "./active-effect/petrified.js";
