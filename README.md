@@ -15,6 +15,7 @@ Join the Discord channel! Learn Sequencer and share your own creations!
 * Bakana
 * DerKriegs
 * Gornetron
+* Doomrule
 
 ## Features
 

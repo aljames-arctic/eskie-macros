@@ -2,6 +2,7 @@ import { animateDead } from "./target/animate-dead.js";
 import { armorOfAgathys } from "./target/armor-of-agathys/_armor-of-agathys.js";
 import { armsOfHadar } from "./template/arms-of-hadar.js";
 import { banishment } from "./active-effect/banishment.js";
+import { benignTransportation } from "./on-target/benign-transportation.js";
 import { bless } from "./active-effect/bless.js";
 import { callLightning } from "./token/call-lightning.js";
 import { chainLightning } from "./token/chain-lightning.js";
@@ -87,6 +88,7 @@ export const effect = {
     armorOfAgathys,
     armsOfHadar,
     banishment,
+    benignTransportation,
     bless,
     callLightning,
     chainLightning,
