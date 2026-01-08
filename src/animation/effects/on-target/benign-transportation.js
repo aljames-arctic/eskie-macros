@@ -13,7 +13,7 @@ const DEFAULT_CONFIG = {
     animations: {
         out: {
             file: 'jb2a.misty_step.01.blue',
-            until: -3000,
+            until: -2000,
         },
         in: {
             file: 'jb2a.misty_step.02.blue',
