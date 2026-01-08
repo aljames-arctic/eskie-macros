@@ -24,12 +24,13 @@ const DEFAULT_CONFIG = {
         enabled: true,
         volume: 0.5,
         file: `psfx.2nd-level-spells.misty-step.v1.outro.fire`,
-    }
+    },
+    teleport: true
 }
 
 async function create(token, targets, config = {}) {
     config = settingsOverride(config);
-    const { id, animations, sound } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, animations, sound, teleport } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
 
     if (!Array.isArray(targets)) targets = [targets];
     const A = targets[0];
@@ -60,16 +61,18 @@ async function create(token, targets, config = {}) {
             .on(B)
             .opacity(0)
 
-        .animation()
-            .on(A)
-            .teleportTo(B.center)
-            .snapToGrid()
-        .animation()
-            .on(B)
-            .teleportTo(A.center)
-            .snapToGrid()
+        if (teleport) {
+            seq.animation()
+                .on(A)
+                .teleportTo(B.center)
+                .snapToGrid()
+            .animation()
+                .on(B)
+                .teleportTo(A.center)
+                .snapToGrid()
+        }
 
-        .effect()
+        seq.effect()
             .file(img(animations.in.file))
             .atLocation(A)
             .scaleToObject(2)
