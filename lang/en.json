@@ -3,7 +3,7 @@
         "settings": {
             "enableSounds": {
                 "name": "Enable Macro Sounds",
-                "hint": "If enabled, macros will play sounds. This setting can be enabled/disabled per player."
+                "hint": "If disabled, macros will not be able to play sounds."
             }
         },
         "updateMenu": {

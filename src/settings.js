@@ -5,7 +5,7 @@ Hooks.once('init', function() {
     game.settings.register('eskie-macros', 'enableSounds', {
         name: 'EMP.settings.enableSounds.name',
         hint: 'EMP.settings.enableSounds.hint',
-        scope: 'client',
+        scope: 'world',
         config: true,
         type: Boolean,
         default: false,
