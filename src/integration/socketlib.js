@@ -3,12 +3,15 @@ import { door, doorSockets } from './socketlib/door.js';
 
 async function register() {
     const socket = socketlib.registerModule('eskie-macros');
-    console.error('Registering socketlib', socket);
-    Object.entries(tileSockets).forEach(([key, value]) => {
-        socket.register(key, value);
-    });
-    Object.entries(doorSockets).forEach(([key, value]) => {
-        socket.register(key, value);
+    const socketAPI = {
+        tileSockets,
+        doorSockets,
+    };
+
+    Object.entries(socketAPI).forEach(([_, api]) => {
+        Object.entries(api).forEach(([key, value]) => {
+            socket.register(key, value);
+        });
     });
     game.modules.get('eskie-macros').socketlib = socket;
 }
