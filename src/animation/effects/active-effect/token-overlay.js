@@ -1,0 +1,162 @@
+//Last Updated: 1/09/2026
+//Author: .eskie
+
+import { utils } from '../../utils/utils.js';
+import { img } from '../../../lib/filemanager.js'
+import { dependency } from '../../../lib/dependency.js';
+import { socket } from '../../../integration/socketlib.js';
+
+const DEFAULT_CONFIG = {
+    id: 'tokenMask',
+    deleteToken: false,
+    tokenOverlay: "eskie.burn.token_mask.orange.no_base.fast.01",
+    revealOverlay: "eskie.texture_mask.tile_base.burn.01.fast",
+    padding: 1
+}
+
+async function createTiles(token, config) {
+    const { revealOverlay, padding } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    let revealOverlayPath = revealOverlay;
+    try { revealOverlayPath = Sequencer.Database.getEntry(revealOverlay).originalData; } catch(e) { revealOverlayPath = revealOverlay; }
+
+    const overlayMaskUpdates = {
+        "texture.src": revealOverlayPath,
+        "alpha": 0,
+        "hidden": false,
+        "x": token.x - (canvas.grid.size * token.document.width * (padding - 1) / 2),
+        "y": token.y - (canvas.grid.size * token.document.width * (padding - 1) / 2),
+        "video": {
+            autoplay: false,
+            loop: false,
+            volume: 0
+        },
+        "width": canvas.grid.size * (token.document.width * padding),
+        "height": canvas.grid.size * (token.document.width * padding),
+    };
+
+    const tokenMaskUpdates = {
+        "texture.src": token.document.texture.src,
+        "alpha": 1,
+        "hidden": false,
+        "x": token.x,
+        "y": token.y,
+        "rotation": token.document.rotation,
+        "width": canvas.grid.size * token.document.width,
+        "height": canvas.grid.size * token.document.height,
+        "texture.scaleX": token.document.texture.scaleX,
+        "texture.scaleY": token.document.texture.scaleY,
+    };
+
+    // Create all tiles
+    const [[tokenRevealMask], [sceneRevealMask], [tokenShapeMask]] = await Promise.all([
+        socket.tile.create(overlayMaskUpdates),
+        socket.tile.create(overlayMaskUpdates),
+        socket.tile.create(tokenMaskUpdates)
+    ]);
+
+    // Ensure Foundry Tiles are generated are loaded
+    function tilesRendered() { return tokenRevealMask?._object?.sourceElement && sceneRevealMask?._object?.sourceElement; }
+    await utils.waitUntil(tilesRendered, { timeout: 5000 });
+
+    // Reset videos to start
+    tokenRevealMask._object.sourceElement.currentTime = 0;
+    sceneRevealMask._object.sourceElement.currentTime = 0;
+    return [tokenRevealMask, sceneRevealMask, tokenShapeMask];
+}
+
+async function create(token, config = {}) {
+    dependency.required({id: 'token-attacher', ref: "Token Attacher"});
+    dependency.required({id: 'monks-active-tiles', ref: "Monk's Active Tile Triggers"});
+
+    const { id, deleteToken, revealOverlay, tokenOverlay, padding } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const label = `${id} ${token.name}`;
+    const tiles = await createTiles(token, {revealOverlay, padding});
+    const [tokenRevealMask, sceneRevealMask, tokenShapeMask] = tiles;
+
+    //Attach tiles to token
+    await tokenAttacher.attachElementsToToken([tokenRevealMask, sceneRevealMask, tokenShapeMask], token, true);
+
+    let seq = new Sequence();
+    if (canvas.scene.background.src) {
+        seq = seq.effect()
+            .name(label)
+            .file(canvas.scene.background.src)
+            .atLocation({x:(canvas.dimensions.width)/2,y:(canvas.dimensions.height)/2})
+            .size({width:canvas.scene.width/canvas.grid.size, height:canvas.scene.height/canvas.grid.size}, {gridUnits: true})
+            .persist()
+            .belowTokens()
+            .mask(sceneRevealMask)
+            .spriteOffset({x:-canvas.scene.background.offsetX,y:-canvas.scene.background.offsetY})
+    }
+
+    seq = seq.animation()
+        .delay(250)
+        .on(token)
+        .opacity(0)
+        .show(false)
+
+    .effect()
+        .name(label)
+        .copySprite(token)
+        .attachTo(token, {bindAlpha: false, bindVisibility: false, bindRotation: true})
+        .scaleToObject(padding, {considerTokenScale:true})
+        .spriteRotation(-token.document.rotation)
+        .mask(tokenRevealMask)
+        .persist()
+
+    .wait(250)
+
+    .thenDo(async () => {
+        return Promise.all([
+            sceneRevealMask.update({ alpha: 1, }),
+            tokenRevealMask.update({
+                alpha: 1,
+                video: { autoplay: true, }
+            })
+        ]);
+      })
+
+    .effect()
+      .file(img(tokenOverlay))
+      .attachTo(token, {bindAlpha: false, bindVisibility: false, bindRotation: false})
+      .mask(tokenShapeMask)
+      .scaleToObject(padding)
+      .zIndex(1)
+      .waitUntilFinished()
+
+    .thenDo(async () => {
+        if (deleteToken) {
+            await token.document.delete();
+        } else {
+            await Promise.all([
+                socket.tile.destroy(tokenRevealMask.id),
+                socket.tile.destroy(tokenShapeMask.id),
+                socket.tile.destroy(sceneRevealMask.id),
+            ]);
+            await stop(token, {id});
+        }
+    });
+
+    return seq;
+}
+
+async function play(token, config = {}) {
+    const seq = await create(token, config);
+    return seq?.play();
+}
+
+async function stop(token, config = {}) {
+    const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const label = `${id} ${token.name}`;
+
+    return Promise.all([
+        new Sequence().animation().on(token).opacity(1).show(true).play(),
+        Sequencer.EffectManager.endEffects({name: label})
+    ]);
+}
+
+export const tokenMaskEffect = {
+    create,
+    play,
+    stop,
+}
