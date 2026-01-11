@@ -17,8 +17,9 @@ const DEFAULT_CONFIG = {
 
 async function createTiles(token, config) {
     const { revealOverlay, padding, rotation } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    let revealOverlayPath = revealOverlay;
-    try { revealOverlayPath = Sequencer.Database.getEntry(revealOverlay).originalData; } catch(e) { revealOverlayPath = revealOverlay; }
+    const revealOverlayConfig = img(revealOverlay);
+    let revealOverlayPath = revealOverlayConfig;
+    try { revealOverlayPath = Sequencer.Database.getEntry(revealOverlayConfig).originalData; } catch(e) { revealOverlayPath = revealOverlayConfig; }
 
     const overlayMaskUpdates = {
         "texture.src": revealOverlayPath,
