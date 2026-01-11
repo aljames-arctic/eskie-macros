@@ -11,11 +11,12 @@ const DEFAULT_CONFIG = {
     deleteToken: false,
     tokenOverlay: undefined,
     revealOverlay: undefined,
-    padding: 1
+    padding: 1,
+    rotation: 0
 }
 
 async function createTiles(token, config) {
-    const { revealOverlay, padding } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { revealOverlay, padding, rotation } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     let revealOverlayPath = revealOverlay;
     try { revealOverlayPath = Sequencer.Database.getEntry(revealOverlay).originalData; } catch(e) { revealOverlayPath = revealOverlay; }
 
@@ -32,6 +33,7 @@ async function createTiles(token, config) {
         },
         "width": canvas.grid.size * (token.document.width * padding),
         "height": canvas.grid.size * (token.document.width * padding),
+        "rotation": rotation,
     };
 
     const tokenMaskUpdates = {
@@ -68,13 +70,13 @@ async function create(token, config = {}) {
     dependency.required({id: 'token-attacher', ref: "Token Attacher"});
     dependency.required({id: 'monks-active-tiles', ref: "Monk's Active Tile Triggers"});
 
-    const { id, deleteToken, revealOverlay, tokenOverlay, padding } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    const { id, deleteToken, revealOverlay, tokenOverlay, padding, rotation } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
     if ( !tokenOverlay || !revealOverlay ) {
         throw new Error(`EMP | tokenMaskEffect: Missing required configuration 'tokenOverlay' or 'revealOverlay'. Effect aborted.`);
     }
 
     const label = `${id} ${token.name}`;
-    const tiles = await createTiles(token, {revealOverlay, padding});
+    const tiles = await createTiles(token, {revealOverlay, padding, rotation});
     const [tokenRevealMask, sceneRevealMask, tokenShapeMask] = tiles;
 
     //Attach tiles to token
@@ -124,6 +126,7 @@ async function create(token, config = {}) {
       .file(img(tokenOverlay))
       .attachTo(token, {bindAlpha: false, bindVisibility: false, bindRotation: false})
       .mask(tokenShapeMask)
+      .rotate(-rotation)
       .scaleToObject(padding)
       .zIndex(1)
       .waitUntilFinished()
