@@ -5,6 +5,7 @@ function closestPath(modulePrefix, ...categories) {
     let currentPath = modulePrefix;
     let originalPath = `${modulePrefix}.${categories.join('.')}`;
     let remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
+    let divergenceOptions = '';
 
     function isMustache(component) {
         return component.startsWith('{{') && component.endsWith('}}');
@@ -19,6 +20,7 @@ function closestPath(modulePrefix, ...categories) {
 
         if (!remainingOptions.includes(categories[0])) {
             diverged = true;
+            divergenceOptions = remainingOptions.join(', ');
             currentPath += `.${remainingOptions[0]}`;
             remainingOptions = Sequencer.Database.getPathsUnder(currentPath);
             categories.shift(); // Remove the used category and continue (try to match as best we can)
@@ -33,6 +35,7 @@ function closestPath(modulePrefix, ...categories) {
         let msg = `EMP  | Filemanager closest path diverged from requested path.`;
         msg +=    `\n\tRequested: ${originalPath}`
         msg +=    `\n\tResolved as: ${currentPath}`;
+        msg +=    `\n\tAvailable options at divergence: [${divergenceOptions}]`;
         console.warn(msg);
     }
     return currentPath;
