@@ -77,7 +77,10 @@ import { stunningStrike } from "./target/stunning-strike.js";
 import { suggestion } from "./target/suggestion.js";
 import { surprised } from "./token/surprised.js";
 import { teleport } from "./token/teleport.js";
-import { tokenMaskEffect } from "./active-effect/token-overlay.js";
+import { burnMask } from "./token-mask/burn-mask.js";
+import { shatterMask } from "./token-mask/shatter-mask.js";
+import { tearMask } from "./token-mask/tear-mask.js";
+import { smokeMask } from "./token-mask/smoke-mask.js";
 import { trueStrike } from "./target/true-strike.js";
 import { viciousMockery } from "./target/vicious-mockery.js";
 import { vortexWarp } from "./target/vortex-warp.js";
@@ -169,7 +172,12 @@ export const effect = {
     suggestion,
     surprised,
     teleport,
-    tokenMaskEffect,
+    tokenMask: {
+        burn: burnMask,
+        shatter: shatterMask,
+        tear: tearMask,
+        smoke: smokeMask,
+    },
     trueStrike,
     viciousMockery,
     vortexWarp,

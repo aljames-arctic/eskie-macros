@@ -9,8 +9,8 @@ import { socket } from '../../../integration/socketlib.js';
 const DEFAULT_CONFIG = {
     id: 'tokenMask',
     deleteToken: false,
-    tokenOverlay: "eskie.burn.token_mask.orange.no_base.fast.01",
-    revealOverlay: "eskie.texture_mask.tile_base.burn.01.fast",
+    tokenOverlay: undefined,
+    revealOverlay: undefined,
     padding: 1
 }
 
@@ -69,6 +69,10 @@ async function create(token, config = {}) {
     dependency.required({id: 'monks-active-tiles', ref: "Monk's Active Tile Triggers"});
 
     const { id, deleteToken, revealOverlay, tokenOverlay, padding } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
+    if ( !tokenOverlay || !revealOverlay ) {
+        throw new Error(`EMP | tokenMaskEffect: Missing required configuration 'tokenOverlay' or 'revealOverlay'. Effect aborted.`);
+    }
+
     const label = `${id} ${token.name}`;
     const tiles = await createTiles(token, {revealOverlay, padding});
     const [tokenRevealMask, sceneRevealMask, tokenShapeMask] = tiles;
@@ -133,8 +137,8 @@ async function create(token, config = {}) {
                 socket.tile.destroy(tokenShapeMask.id),
                 socket.tile.destroy(sceneRevealMask.id),
             ]);
-            await stop(token, {id});
         }
+        await Sequencer.EffectManager.endEffects({name: label})
     });
 
     return seq;
