@@ -76,7 +76,7 @@ async function create(token, config = {}) {
         throw new Error(`EMP | tokenMaskEffect: Missing required configuration 'tokenOverlay' or 'revealOverlay'. Effect aborted.`);
     }
 
-    const label = `${id} ${token.name}`;
+    const label = `${id} - ${token.id}`;
     const tiles = await createTiles(token, {revealOverlay, padding, rotation});
     const [tokenRevealMask, sceneRevealMask, tokenShapeMask] = tiles;
 
@@ -155,7 +155,7 @@ async function play(token, config = {}) {
 
 async function stop(token, config = {}) {
     const { id } = foundry.utils.mergeObject(DEFAULT_CONFIG, config, {inplace:false});
-    const label = `${id} ${token.name}`;
+    const label = `${id} - ${token.id}`;
 
     return Promise.all([
         new Sequence().animation().on(token).opacity(1).show(true).play(),
