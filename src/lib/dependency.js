@@ -1,17 +1,15 @@
 /**
  * Checks if the versions are in ascending order.
- * @param {string} a The first version.
- * @param {string} b The second version.
- * @param {string} c The third version.
+ * @param {string} min The minimum version.
+ * @param {string} version The version to check.
+ * @param {string} max The maximum version.
  * @returns {boolean} Whether the versions are in ascending order.
  * @private
  */
-function _isAscending(a, b, c) {
-    // Not true that b > a or c > b
+function _isAscending(min, version, max) {
     let isValidVersion = true;
-    const [minimum, maximum] = [dependency.min, dependency.max];
-    if (minimum) isValidVersion = isValidVersion && !foundry.utils.isNewerVersion(minimum, entity?.version);
-    if (maximum) isValidVersion = isValidVersion && !foundry.utils.isNewerVersion(entity?.version, maximum);
+    if (min) isValidVersion = isValidVersion && !foundry.utils.isNewerVersion(min, version);
+    if (max) isValidVersion = isValidVersion && !foundry.utils.isNewerVersion(version, max);
     return isValidVersion;
 }
 
@@ -89,7 +87,7 @@ function isActivated(dependency, warnMessage) {
     return valid;
 }
 
-function isInstalled(dependency) {
+function isInstalled(dependency, warnMessage) {
     let [installed, isValidVersion] = _isInstalled(dependency);
     let valid = installed && isValidVersion;
     if (!valid && warnMessage) {
